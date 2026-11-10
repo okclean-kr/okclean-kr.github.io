@@ -6,7 +6,9 @@ export async function submitMember(config, m){
   const app=getApps().length?getApp():initializeApp(config);
   const auth=getAuth(app); if(!auth.currentUser) await signInAnonymously(auth);
   const db=getFirestore(app);
-  const id=crypto.randomUUID();
+  // Firestore 규칙은 member_requests/{uid} 형태만 허용합니다.
+  // 같은 익명 UID에서 재시도하면 같은 접수 문서를 갱신해 중복 생성을 막습니다.
+  const id=auth.currentUser.uid;
   await setDoc(doc(db,'member_requests',id),{
     name:String(m.name||'').slice(0,30),phone:String(m.phone||'').slice(0,20),
     area:String(m.area||'').slice(0,40),free:String(m.free||'').slice(0,80),

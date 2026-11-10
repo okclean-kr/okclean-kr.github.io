@@ -2,30 +2,26 @@
 (function(){
   'use strict';
   const script=document.currentScript;
-  if(!script||window.OKCleanInstallUnified) return;
+  if(!script||window.OKCleanInstall) return;
 
-  const role=script.dataset.appRole||'customer';
-  const name=script.dataset.appName||(role==='admin'?'오케이청소 관리자':'오케이청소');
-  const iosTitle=role==='admin'?'관리자 앱 설치':'아이폰에 앱 설치';
+  const role=script.dataset.appRole||script.dataset.app||'customer';
+  const appName=script.dataset.appName||(role==='admin'?'오케이청소 관리자':'오케이청소');
   const installLabel=role==='admin'?'관리자 앱 설치':'오케이청소 앱 설치';
-  const installedLabel='앱이 설치되어 있습니다';
-  const root=script.dataset.root||'';
-  const ua=navigator.userAgent||'';
-  const isIOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-  const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const displayMode=matchMedia('(display-mode: standalone)');
+  const isStandalone=()=>displayMode.matches||navigator.standalone===true;
 
-  let deferred=null;
+  let pending=null;
   let installed=isStandalone();
-  const buttons=()=>Array.from(document.querySelectorAll('[data-install]'));
-  const labels=()=>Array.from(document.querySelectorAll('[data-install-label]'));
+  let panel=null;
+  let lastTrigger=null;
 
-  function setText(text){
-    labels().forEach(el=>el.textContent=text);
+  const buttons=()=>Array.from(document.querySelectorAll('[data-install]'));
+
+  function setLabel(text){
     buttons().forEach(btn=>{
-      if(!btn.querySelector('[data-install-label]')){
-        const span=btn.querySelector('span');
-        if(span) span.textContent=text;
-      }
+      const target=btn.querySelector('[data-install-label],span')||btn;
+      target.textContent=text;
     });
   }
 
@@ -33,51 +29,80 @@
     buttons().forEach(btn=>{btn.hidden=!show;btn.disabled=false;});
   }
 
-  function statusText(text){
-    document.querySelectorAll('[data-install-status]').forEach(el=>{el.textContent=text;el.hidden=!text;});
+  function update(){
+    if(installed||isStandalone()){
+      installed=true;
+      setVisible(false);
+      return;
+    }
+    setVisible(true);
+    setLabel(isIOS?'아이폰에 앱 설치':installLabel);
   }
 
   function closePanel(){
-    const old=document.getElementById('okInstallUnifiedPanel');
-    if(old) old.remove();
+    if(panel){panel.remove();panel=null;}
+    if(lastTrigger&&lastTrigger.isConnected) lastTrigger.focus({preventScroll:true});
   }
 
-  function panel(title,body){
+  function showPanel(title,description,body=''){
     closePanel();
-    const box=document.createElement('section');
-    box.id='okInstallUnifiedPanel';
-    box.className='install-help-card';
-    box.setAttribute('role','status');
-    box.innerHTML='<div class="install-help-head"><b></b><button type="button" aria-label="닫기">×</button></div><div class="install-help-body"></div>';
-    box.querySelector('b').textContent=title;
-    box.querySelector('.install-help-body').innerHTML=body;
-    box.querySelector('button').onclick=closePanel;
-    const anchor=document.querySelector('[data-install-primary]')||buttons()[0];
-    (anchor?.parentElement||document.body).appendChild(box);
+    panel=document.createElement('section');
+    panel.className='ok-install-panel';
+    panel.id='okInstallPanel';
+    panel.tabIndex=-1;
+    panel.innerHTML=
+      '<div class="ok-install-top">'+
+        '<div class="ok-install-brand"><span class="ok-install-badge">'+(role==='admin'?'관리자용':'고객용')+'</span><strong></strong></div>'+
+        '<button type="button" class="ok-install-close" aria-label="닫기">×</button>'+
+      '</div>'+
+      '<h2 id="ok-install-title"></h2>'+
+      '<p id="ok-install-description"></p>'+
+      '<div class="ok-install-content"></div>'+
+      '<p class="ok-install-page-hint"></p>';
+    panel.querySelector('strong').textContent=appName;
+    panel.querySelector('#ok-install-title').textContent=title;
+    panel.querySelector('#ok-install-description').textContent=description;
+    panel.querySelector('.ok-install-content').innerHTML=body;
+    panel.querySelector('.ok-install-page-hint').textContent='설치 없이도 이 페이지를 계속 사용할 수 있어요.';
+    panel.querySelector('.ok-install-close').onclick=closePanel;
+    const anchor=lastTrigger?.closest('header')||lastTrigger?.parentElement||document.querySelector('main')||document.body;
+    anchor.after ? anchor.after(panel) : document.body.prepend(panel);
+    panel.focus({preventScroll:true});
   }
 
   function iosHelp(){
-    panel(iosTitle,'<ol class="install-help-steps"><li>Safari의 <b>공유</b> 버튼을 누르세요.</li><li><b>홈 화면에 추가</b>를 선택하세요.</li><li>오른쪽 위 <b>추가</b>를 누르세요.</li></ol>');
+    showPanel(
+      '아이폰 앱 설치 방법',
+      'Safari에서 아래 3단계만 진행하세요.',
+      '<ol class="ok-install-steps"><li><b>공유</b> 버튼을 누르세요.</li><li><b>홈 화면에 추가</b>를 선택하세요.</li><li>오른쪽 위 <b>추가</b>를 누르세요.</li></ol>'
+    );
   }
 
   function fallbackHelp(){
-    panel('앱 설치 안내','<p>이 브라우저에서는 자동 설치창을 열 수 없습니다.</p><ol class="install-help-steps"><li>브라우저 메뉴를 여세요.</li><li><b>앱 설치</b> 또는 <b>홈 화면에 추가</b>를 선택하세요.</li></ol>');
+    showPanel(
+      '앱 설치 안내',
+      '이 브라우저에서는 자동 설치창을 열 수 없습니다.',
+      '<ol class="ok-install-steps"><li>브라우저 메뉴를 여세요.</li><li><b>앱 설치</b> 또는 <b>홈 화면에 추가</b>를 선택하세요.</li></ol>'
+    );
   }
 
-  async function install(){
+  async function install(trigger){
+    lastTrigger=trigger||buttons()[0]||null;
     if(installed||isStandalone()){
-      installed=true;setVisible(false);setText(installedLabel);statusText(installedLabel);return;
+      installed=true;
+      update();
+      return;
     }
-    if(deferred){
-      const ev=deferred;
-      deferred=null;
+    if(pending){
+      const event=pending;
+      pending=null;
       try{
-        await ev.prompt();
-        const choice=await ev.userChoice;
+        await event.prompt();
+        const choice=await event.userChoice;
         if(choice?.outcome==='accepted'){
-          statusText('설치를 시작했습니다.');
+          showPanel('설치를 시작했어요','브라우저의 설치가 완료되면 홈 화면 또는 앱 목록에서 실행할 수 있습니다.');
         }else{
-          statusText('설치를 취소했습니다.');
+          showPanel('설치를 취소했어요','원할 때 앱 설치 버튼을 다시 누를 수 있습니다.');
         }
       }catch(_){
         fallbackHelp();
@@ -88,39 +113,36 @@
     fallbackHelp();
   }
 
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();
-    deferred=e;
-    if(!installed&&!isStandalone()){
-      setVisible(true);
-      setText(installLabel);
-      statusText('');
-    }
+  window.addEventListener('beforeinstallprompt',event=>{
+    event.preventDefault();
+    pending=event;
+    update();
   });
 
   window.addEventListener('appinstalled',()=>{
-    deferred=null;
+    pending=null;
     installed=true;
-    setVisible(false);
-    statusText(installedLabel);
     closePanel();
+    update();
   });
 
-  buttons().forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();install();}));
+  const modeChanged=()=>{if(isStandalone()){installed=true;closePanel();}update();};
+  if(displayMode.addEventListener) displayMode.addEventListener('change',modeChanged);
 
-  if(installed){
-    setVisible(false);
-    statusText(installedLabel);
-  }else{
-    setVisible(true);
-    setText(isIOS?iosTitle:installLabel);
-  }
+  document.addEventListener('click',event=>{
+    const btn=event.target.closest('[data-install]');
+    if(!btn) return;
+    event.preventDefault();
+    install(btn);
+  });
 
-  if('serviceWorker' in navigator&&script.dataset.sw){
+  if('serviceWorker' in navigator){
+    const swUrl=new URL(script.dataset.sw||'sw.js',script.src);
     window.addEventListener('load',()=>{
-      navigator.serviceWorker.register(root+script.dataset.sw,{updateViaCache:'none'}).catch(()=>{});
+      navigator.serviceWorker.register(swUrl.href,{updateViaCache:'none'}).catch(()=>{});
     },{once:true});
   }
 
-  window.OKCleanInstallUnified=Object.freeze({install,getState:()=>({role,name,installed:isStandalone()||installed,hasPrompt:!!deferred,isIOS})});
+  update();
+  window.OKCleanInstall=Object.freeze({install,getState:()=>({role,appName,installed:isStandalone()||installed,hasPrompt:!!pending,isIOS})});
 })();

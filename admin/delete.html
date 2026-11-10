@@ -96,6 +96,7 @@ async function loadMembers(){
   }catch(e){
     $('members').innerHTML='';
     message('회원 목록을 불러올 수 없습니다. 관리자 권한을 확인하세요. ('+(e?.code||'unknown')+')','err');
+    throw e;
   }
 }
 
@@ -139,7 +140,7 @@ onAuthStateChanged(auth,user=>{
   $('panel').classList.toggle('hidden',!user);
   if(!user){message('로그인이 필요합니다.');$('members').innerHTML='';return;}
   message('관리자 권한을 확인 중입니다…');
-  loadMembers().then(()=>message('관리자 로그인 상태입니다.','ok')).catch(()=>{});
+  loadMembers().then(()=>message('관리자 로그인 및 권한 확인 완료.','ok')).catch(()=>{});
 });
 </script>
 </body>

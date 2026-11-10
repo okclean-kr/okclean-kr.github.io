@@ -48,7 +48,7 @@
   <h1>영상에서 본 제품,<br>여기서 바로 찾으세요</h1>
   <p>오케이청소가 쇼츠·릴스·블로그에서 소개한 제품을 모았습니다. 제품을 누르면 공식 판매·제품 페이지로 이동합니다.</p>
   <div class="shop-badges"><span>✓ 청소 현장 중심 추천</span><span>✓ 제품별 한 번에 이동</span><span>✓ 모바일 최적화</span></div>
-  <div class="shop-jump" aria-label="제품 바로가기">
+  <div class="shop-jump" id="productJump" aria-label="제품 바로가기">
     <a href="#medilox-s">메디록스-S</a><a href="#keyang-drill">계양 충전드릴</a><a href="#osc-impact">오성 임팩트렌치</a>
   </div>
   <a class="btn glove shop-primary" href="#products">제품 바로 보기</a>
@@ -57,7 +57,7 @@
 <section class="s" id="products"><div class="wrap">
   <h2>지금 소개 중인 제품</h2>
   <p class="d">홍보 영상에서 본 제품명을 확인하고 바로 이동하세요.</p>
-  <div class="product-grid">
+  <div class="product-grid" id="productGrid">
     <article class="product-card" id="medilox-s">
       <span class="eyebrow">살균·소독</span><h2>메디록스-S</h2>
       <p>청소 후 위생 관리와 살균·소독 용도로 소개하는 제품입니다.</p>
@@ -109,5 +109,20 @@
    }catch(e){}
  }));
 })();
+</script>
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import{getFirestore,collection,getDocs,query,orderBy}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+const cfg={apiKey:'AIzaSyA1jn9CDPiEg_Sg_aOlEeZjPy8P7ZoFOZw',authDomain:'okclean-admin.firebaseapp.com',projectId:'okclean-admin',appId:'1:665748095050:web:49d73ca0f28ec5f67ee6b3'};
+const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+try{
+ const db=getFirestore(initializeApp(cfg));
+ const snap=await getDocs(query(collection(db,'products'),orderBy('order','asc')));
+ const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active!==false&&x.name&&x.url);
+ if(rows.length){
+  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:12px;background:#fff">`:''}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions"><a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><span class="product-note">외부 판매 페이지로 이동</span></div></article>`).join('');
+  document.getElementById('productJump').innerHTML=rows.slice(0,8).map(x=>`<a href="#p-${esc(x.id)}">${esc(x.name)}</a>`).join('');
+ }
+}catch(e){console.info('products fallback',e?.code||e?.message)}
 </script>
 </body></html>

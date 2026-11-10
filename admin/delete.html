@@ -134,13 +134,33 @@ $('members').addEventListener('click',async e=>{
 });
 
 getRedirectResult(auth).catch(()=>{});
-onAuthStateChanged(auth,user=>{
-  $('loginBtn').classList.toggle('hidden',!!user);
+onAuthStateChanged(auth,async user=>{
+  const provider=user?.providerData?.some(p=>p.providerId==='google.com');
+  if(user && !provider){
+    // 고객 회원가입에서 남은 익명 세션은 관리자 세션이 아닙니다.
+    try{await signOut(auth);}catch(_){}
+    $('loginBtn').classList.remove('hidden');
+    $('logoutBtn').classList.add('hidden');
+    $('panel').classList.add('hidden');
+    $('members').innerHTML='';
+    message('관리자 Google 계정으로 로그인해 주세요.','warn');
+    return;
+  }
+
+  $('loginBtn').classList.toggle('hidden',!user);
   $('logoutBtn').classList.toggle('hidden',!user);
   $('panel').classList.toggle('hidden',!user);
-  if(!user){message('로그인이 필요합니다.');$('members').innerHTML='';return;}
+
+  if(!user){
+    message('관리자 Google 계정으로 로그인해 주세요.');
+    $('members').innerHTML='';
+    return;
+  }
+
   message('관리자 권한을 확인 중입니다…');
-  loadMembers().then(()=>message('관리자 로그인 및 권한 확인 완료.','ok')).catch(()=>{});
+  loadMembers()
+    .then(()=>message('관리자 로그인 및 권한 확인 완료.','ok'))
+    .catch(()=>{});
 });
 </script>
 </body>

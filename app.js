@@ -285,6 +285,15 @@ if(M){
       const mod=await import("./member-sync.js?v=20261110-2");
       const saved=await mod.submitMember(C.firebase,draft);
       if(!saved||!saved.id) throw new Error("SAVE_NOT_CONFIRMED");
+      if(saved.existing){
+        MEMBER={...draft,code:saved.code||draft.code,requestId:saved.id,saved:true,existing:true};
+        store.set("member_v2",MEMBER);
+        $("jErr").textContent="";
+        joinDone(); calc();
+        const note=$("joinDone").querySelector(".step-k");
+        if(note) note.innerHTML="<b>이미 가입된 기기에서 기존 쿠폰을 확인했어요.</b> 예약할 때 쿠폰번호를 알려 주세요.";
+        return;
+      }
       MEMBER={...draft,requestId:saved.id,saved:true};
       store.set("member_v2",MEMBER);
       joinDone(); calc();

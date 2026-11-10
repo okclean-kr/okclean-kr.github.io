@@ -142,7 +142,7 @@
 </script>
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import{getFirestore,collection,getDocs,query,orderBy,addDoc,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import{getFirestore,collection,getDocs,query,orderBy,addDoc,serverTimestamp,limit}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const cfg={apiKey:'AIzaSyA1jn9CDPiEg_Sg_aOlEeZjPy8P7ZoFOZw',authDomain:'okclean-admin.firebaseapp.com',projectId:'okclean-admin',appId:'1:665748095050:web:49d73ca0f28ec5f67ee6b3'};
 const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 try{
@@ -156,8 +156,23 @@ try{
      at:serverTimestamp()
    }).catch(()=>{});
  });
- const snap=await getDocs(query(collection(db,'products'),orderBy('order','asc')));
- const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active!==false&&x.name&&x.url);
+ const [snap,clickSnap]=await Promise.all([
+   getDocs(query(collection(db,'products'),orderBy('order','asc'))),
+   getDocs(query(collection(db,'product_clicks'),orderBy('at','desc'),limit(500)))
+ ]);
+ const recentClicks={};
+ const cutoff=Date.now()-30*86400000;
+ clickSnap.docs.forEach(d=>{
+   const x=d.data(),t=x.at?.toDate?.()?.getTime?.()||0,p=String(x.product||'');
+   if(p&&t>=cutoff)recentClicks[p]=(recentClicks[p]||0)+1;
+ });
+ const rows=snap.docs.map(d=>({id:d.id,...d.data()}))
+   .filter(x=>x.active!==false&&x.name&&x.url)
+   .sort((a,b)=>{
+     const ca=recentClicks[a.id]||0,cb=recentClicks[b.id]||0;
+     if(ca!==cb)return cb-ca;
+     return (Number(a.order)||100)-(Number(b.order)||100);
+   });
  if(rows.length){
   document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img class="product-img" src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy">`:`<img class="product-img" src="../logo.png" alt="오케이청소 추천제품" loading="lazy">`}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions"><a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><button type="button" class="btn line share-product" data-share-product="${esc(x.id)}" data-share-name="${esc(x.name)}">이 제품 링크 복사</button><span class="product-note">쿠팡 등 외부 판매 페이지로 이동</span></div></article>`).join('');
   document.getElementById('productJump').innerHTML=rows.slice(0,8).map(x=>`<a href="#p-${esc(x.id)}">${esc(x.name)}</a>`).join('');

@@ -58,6 +58,8 @@ const app=initializeApp(config);
 const auth=getAuth(app);
 const db=getFirestore(app);
 const provider=new GoogleAuthProvider();
+const ADMIN_UID='H1MfdqGkFRZzU8qkqwXTsiKv3CO2';
+provider.setCustomParameters({prompt:'select_account'});
 
 function message(text,type=''){
   $('msg').textContent=text;
@@ -135,8 +137,8 @@ $('members').addEventListener('click',async e=>{
 
 getRedirectResult(auth).catch(()=>{});
 onAuthStateChanged(auth,async user=>{
-  const provider=user?.providerData?.some(p=>p.providerId==='google.com');
-  if(user && !provider){
+  const googleProvider=user?.providerData?.some(p=>p.providerId==='google.com');
+  if(user && !googleProvider){
     // 고객 회원가입에서 남은 익명 세션은 관리자 세션이 아닙니다.
     try{await signOut(auth);}catch(_){}
     $('loginBtn').classList.remove('hidden');
@@ -147,16 +149,28 @@ onAuthStateChanged(auth,async user=>{
     return;
   }
 
-  $('loginBtn').classList.toggle('hidden',!user);
+  $('loginBtn').classList.toggle('hidden',!!user);
   $('logoutBtn').classList.toggle('hidden',!user);
-  $('panel').classList.toggle('hidden',!user);
 
   if(!user){
+    $('panel').classList.add('hidden');
     message('관리자 Google 계정으로 로그인해 주세요.');
     $('members').innerHTML='';
     return;
   }
 
+  if(user.uid!==ADMIN_UID){
+    $('panel').classList.add('hidden');
+    $('members').innerHTML='';
+    $('loginBtn').classList.remove('hidden');
+    $('loginBtn').textContent='다른 Google 계정으로 다시 로그인';
+    message('현재 Google 계정은 등록된 관리자 계정이 아닙니다. 다른 계정을 선택해 주세요.','err');
+    return;
+  }
+
+  $('loginBtn').classList.add('hidden');
+  $('loginBtn').textContent='Google 관리자 로그인';
+  $('panel').classList.remove('hidden');
   message('관리자 권한을 확인 중입니다…');
   loadMembers()
     .then(()=>message('관리자 로그인 및 권한 확인 완료.','ok'))

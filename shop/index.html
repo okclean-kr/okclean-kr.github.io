@@ -19,6 +19,8 @@
 .product-grid{display:grid;gap:14px}.product-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px}
 .product-card .eyebrow{font-size:12px;font-weight:800;color:var(--water)}.product-card h2{font-size:22px;line-height:1.25;margin:0}.product-card p{margin:0;color:var(--muted);line-height:1.6}
 .product-card ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7}.product-actions{display:grid;gap:8px;margin-top:auto}
+.product-img{width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.partner-note{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:#fff8e8;border:1px solid #f2d68a;font-size:13px;line-height:1.55;color:#6f5200}
 .product-actions .btn{width:100%;min-height:54px;padding:15px 16px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.product-note{font-size:12px;color:var(--muted);text-align:center}.shop-how{display:grid;gap:10px}.shop-how div{border:1px solid var(--line);background:var(--paper);border-radius:14px;padding:14px}
 .shop-how b{display:block;margin-bottom:4px}.shop-how span{color:var(--muted);font-size:14px}
 @media(min-width:760px){.product-grid{grid-template-columns:repeat(3,1fr)}.shop-how{grid-template-columns:repeat(3,1fr)}}
@@ -57,6 +59,7 @@
 <section class="s" id="products"><div class="wrap">
   <h2>지금 소개 중인 제품</h2>
   <p class="d">홍보 영상에서 본 제품명을 확인하고 바로 이동하세요.</p>
+  <p class="partner-note"><b>쿠팡 파트너스 안내</b><br>이 페이지의 일부 링크는 쿠팡 파트너스 활동의 일환으로, 구매 시 일정액의 수수료를 제공받을 수 있습니다. 구매자에게 추가 비용은 발생하지 않습니다.</p>
   <div class="product-grid" id="productGrid">
     <article class="product-card" id="medilox-s">
       <span class="eyebrow">살균·소독</span><h2>메디록스-S</h2>
@@ -100,14 +103,15 @@
 <script>
 (function(){
  const p=new URLSearchParams(location.search),src=p.get('src')||'profile';
- document.querySelectorAll('.buy-link').forEach(a=>a.addEventListener('click',()=>{
+ document.addEventListener('click',e=>{
+   const a=e.target.closest('.buy-link'); if(!a)return;
    try{
      const key='okclean_product_clicks';
      const log=JSON.parse(localStorage.getItem(key)||'[]');
      log.push({product:a.dataset.product,src:src,at:new Date().toISOString()});
      localStorage.setItem(key,JSON.stringify(log.slice(-100)));
    }catch(e){}
- }));
+ });
 })();
 </script>
 <script type="module">
@@ -120,7 +124,7 @@ try{
  const snap=await getDocs(query(collection(db,'products'),orderBy('order','asc')));
  const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active!==false&&x.name&&x.url);
  if(rows.length){
-  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:12px;background:#fff">`:''}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions"><a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><span class="product-note">외부 판매 페이지로 이동</span></div></article>`).join('');
+  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img class="product-img" src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy">`:`<img class="product-img" src="../logo.png" alt="오케이청소 추천제품" loading="lazy">`}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions"><a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><span class="product-note">쿠팡 등 외부 판매 페이지로 이동</span></div></article>`).join('');
   document.getElementById('productJump').innerHTML=rows.slice(0,8).map(x=>`<a href="#p-${esc(x.id)}">${esc(x.name)}</a>`).join('');
  }
 }catch(e){console.info('products fallback',e?.code||e?.message)}

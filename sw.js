@@ -1,7 +1,7 @@
 // 고객 홈페이지 전용 캐시. 관리자·인증 경로와 다른 앱의 캐시는 건드리지 않습니다.
 const BASE = new URL('./', self.registration.scope);
 const PREFIX = 'okclean-customer-' + encodeURIComponent(BASE.pathname) + '-';
-const CACHE = PREFIX + 'restore-20261110-v1';
+const CACHE = PREFIX + 'restore-20261110-v2';
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
 self.addEventListener('activate', event => event.waitUntil(
   caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith(PREFIX) && key !== CACHE).map(key => caches.delete(key))))
@@ -12,7 +12,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if(request.method !== 'GET' || url.origin !== BASE.origin || !url.pathname.startsWith(BASE.pathname)) return;
   const relative = url.pathname.slice(BASE.pathname.length);
-  if(relative.startsWith('admin/') || relative.startsWith('__/') || relative === 'config.json') return;
+  if(relative.startsWith('admin/') || relative.startsWith('__/') || relative === 'config.json' || relative === 'member-sync.js') return;
   const eligible = request.mode === 'navigate' || /\.(?:html|css|js|json|webmanifest|png|jpe?g|svg|webp)$/.test(url.pathname);
   if(!eligible) return;
   event.respondWith((async () => {

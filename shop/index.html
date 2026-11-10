@@ -142,11 +142,20 @@
 </script>
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import{getFirestore,collection,getDocs,query,orderBy}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import{getFirestore,collection,getDocs,query,orderBy,addDoc,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const cfg={apiKey:'AIzaSyA1jn9CDPiEg_Sg_aOlEeZjPy8P7ZoFOZw',authDomain:'okclean-admin.firebaseapp.com',projectId:'okclean-admin',appId:'1:665748095050:web:49d73ca0f28ec5f67ee6b3'};
 const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 try{
  const db=getFirestore(initializeApp(cfg));
+ document.addEventListener('click',e=>{
+   const a=e.target.closest('.buy-link'); if(!a)return;
+   const src=new URLSearchParams(location.search).get('src')||'profile';
+   addDoc(collection(db,'product_clicks'),{
+     product:String(a.dataset.product||'').slice(0,128),
+     src:String(src).slice(0,32),
+     at:serverTimestamp()
+   }).catch(()=>{});
+ });
  const snap=await getDocs(query(collection(db,'products'),orderBy('order','asc')));
  const rows=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active!==false&&x.name&&x.url);
  if(rows.length){

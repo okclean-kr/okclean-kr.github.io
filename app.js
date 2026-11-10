@@ -25,7 +25,7 @@ const won = x => { x = Math.round(x / 1000) * 1000; return x >= 10000 ? (+(x / 1
 const BLOGS = [].concat(C.blog || []).filter(Boolean);
 const phoneDigits = (C.phone || "").replace(/[^0-9+]/g, "");
 const M = C.member || null;
-let MEMBER = null; // 운영 저장 확인 전에는 기존 로컬 쿠폰을 가입 완료로 처리하지 않습니다.
+let MEMBER = store.get("member_v2", null); // Firebase 저장이 확인된 가입만 완료 상태로 사용합니다.
 // 친구 초대 링크(?ref=OK-XXXXXX)로 들어온 경우 추천인 코드를 기억
 const refQ = (new URLSearchParams(location.search).get("ref") || "").toUpperCase();
 if(/^OK-[A-Z0-9]{6}$/.test(refQ) && (!MEMBER || MEMBER.code !== refQ)) store.set("ref", refQ);
@@ -139,7 +139,7 @@ function calc(){
   if(M){
     const box = $("qMem"); box.hidden = false;
     if(MEMBER) box.innerHTML = r ? `🎟 회원 쿠폰 적용 시 <b>${priceText(Math.max(0, r.lo - M.coupon), r.hi == null ? null : Math.max(0, r.hi - M.coupon))}</b> + ${esc(MEMBER.free)} 무료` : `🎟 회원 쿠폰 ${won(M.coupon)}원 할인 + ${esc(MEMBER.free)} 무료가 적용돼요`;
-    else box.innerHTML = `<button type="button" class="mem-join" data-join>🎟 회원 혜택 문의 · <b>${won(M.coupon)}원 할인 쿠폰</b> + 무료 서비스 →</button>`;
+    else box.innerHTML = `<button type="button" class="mem-join" data-join>🎟 회원가입하면 여기서 <b>${won(M.coupon)}원 더 할인</b> + 무료 서비스 →</button>`;
   }
   store.set("quote", {svc: cur.svc, v: cur.v, t: cur.t, qty: cur.qty, opts: cur.opts, area: $("qArea").value, date: $("qDate").value});
 }
@@ -226,33 +226,74 @@ const nowEl = document.querySelector(".mo.now");
 if(nowEl) $("months").scrollLeft = Math.max(0, nowEl.offsetLeft - 20);
 
 
-// 회원 자동 접수는 운영 규칙과 저장 확인을 검증한 뒤 별도로 복구합니다.
-// 여기서는 개인정보를 수집하거나 가입 완료/쿠폰 발급을 표시하지 않습니다.
-function openJoin(){
-  const title = document.getElementById('sheetT');
-  const body = document.getElementById('sheetB');
-  if(!title || !body) return;
-  title.textContent = '회원 혜택 문의';
-  body.replaceChildren();
-  const explanation = document.createElement('p');
-  explanation.className = 'lead-s';
-  explanation.textContent = '1만원 할인 쿠폰과 무료 서비스 1가지의 신청 방법을 카카오톡 상담에서 안내해 드려요. 기존 회원도 상담할 때 쿠폰번호를 알려 주세요.';
-  const status = document.createElement('p');
-  status.className = 'hint';
-  status.textContent = '이 화면에서는 회원가입 접수나 쿠폰 발급이 이루어지지 않습니다.';
-  const contact = document.createElement('a');
-  contact.className = 'btn glove';
-  contact.href = C.kakao;
-  contact.target = '_blank';
-  contact.rel = 'noopener';
-  contact.textContent = '카카오톡으로 회원 혜택 문의';
-  body.append(explanation, status, contact);
-  window.openModal('sheet');
+// ── 회원가입 (Firebase 저장 확인 후 완료) ──
+function joinDone(){
+  const d = $("joinDone"), m = MEMBER;
+  $("joinForm").hidden = true; d.hidden = false;
+  d.innerHTML = `<p class="done-k">가입을 환영해요, ${esc(m.name)}님</p>
+    <div class="coupon"><span>회원 쿠폰</span><b>${won(M.coupon)}원 할인</b><em>+ ${esc(m.free)} 무료</em><code>${esc(m.code)}</code></div>
+    <p class="note">${esc(M.couponTerms)}</p>
+    <p class="step-k"><b>저장 확인 완료</b> · 예약할 때 쿠폰번호를 알려 주세요.</p>
+    <button class="btn glove" type="button" id="jKakao">카톡으로 가입 내용 보내기</button>
+    ${M.referral ? `<button class="btn line small" type="button" data-invite>친구 초대 링크 보내기</button>` : ""}
+    <button class="link" type="button" data-close>닫기</button>`;
+  $("jKakao").onclick = () => {
+    const text = `[${C.name} 회원가입]\n이름: ${m.name}\n연락처: ${m.phone}\n지역: ${m.area || "-"}\n무료 서비스: ${m.free}\n쿠폰번호: ${m.code}${m.ref ? `\n추천인 코드: ${m.ref}` : ""}\n이벤트 소식: ${m.ad ? "받음" : "안 받음"}`;
+    kakaoSend("카톡으로 가입 내용 보내기", text);
+  };
 }
-document.addEventListener('click', event => {
-  if(event.target.closest('[data-join], [data-invite]')){
-    event.preventDefault();
-    openJoin();
+async function invite(){
+  if(!MEMBER){ openJoin(); return; }
+  const url = (C.siteUrl || location.origin).replace(/\/$/, "") + "/?ref=" + MEMBER.code;
+  const text = `${C.name} 회원가입하면 ${won(M.coupon)}원 할인 쿠폰 + 무료 서비스 1가지를 받을 수 있어요.`;
+  if(navigator.share && !/KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\//i.test(navigator.userAgent)){
+    try { await navigator.share({title: C.name, text, url}); return; } catch(e){ if(e && e.name === "AbortError") return; }
   }
-});
-calc();
+  if(await copy(text + "\n" + url)) toast("초대 링크를 복사했어요.");
+}
+function openJoin(){
+  if(!M) return;
+  if(MEMBER) joinDone(); else {
+    $("joinForm").hidden = false; $("joinDone").hidden = true;
+    const rb = $("jRef"); if(rb && REF){ rb.hidden = false; rb.textContent = `친구 초대로 오셨네요! 추천인 코드 ${REF}가 함께 등록돼요.`; }
+  }
+  openModal("join");
+}
+if(M){
+  document.addEventListener("click", e => {
+    if(e.target.closest("[data-join]")){ e.preventDefault(); openJoin(); }
+    if(e.target.closest("[data-later]")){ store.set("joinLater", Date.now()); closeModal($("join")); }
+    if(e.target.closest("[data-invite]")){ e.preventDefault(); invite(); }
+  });
+  $("jPhone").addEventListener("input", e => {
+    const d = e.target.value.replace(/\D/g, "").slice(0, 11);
+    e.target.value = d.length < 4 ? d : d.length < 8 ? `${d.slice(0, 3)}-${d.slice(3)}` : `${d.slice(0, 3)}-${d.slice(3, d.length - 4)}-${d.slice(-4)}`;
+  });
+  $("jSubmit").onclick = async () => {
+    const name = $("jName").value.trim(), phone = $("jPhone").value.trim();
+    const err = msg => { $("jErr").textContent = msg; };
+    if(!name) return err("이름을 적어 주세요.");
+    if(!/^01[016789]-?\d{3,4}-?\d{4}$/.test(phone)) return err("휴대폰 번호를 정확히 적어 주세요. 예: 010-1234-5678");
+    if(!$("jAgree").checked) return err("개인정보 수집·이용에 동의해 주세요.");
+    if(!(C.firebase && C.firebase.apiKey && C.firebase.projectId)) return err("회원 시스템 연결을 확인 중이에요. 카카오톡으로 신청해 주세요.");
+    const btn=$("jSubmit"); btn.disabled=true; btn.textContent="가입 정보를 저장하고 있어요…"; err("");
+    const abc="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const code="OK-"+Array.from({length:6},()=>abc[Math.floor(Math.random()*abc.length)]).join("");
+    const draft={name,phone,area:$("jArea").value,free:(document.querySelector('input[name="jFree"]:checked')||{}).value||M.freeServices[0],
+      ad:$("jAgree").checked&&$("jAd").checked,code,ref:REF&&REF!==code?REF:"",joined:new Date().toISOString().slice(0,10)};
+    try{
+      const mod=await import("./member-sync.js");
+      const saved=await mod.submitMember(C.firebase,draft);
+      if(!saved||!saved.id) throw new Error("SAVE_NOT_CONFIRMED");
+      MEMBER={...draft,requestId:saved.id,saved:true};
+      store.set("member_v2",MEMBER);
+      joinDone(); calc();
+    }catch(e){
+      console.error("회원 저장 실패",e);
+      MEMBER=null;
+      err("가입 정보 저장을 확인하지 못했어요. 쿠폰은 아직 발급되지 않았습니다. 잠시 후 다시 시도하거나 카카오톡으로 문의해 주세요.");
+      btn.disabled=false; btn.textContent="다시 저장 시도";
+    }
+  };
+  calc();
+}

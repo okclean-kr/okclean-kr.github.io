@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>오케이청소 회원 삭제 도구</title>
+<link rel="icon" href="../icon-192.png">
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#f5f7fb}
+body{margin:0}.wrap{max-width:860px;margin:0 auto;padding:24px}.card{background:#fff;border:1px solid #e5e9f2;border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+h1{font-size:24px;margin:0 0 8px}.muted{color:#6d7688;font-size:14px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}.primary{background:#174aa6;color:#fff}.danger{background:#b42318;color:#fff}.ghost{background:#eef2f8;color:#172033}
+button:disabled{opacity:.5;cursor:not-allowed}.member{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.member b{display:block}.code{font-family:ui-monospace,Consolas,monospace}.status{padding:8px 10px;border-radius:10px;background:#eef2f8;font-size:13px}.ok{background:#eaf7ee;color:#16753a}.warn{background:#fff4e5;color:#9a5700}.err{background:#fdecec;color:#a1261d}
+#members{display:grid;gap:10px}.hidden{display:none!important}
+@media(max-width:620px){.member{grid-template-columns:1fr}.member .danger{width:100%}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>오케이청소 회원 삭제 도구</h1>
+  <p class="muted">허가된 관리자 Google 계정만 사용할 수 있습니다. 삭제하면 회원정보와 쿠폰 확인정보가 함께 삭제되며 복구할 수 없습니다.</p>
+
+  <section class="card" id="loginCard">
+    <div class="row">
+      <button class="primary" id="loginBtn" type="button">Google 관리자 로그인</button>
+      <button class="ghost hidden" id="logoutBtn" type="button">로그아웃</button>
+    </div>
+    <p id="msg" class="status">로그인이 필요합니다.</p>
+  </section>
+
+  <section class="card hidden" id="panel">
+    <div class="row" style="justify-content:space-between">
+      <b>회원 목록</b>
+      <button class="ghost" id="reloadBtn" type="button">새로고침</button>
+    </div>
+    <p class="muted">삭제 대상의 이름 또는 쿠폰번호를 다시 입력해야 삭제됩니다.</p>
+    <div id="members"></div>
+  </section>
+
+  <p><a href="./">관리자 바로가기 화면으로 돌아가기</a></p>
+</main>
+
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {getFirestore,collection,query,orderBy,limit,getDocs,doc,writeBatch,getDoc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const config={
+  apiKey:'AIzaSyA1jn9CDPiEg_Sg_aOlEeZjPy8P7ZoFOZw',
+  authDomain:'okclean-admin.firebaseapp.com',
+  projectId:'okclean-admin',
+  appId:'1:665748095050:web:49d73ca0f28ec5f67ee6b3'
+};
+const app=initializeApp(config);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const provider=new GoogleAuthProvider();
+
+function message(text,type=''){
+  $('msg').textContent=text;
+  $('msg').className='status '+type;
+}
+async function login(){
+  try{await signInWithPopup(auth,provider)}
+  catch(e){
+    if(e?.code==='auth/popup-blocked') await signInWithRedirect(auth,provider);
+    else message('로그인 실패: '+(e?.code||e?.message||'unknown'),'err');
+  }
+}
+$('loginBtn').onclick=login;
+$('logoutBtn').onclick=()=>signOut(auth);
+$('reloadBtn').onclick=()=>loadMembers();
+
+async function loadMembers(){
+  $('members').innerHTML='<p class="muted">회원정보를 불러오는 중…</p>';
+  try{
+    const snap=await getDocs(query(collection(db,'member_requests'),orderBy('joined','desc'),limit(500)));
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!rows.length){$('members').innerHTML='<p class="muted">표시할 회원이 없습니다.</p>';return;}
+    $('members').innerHTML=rows.map(m=>`
+      <div class="card member" data-id="${esc(m.id)}">
+        <div>
+          <b>${esc(m.name)} · ${esc(m.area)}</b>
+          <div class="muted">${esc(m.phone)}</div>
+          <div class="code">${esc(m.code)}</div>
+          <div class="muted">상태: ${esc(m.status)}</div>
+        </div>
+        <button class="danger" type="button"
+          data-delete="${esc(m.id)}"
+          data-name="${esc(m.name)}"
+          data-code="${esc(m.code)}">개인정보 삭제</button>
+      </div>`).join('');
+  }catch(e){
+    $('members').innerHTML='';
+    message('회원 목록을 불러올 수 없습니다. 관리자 권한을 확인하세요. ('+(e?.code||'unknown')+')','err');
+    throw e;
+  }
+}
+
+$('members').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-delete]');
+  if(!b)return;
+  const id=b.dataset.delete,name=b.dataset.name||'',code=b.dataset.code||'';
+
+  if(!confirm('이 회원의 개인정보와 쿠폰 확인정보를 함께 삭제합니다.\n삭제 후 복구할 수 없습니다. 계속하시겠습니까?')) return;
+  const typed=prompt('삭제 확인을 위해 회원 이름 또는 쿠폰번호를 정확히 입력하세요.');
+  if(typed!==name && typed!==code){
+    message('삭제 취소: 확인값이 일치하지 않습니다.','warn');
+    return;
+  }
+
+  b.disabled=true;
+  try{
+    const memberRef=doc(db,'member_requests',id);
+    const receiptRef=doc(db,'member_receipts',id);
+    const batch=writeBatch(db);
+    batch.delete(memberRef);
+    batch.delete(receiptRef);
+    await batch.commit();
+
+    const [a,b2]=await Promise.all([getDoc(memberRef),getDoc(receiptRef)]);
+    if(a.exists()||b2.exists()) throw new Error('DELETE_NOT_CONFIRMED');
+
+    message('개인정보 삭제가 완료되었습니다.','ok');
+    await loadMembers();
+  }catch(e){
+    message('삭제 실패: '+(e?.code||e?.message||'unknown'),'err');
+  }finally{
+    b.disabled=false;
+  }
+});
+
+getRedirectResult(auth).catch(()=>{});
+onAuthStateChanged(auth,user=>{
+  $('loginBtn').classList.toggle('hidden',!!user);
+  $('logoutBtn').classList.toggle('hidden',!user);
+  $('panel').classList.toggle('hidden',!user);
+  if(!user){message('로그인이 필요합니다.');$('members').innerHTML='';return;}
+  message('관리자 권한을 확인 중입니다…');
+  loadMembers().then(()=>message('관리자 로그인 및 권한 확인 완료.','ok')).catch(()=>{});
+});
+</script>
+</body>
+</html>

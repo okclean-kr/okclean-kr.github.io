@@ -1,0 +1,11 @@
+// 제안 규칙 조각 - 실제 배포 전 관리자 앱 batch delete 구현과 함께 검증 필요
+// 기존 isAdmin() 함수와 컬렉션 match 내부에만 적용
+//
+// member_requests:
+// allow delete: if isAdmin();
+//
+// member_receipts:
+// allow delete: if isAdmin();
+//
+// 일반 사용자 삭제 권한은 열지 않는다.
+// 실제 배포 시 두 문서를 관리자 UI의 writeBatch.delete()로 함께 삭제한다.

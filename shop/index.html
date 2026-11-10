@@ -156,16 +156,18 @@ try{
      at:serverTimestamp()
    }).catch(()=>{});
  });
- const [snap,clickSnap]=await Promise.all([
-   getDocs(query(collection(db,'products'),orderBy('order','asc'))),
-   getDocs(query(collection(db,'product_clicks'),orderBy('at','desc'),limit(500)))
- ]);
+ const snap=await getDocs(query(collection(db,'products'),orderBy('order','asc')));
  const recentClicks={};
- const cutoff=Date.now()-30*86400000;
- clickSnap.docs.forEach(d=>{
-   const x=d.data(),t=x.at?.toDate?.()?.getTime?.()||0,p=String(x.product||'');
-   if(p&&t>=cutoff)recentClicks[p]=(recentClicks[p]||0)+1;
- });
+ try{
+   const clickSnap=await getDocs(query(collection(db,'product_clicks'),orderBy('at','desc'),limit(500)));
+   const cutoff=Date.now()-30*86400000;
+   clickSnap.docs.forEach(d=>{
+     const x=d.data(),t=x.at?.toDate?.()?.getTime?.()||0,p=String(x.product||'');
+     if(p&&t>=cutoff)recentClicks[p]=(recentClicks[p]||0)+1;
+   });
+ }catch(_){
+   // 클릭통계는 관리자 전용일 수 있습니다. 고객 상품 표시는 계속 진행합니다.
+ }
  const rows=snap.docs.map(d=>({id:d.id,...d.data()}))
    .filter(x=>x.active!==false&&x.name&&x.url)
    .sort((a,b)=>{

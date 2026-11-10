@@ -1,0 +1,36 @@
+{
+  "snapshot_at": "2026-11-10",
+  "note": "Public product recovery snapshot. Member/customer PII is intentionally excluded.",
+  "products": [
+    {
+      "id": "9f081382-af8d-40e4-98e4-ddcbeaa7c75b",
+      "name": "메디록스-S 살균소독제 300ml",
+      "category": "살균·소독",
+      "description": "청소 후 위생관리와 살균·소독이 필요한 공간에 활용하기 좋은 제품입니다. 오케이청소가 현장에서 위생관리용으로 추천하는 제품입니다.",
+      "image": "https://t3a.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/2025/10/31/15/4/e873ce73-adee-46c0-8c86-f4aaef933af5.png",
+      "url": "https://link.coupang.com/a/iyHPkXJ1J7",
+      "order": 10,
+      "active": true
+    },
+    {
+      "id": "55c44bb3-9555-461c-a239-e3087cadac39",
+      "name": "계양전기 DD12L-30I 12V MAX 충전 드라이버드릴",
+      "category": "전동공구",
+      "description": "청소 현장에서 피스 체결·분해 작업에 활용하기 좋은 충전드릴입니다. 가볍고 휴대성이 좋아 출장 작업용으로 추천합니다.",
+      "image": "https://t5a.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/5c1b/63b7778e941fe4d690ca81040f02e4a6e0e97fc289b8e4626f9811929471.jpg",
+      "url": "https://link.coupang.com/a/iyHLAhux3c",
+      "order": 20,
+      "active": true
+    },
+    {
+      "id": "7bdb5d1a-4328-4d27-9af1-f198ea0a42ea",
+      "name": "오성 MAX 20V 충전 임팩 드라이버·렌치 OCW-2051XL",
+      "category": "전동공구",
+      "description": "강한 체결력과 힘이 필요한 볼트 분해·조립 작업에 활용하기 좋은 충전 임팩 제품입니다. 청소장비 설치·정비 등 다양한 현장 작업에 활용할 수 있습니다.",
+      "image": "https://t5a.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/d7ef/2953b6303afd6e3d05cd48567bd68b292ada6c726c7ad056b95bafff9744.JPG",
+      "url": "https://link.coupang.com/a/iyHzcD6LK0",
+      "order": 30,
+      "active": true
+    }
+  ]
+}

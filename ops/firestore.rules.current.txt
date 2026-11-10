@@ -1,0 +1,134 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owner(id) {
+      return signedIn() && request.auth.uid == id;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.uid == 'H1MfdqGkFRZzU8qkqwXTsiKv3CO2'
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+
+    function validMember(d) {
+      return d.keys().hasOnly([
+          'name','phone','area','free','ad','code','ref','joined',
+          'status','couponStatus','freeStatus','memo','points','grade','ownerUid'
+        ])
+        && d.keys().hasAll([
+          'name','phone','area','free','ad','code','ref','joined',
+          'status','couponStatus','freeStatus','memo','points','grade','ownerUid'
+        ])
+        && d.name is string
+        && d.name.size() > 0
+        && d.name.size() <= 30
+        && d.phone is string
+        && d.phone.matches('^01[016789]-?[0-9]{3,4}-?[0-9]{4}$')
+        && d.area is string
+        && d.area.size() <= 40
+        && d.free is string
+        && d.free.size() <= 80
+        && d.ad is bool
+        && d.code is string
+        && d.code.matches('^OK-[A-Z2-9]{6}$')
+        && d.ref is string
+        && d.ref.size() <= 20
+        && d.joined is timestamp
+        && d.ownerUid is string
+        && d.ownerUid.size() > 0
+        && d.ownerUid.size() <= 128
+        && d.status in ['신규','상담중','예약확정','작업완료','종료']
+        && d.couponStatus in ['미사용','사용','취소']
+        && d.freeStatus in ['미제공','제공완료','취소']
+        && d.memo is string
+        && d.memo.size() <= 1000
+        && d.points is number
+        && d.points >= 0
+        && d.points <= 10000000
+        && d.grade in ['새싹','실버','골드','VIP'];
+    }
+
+    function validReceipt(d, id) {
+      return d.keys().hasAll(['ownerUid','requestId','code','joined'])
+        && d.keys().hasOnly(['ownerUid','requestId','code','joined'])
+        && d.ownerUid == id
+        && d.requestId == id
+        && id.size() <= 128
+        && d.code is string
+        && d.code.matches('^OK-[A-Z2-9]{6}$')
+        && d.joined == request.time;
+    }
+
+    match /member_requests/{id} {
+      allow read: if isAdmin();
+
+      allow create: if owner(id)
+        && validMember(request.resource.data)
+        && request.resource.data.ownerUid == id
+        && request.resource.data.joined == request.time
+        && request.resource.data.status == '신규'
+        && request.resource.data.couponStatus == '미사용'
+        && request.resource.data.freeStatus == '미제공'
+        && request.resource.data.memo == ''
+        && request.resource.data.points == 0
+        && request.resource.data.grade == '새싹'
+        && getAfter(
+          /databases/$(database)/documents/member_receipts/$(id)
+        ).data.code == request.resource.data.code
+        && getAfter(
+          /databases/$(database)/documents/member_receipts/$(id)
+        ).data.joined == request.time;
+
+      allow update: if isAdmin()
+        && validMember(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status','couponStatus','freeStatus','grade','points','memo'
+        ]);
+
+      allow delete: if isAdmin();
+    }
+
+    match /member_receipts/{id} {
+      allow get: if owner(id) || isAdmin();
+      allow list: if false;
+
+      allow create: if owner(id)
+        && validReceipt(request.resource.data, id);
+
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /product_clicks/{clickId} {
+      allow read: if isAdmin();
+
+      allow create: if
+        request.resource.data.keys().hasOnly(['product','src','at'])
+        && request.resource.data.keys().hasAll(['product','src','at'])
+        && request.resource.data.product is string
+        && request.resource.data.product.size() > 0
+        && request.resource.data.product.size() <= 128
+        && request.resource.data.src is string
+        && request.resource.data.src.size() <= 32
+        && request.resource.data.at == request.time;
+
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

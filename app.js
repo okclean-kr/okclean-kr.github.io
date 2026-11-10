@@ -282,7 +282,7 @@ if(M){
     const draft={name,phone,area:$("jArea").value,free:(document.querySelector('input[name="jFree"]:checked')||{}).value||M.freeServices[0],
       ad:$("jAgree").checked&&$("jAd").checked,code,ref:REF&&REF!==code?REF:"",joined:new Date().toISOString().slice(0,10)};
     try{
-      const mod=await import("./member-sync.js");
+      const mod=await import("./member-sync.js?v=20261110-2");
       const saved=await mod.submitMember(C.firebase,draft);
       if(!saved||!saved.id) throw new Error("SAVE_NOT_CONFIRMED");
       MEMBER={...draft,requestId:saved.id,saved:true};

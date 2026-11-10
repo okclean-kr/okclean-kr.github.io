@@ -310,8 +310,3 @@ body.modal-open{overflow:hidden}
 
 /* 작은 화면의 가격표 설명 셀 줄바꿈 */
 .ptable td.kn{white-space:normal;overflow-wrap:anywhere}
-
-/* 통합 앱 설치 UX */
-.install-cta{margin:16px 0;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--paper);display:grid;gap:10px;max-width:440px}
-.install-cta>div{display:grid;gap:3px}.install-cta b{font-size:17px}.install-cta span{color:var(--muted);font-size:14px;line-height:1.5}.install-cta .btn{min-height:48px;width:100%}.install-status{margin:0;color:var(--muted);font-size:13px}
-.install-help-card{margin-top:10px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}.install-help-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.install-help-head button{border:0;background:transparent;font-size:24px;line-height:1;cursor:pointer}.install-help-body{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.6}.install-help-steps{margin:8px 0 0;padding-left:22px}.install-help-steps li{margin:5px 0}

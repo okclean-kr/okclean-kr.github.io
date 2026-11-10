@@ -27,6 +27,9 @@
   <div class="stat"><b id="stShorts">0</b><span>쇼츠</span></div>
   <div class="stat"><b id="stReels">0</b><span>릴스</span></div>
   <div class="stat"><b id="stBlog">0</b><span>블로그</span></div>
+  <div class="stat"><b id="stThreads">0</b><span>Threads</span></div>
+</div>
+<div class="stats">
   <div class="stat"><b id="stProfile">0</b><span>프로필/기타</span></div>
 </div>
 <div id="statList" class="muted" style="margin-top:10px">통계를 불러오는 중…</div></section>
@@ -44,20 +47,22 @@ async function loadStats(){try{
   ]);
   const names={}; productSnap.docs.forEach(d=>{names[d.id]=d.data().name||d.id});
   const rows=clickSnap.docs.map(d=>d.data()), now=new Date(), startToday=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime(), day=86400000;
-  let today=0,d7=0,d30=0; const bySrc={},byProduct={};
+  let today=0,d7=0,d30=0; const bySrc={},byProduct={},byProductSrc={};
   for(const x of rows){
     const src=String(x.src||'other'); bySrc[src]=(bySrc[src]||0)+1;
     const product=String(x.product||'unknown'); byProduct[product]=(byProduct[product]||0)+1;
+    byProductSrc[product]??={};
+    byProductSrc[product][src]=(byProductSrc[product][src]||0)+1;
     const t=x.at?.toDate?.()?.getTime?.()||0;
     if(t>=startToday)today++;
     if(t>=now.getTime()-7*day)d7++;
     if(t>=now.getTime()-30*day)d30++;
   }
   $('stToday').textContent=today;$('st7d').textContent=d7;$('st30d').textContent=d30;$('stTotal').textContent=rows.length;
-  $('stShorts').textContent=bySrc.shorts||0;$('stReels').textContent=bySrc.reels||0;$('stBlog').textContent=bySrc.blog||0;
+  $('stShorts').textContent=bySrc.shorts||0;$('stReels').textContent=bySrc.reels||0;$('stBlog').textContent=bySrc.blog||0;$('stThreads').textContent=bySrc.threads||0;
   $('stProfile').textContent=(bySrc.profile||0)+(bySrc.share||0)+(bySrc.other||0);
   const top=Object.entries(byProduct).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  $('statList').innerHTML=top.length?'<table class="stat-table"><thead><tr><th>인기상품</th><th>클릭</th></tr></thead><tbody>'+top.map(([k,v])=>'<tr><td>'+esc(names[k]||k)+'</td><td>'+v+'</td></tr>').join('')+'</tbody></table>':'아직 기록된 클릭이 없습니다.';
+  $('statList').innerHTML=top.length?'<table class="stat-table"><thead><tr><th>상품</th><th>전체</th><th>쇼츠</th><th>블로그</th><th>Threads</th><th>릴스</th></tr></thead><tbody>'+top.map(([k,v])=>{const s=byProductSrc[k]||{};return '<tr><td>'+esc(names[k]||k)+'</td><td>'+v+'</td><td>'+(s.shorts||0)+'</td><td>'+(s.blog||0)+'</td><td>'+(s.threads||0)+'</td><td>'+(s.reels||0)+'</td></tr>'}).join('')+'</tbody></table>':'아직 기록된 클릭이 없습니다.';
 }catch(e){$('statList').textContent='통계를 불러올 수 없습니다. Firestore 규칙 확인 필요: '+(e.code||e.message)}}
 async function load(){let s;try{s=await getDocs(query(collection(db,'products'),orderBy('order','asc')))}catch(e){$('msg').textContent='상품 목록을 불러올 수 없습니다. Firestore 규칙 확인 필요: '+(e.code||e.message);return}const rows=s.docs.map(d=>({id:d.id,...d.data()}));$('list').innerHTML=rows.length?rows.map(x=>`<div class="card item"><div><b>${esc(x.name)}</b><div class="muted">${esc(x.category||'')} · ${x.active===false?'숨김':'노출'}</div><div class="muted">${esc(x.url||'')}</div></div><div class="row"><button class="btn ghost" data-edit="${esc(x.id)}">수정</button><button class="btn danger" data-del="${esc(x.id)}">삭제</button></div></div>`).join(''):'<p class="muted">등록 상품이 없습니다.</p>';window.rows=rows}
 $('list').onclick=async e=>{const edit=e.target.dataset.edit,del=e.target.dataset.del;if(edit){const x=window.rows.find(v=>v.id===edit);for(const k of['name','category','url','image','description','order'])$(k).value=x[k]??'';$('id').value=x.id;$('active').value=String(x.active!==false);scrollTo({top:0,behavior:'smooth'})}if(del&&confirm('이 상품을 삭제할까요?')){await deleteDoc(doc(db,'products',del));load()}};

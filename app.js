@@ -291,7 +291,8 @@ if(M){
     }catch(e){
       console.error("회원 저장 실패",e);
       MEMBER=null;
-      err("가입 정보 저장을 확인하지 못했어요. 쿠폰은 아직 발급되지 않았습니다. 잠시 후 다시 시도하거나 카카오톡으로 문의해 주세요.");
+      const code = String(e?.code || "unknown").replace(/^firestore\//,"").replace(/^auth\//,"");
+      err(`가입 정보 저장을 확인하지 못했어요. 쿠폰은 아직 발급되지 않았습니다. 오류 코드: ${code}`);
       btn.disabled=false; btn.textContent="다시 저장 시도";
     }
   };

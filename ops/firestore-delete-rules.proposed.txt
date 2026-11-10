@@ -1,11 +1,13 @@
-// 제안 규칙 조각 - 실제 배포 전 관리자 앱 batch delete 구현과 함께 검증 필요
-// 기존 isAdmin() 함수와 컬렉션 match 내부에만 적용
+// 관리자 회원 삭제 기능 제안 규칙
+// 실제 운영 Firestore에는 아직 반영하지 않는다.
 //
-// member_requests:
+// member_requests/{id}
 // allow delete: if isAdmin();
 //
-// member_receipts:
+// member_receipts/{id}
+// allow update: if false;
 // allow delete: if isAdmin();
 //
-// 일반 사용자 삭제 권한은 열지 않는다.
-// 실제 배포 시 두 문서를 관리자 UI의 writeBatch.delete()로 함께 삭제한다.
+// 일반 사용자 delete 권한은 계속 차단한다.
+// 관리자 UI는 member_requests/{uid}, member_receipts/{uid}를
+// writeBatch.delete()로 한 번에 삭제하고, 삭제 후 두 문서의 미존재를 확인한다.

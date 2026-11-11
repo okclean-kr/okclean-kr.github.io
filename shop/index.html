@@ -147,7 +147,6 @@ import{initializeApp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-ap
 import{getFirestore,collection,getDocs,query,orderBy,addDoc,serverTimestamp,limit}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const cfg={apiKey:'AIzaSyA1jn9CDPiEg_Sg_aOlEeZjPy8P7ZoFOZw',authDomain:'okclean-admin.firebaseapp.com',projectId:'okclean-admin',appId:'1:665748095050:web:49d73ca0f28ec5f67ee6b3'};
 const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const isCoupangLink=value=>{try{const host=new URL(value).hostname.toLowerCase();return host==='coupang.com'||host.endsWith('.coupang.com');}catch(_){return false;}};
 try{
  const db=getFirestore(initializeApp(cfg));
  document.addEventListener('click',e=>{
@@ -179,7 +178,7 @@ try{
      return (Number(a.order)||100)-(Number(b.order)||100);
    });
  if(rows.length){
-  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img class="product-img" src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy">`:`<img class="product-img" src="../logo.png" alt="오케이청소 추천제품" loading="lazy">`}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions">${isCoupangLink(x.url)?`<aside class="partner-note" aria-label="쿠팡파트너스 광고 안내">광고 · 이 링크로 구매하시면 오케이청소가 쿠팡파트너스 활동에 따른 일정액의 수수료를 받습니다.</aside>`:'' }<a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><button type="button" class="btn line share-product" data-share-product="${esc(x.id)}" data-share-name="${esc(x.name)}">이 제품 링크 복사</button><span class="product-note">쿠팡 등 외부 판매 페이지로 이동</span></div></article>`).join('');
+  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img class="product-img" src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy">`:`<img class="product-img" src="../logo.png" alt="오케이청소 추천제품" loading="lazy">`}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions"><a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><button type="button" class="btn line share-product" data-share-product="${esc(x.id)}" data-share-name="${esc(x.name)}">이 제품 링크 복사</button><span class="product-note">쿠팡 등 외부 판매 페이지로 이동</span></div></article>`).join('');
   document.getElementById('productJump').innerHTML=rows.slice(0,8).map(x=>`<a href="#p-${esc(x.id)}">${esc(x.name)}</a>`).join('');
   const wanted=window.__okcleanWantedProduct||'';
   if(wanted){

@@ -19,6 +19,7 @@
 .product-card .eyebrow{font-size:12px;font-weight:800;color:var(--water)}.product-card h2{font-size:22px;line-height:1.25;margin:0}.product-card p{margin:0;color:var(--muted);line-height:1.6}
 .product-card ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7}.product-actions{display:grid;gap:8px;margin-top:auto}
 .product-img{width:100%;aspect-ratio:4/3;object-fit:contain;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.shop-hero .partner-note,.partner-note{max-width:none;font-size:15px;font-weight:600;color:#6f5200;line-height:1.65}
 .partner-note{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:#fff8e8;border:1px solid #f2d68a;font-size:13px;line-height:1.55;color:#6f5200}
 .product-actions .btn{width:100%;min-height:54px;padding:15px 16px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.product-note{font-size:12px;color:var(--muted);text-align:center}.shop-how{display:grid;gap:10px}.shop-how div{border:1px solid var(--line);background:var(--paper);border-radius:14px;padding:14px}
 .shop-how b{display:block;margin-bottom:4px}.shop-how span{color:var(--muted);font-size:14px}
@@ -47,6 +48,7 @@
 <section class="shop-hero"><div class="wrap">
   <div class="crumb"><a href="../index.html">홈</a> / 추천제품</div>
   <h1>오케이청소 추천제품</h1>
+  <aside class="partner-note" aria-label="쿠팡파트너스 광고 안내"><strong>광고 · 쿠팡파트너스 안내</strong><br>이 페이지는 쿠팡파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.<br>이 페이지의 쿠팡파트너스 링크로 구매하시면 오케이청소가 일정액의 수수료를 받습니다.</aside>
   <p>청소 현장에서 직접 사용하거나 소개한 제품을 한곳에 모았습니다. 원하는 제품을 선택하면 판매 페이지로 바로 이동합니다.</p>
   <div class="shop-jump" id="productJump" aria-label="제품 바로가기">
     <a href="#medilox-s">메디록스-S</a><a href="#keyang-drill">계양 충전드릴</a><a href="#osc-impact">오성 임팩트렌치</a>
@@ -57,7 +59,7 @@
 <section class="s" id="products"><div class="wrap">
   <h2>추천제품</h2>
   <p class="d">제품명을 확인하고 원하는 상품을 선택하세요.</p>
-  <p class="partner-note"><b>판매처 안내</b><br>현재 기본 추천 링크는 제조사·공식몰 또는 공식 제품 페이지로 연결됩니다. 제휴 링크가 포함되는 경우 해당 제품에 별도로 표시합니다.</p>
+  <p class="partner-note"><b>판매처 안내</b><br>상품에 따라 쿠팡 또는 제조사·공식몰 등 외부 판매 페이지로 연결됩니다. 쿠팡파트너스 링크를 통한 구매 시 오케이청소가 일정액의 수수료를 받습니다.</p>
   <div class="product-grid" id="productGrid">
     <article class="product-card" id="medilox-s">
       <span class="eyebrow">살균·소독</span><h2>메디록스-S</h2>
@@ -145,6 +147,7 @@ import{initializeApp}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-ap
 import{getFirestore,collection,getDocs,query,orderBy,addDoc,serverTimestamp,limit}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 const cfg={apiKey:'AIzaSyA1jn9CDPiEg_Sg_aOlEeZjPy8P7ZoFOZw',authDomain:'okclean-admin.firebaseapp.com',projectId:'okclean-admin',appId:'1:665748095050:web:49d73ca0f28ec5f67ee6b3'};
 const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const isCoupangLink=value=>{try{const host=new URL(value).hostname.toLowerCase();return host==='coupang.com'||host.endsWith('.coupang.com');}catch(_){return false;}};
 try{
  const db=getFirestore(initializeApp(cfg));
  document.addEventListener('click',e=>{
@@ -176,7 +179,7 @@ try{
      return (Number(a.order)||100)-(Number(b.order)||100);
    });
  if(rows.length){
-  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img class="product-img" src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy">`:`<img class="product-img" src="../logo.png" alt="오케이청소 추천제품" loading="lazy">`}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions"><a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><button type="button" class="btn line share-product" data-share-product="${esc(x.id)}" data-share-name="${esc(x.name)}">이 제품 링크 복사</button><span class="product-note">쿠팡 등 외부 판매 페이지로 이동</span></div></article>`).join('');
+  document.getElementById('productGrid').innerHTML=rows.map(x=>`<article class="product-card" id="p-${esc(x.id)}">${x.image?`<img class="product-img" src="${esc(x.image)}" alt="${esc(x.name)}" loading="lazy">`:`<img class="product-img" src="../logo.png" alt="오케이청소 추천제품" loading="lazy">`}<span class="eyebrow">${esc(x.category||'추천제품')}</span><h2>${esc(x.name)}</h2><p>${esc(x.description||'오케이청소 추천제품입니다.')}</p><div class="product-actions">${isCoupangLink(x.url)?`<aside class="partner-note" aria-label="쿠팡파트너스 광고 안내">광고 · 이 링크로 구매하시면 오케이청소가 쿠팡파트너스 활동에 따른 일정액의 수수료를 받습니다.</aside>`:'' }<a class="btn glove buy-link" data-product="${esc(x.id)}" href="${esc(x.url)}" target="_blank" rel="noopener sponsored">${esc(x.name)} 구매하러 가기</a><button type="button" class="btn line share-product" data-share-product="${esc(x.id)}" data-share-name="${esc(x.name)}">이 제품 링크 복사</button><span class="product-note">쿠팡 등 외부 판매 페이지로 이동</span></div></article>`).join('');
   document.getElementById('productJump').innerHTML=rows.slice(0,8).map(x=>`<a href="#p-${esc(x.id)}">${esc(x.name)}</a>`).join('');
   const wanted=window.__okcleanWantedProduct||'';
   if(wanted){

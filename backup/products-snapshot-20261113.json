@@ -1,0 +1,218 @@
+{
+  "snapshot_at": "2026-11-13",
+  "source": "Firestore public products collection (read-only)",
+  "source_project": "okclean-admin",
+  "recovery_note": "Contains only publicly readable product catalog fields; excludes member/receipt/coupon data and product_clicks activity.",
+  "products": [
+    {
+      "id": "9f081382-af8d-40e4-98e4-ddcbeaa7c75b",
+      "name": "메디록스-S 살균소독제 300ml",
+      "description": "청소 후 위생관리와 살균·소독이 필요한 공간에 활용하기 좋은 제품입니다. 오케이청소가 현장에서 위생관리용으로 추천하는 제품입니다.",
+      "image": "https://t3a.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/2025/10/31/15/4/e873ce73-adee-46c0-8c86-f4aaef933af5.png",
+      "url": "https://link.coupang.com/a/iyHPkXJ1J7",
+      "active": true,
+      "order": 10,
+      "category": "살균·소독"
+    },
+    {
+      "id": "55c44bb3-9555-461c-a239-e3087cadac39",
+      "name": "계양전기 DD12L-30I 12V MAX 충전 드라이버드릴",
+      "description": "청소 현장에서 피스 체결·분해 작업에 활용하기 좋은 충전드릴입니다. 가볍고 휴대성이 좋아 출장 작업용으로 추천합니다.",
+      "image": "https://t5a.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/5c1b/63b7778e941fe4d690ca81040f02e4a6e0e97fc289b8e4626f9811929471.jpg",
+      "url": "https://link.coupang.com/a/iyHLAhux3c",
+      "active": true,
+      "order": 20,
+      "category": "전동공구"
+    },
+    {
+      "id": "7bdb5d1a-4328-4d27-9af1-f198ea0a42ea",
+      "name": "오성 MAX 20V 충전 임팩 드라이버·렌치 OCW-2051XL",
+      "description": "강한 체결력과 힘이 필요한 볼트 분해·조립 작업에 활용하기 좋은 충전 임팩 제품입니다. 청소장비 설치·정비 등 다양한 현장 작업에 활용할 수 있습니다.",
+      "image": "https://t5a.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/d7ef/2953b6303afd6e3d05cd48567bd68b292ada6c726c7ad056b95bafff9744.JPG",
+      "url": "https://link.coupang.com/a/iyHzcD6LK0",
+      "active": true,
+      "order": 30,
+      "category": "전동공구"
+    },
+    {
+      "id": "4abe997a-fc41-4fda-b203-ba1234845459",
+      "name": "3M 스카치브라이트 강력 다목적 패드 수세미 중형, 3개입, 1개",
+      "description": "찌든 오염을 문질러 닦을 때 사용하는 3M 스카치브라이트 강력 다목적 패드!\n주방과 청소 현장에서 세척용으로 활용하기 좋은 수세미입니다. 중형 패드 3개입, 1팩 구성입니다.",
+      "image": "https://thumbnail6.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/523077138111292-0fa299df-5bf4-4188-bf51-b9a25d4abb9a.jpg",
+      "url": "https://link.coupang.com/a/iAT20AX6VE",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "46c6e97f-ecc7-4551-bc42-6fcc89f5ca07",
+      "name": "데이즈마켓 경편 바둑 초극세사 걸레 40 x 60 cm, 20개, 다크블루",
+      "description": "청소할 곳이 많다면, 바꿔 쓸 걸레도 넉넉하게!\n\n데이즈마켓 경편 바둑 초극세사 걸레는 40 × 60cm 크기, 20개 구성으로 청소 현장에 여러 장 준비해두기 좋은 제품입니다.",
+      "image": "https://thumbnail5.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/0b7f/8e5c37e7911d88f52be184753978464d5da7e92c1cf030be812187d164d2.jpg",
+      "url": "https://link.coupang.com/a/iAR2esuZrw",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "84a4c08f-cb59-4eff-99b1-0f9bbb11edf1",
+      "name": "라이노분무기 500mI 국내제조 내화학성분무기 전문가용 청소 소독 식당분무기, 1개, 초록",
+      "description": "청소·소독 작업에 준비하기 좋은 라이노 전문가용 내화학성 분무기!\n국내 제조 500ml 제품으로 식당·매장·청소 현장에서 활용하기 좋습니다. 초록색 1개 구성입니다.",
+      "image": "https://thumbnail13.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/6942/df7b7bee5bc0ab8b9cec4ef006d57fe82598934cf60ed02eada43d1acd08.jpg",
+      "url": "https://link.coupang.com/a/iATbA6jnyK",
+      "active": true,
+      "order": 100,
+      "category": "살균·소독"
+    },
+    {
+      "id": "97bd6b29-ad74-4d75-9b4c-d4bd88cea849",
+      "name": "보흥클레온 마루광택기 FM-16SA",
+      "description": "상가·사무실 바닥 관리를 위한 보흥클레온 FM-16SA 마루광택기!\n16인치·2마력 사양으로 바닥 세척과 왁스 제거 작업에 활용하기 좋은 전문 청소 장비입니다.",
+      "image": "https://thumbnail5.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/0188/665942f723581d0c12616cdd440f6aad463cfbda7062c2668bf6161f23e4.png",
+      "url": "https://link.coupang.com/a/iARvdoxGuG",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "3abcf3c8-9460-4ec5-b038-5e474a433cd3",
+      "name": "샤크 에보파워 무선 핸디 청소기",
+      "description": "눈에 띄는 먼지와 부스러기를 그때그때 정리하는 샤크 에보파워 무선 핸디 청소기!\n손에 들고 사용하는 무선 핸디형으로, 책상 주변이나 작은 공간을 간편하게 청소할 때 활용하기 좋습니다.",
+      "image": "https://thumbnail1.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/43b8/5eb64c7f961ed67c21c54cf27f18352521fa14a5b2daf080531372589473.jpg",
+      "url": "https://link.coupang.com/a/iAUrEAPGJU",
+      "active": true,
+      "order": 100,
+      "category": "청소용품"
+    },
+    {
+      "id": "0f2b950d-4798-4e5d-acd5-67625218876a",
+      "name": "스카치브라이트 쓰리엠 베이킹소다 크린스틱 시트타입 보라색 본품 10p, 1개",
+      "description": "세제가 들어 있어 욕실 청소에 간편하게 쓰는 3M 스카치브라이트 베이킹소다 크린스틱!\n욕실의 오염을 문질러 닦는 시트타입 수세미입니다. 보라색 10매입, 1팩 구성입니다.",
+      "image": "https://thumbnail2.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/2025/04/30/18/0/f9bb915b-52fe-47e6-b7ae-63f0d2374d9c.jpg",
+      "url": "https://link.coupang.com/a/iAUCGeJAVo",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "e5c990e6-2fe7-499a-ad1f-4c2fdd05ea4d",
+      "name": "월드크린 롱타이탄비 빗자루, 1개",
+      "description": "매일 하는 바닥 청소에 활용하기 좋은 월드크린 롱타이탄비 빗자루!\n가정·매장·사무실에서 먼지와 작은 쓰레기를 쓸어 모을 때 사용하기 좋습니다. 1개 구성으로 랜덤 발송됩니다.",
+      "image": "https://thumbnail2.coupangcdn.com/thumbnails/remote/212x212ex/image/1025_amir_coupang_oct_80k/ff89/d8841ea5119abd927d5b9bf22652c64745db4bda0adb4b97bbf606a5e784.jpg",
+      "url": "https://link.coupang.com/a/iATKxKaWEC",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "3284f821-cf83-40b7-b804-bf75da8190d8",
+      "name": "월드크린 미화 쓰레받기, 1개, 오렌지",
+      "description": "쓸어 모은 먼지와 쓰레기를 담아 마무리하는 월드크린 미화 쓰레받기!\n가정·매장·사무실의 일상적인 바닥 청소에 활용하기 좋습니다. 오렌지색 1개 구성입니다.",
+      "image": "https://thumbnail6.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/2024/12/27/12/0/5fd51d56-c95f-41a6-af5c-7b1b82e6cdb8.jpg",
+      "url": "https://link.coupang.com/a/iATjVwihhY",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "db3b0d53-ac22-470d-8aec-072345323857",
+      "name": "월드크린 바닥청소솔 대형, 랜덤 발송, 1개",
+      "description": "바닥의 때와 오염을 문질러 닦는 월드크린 대형 바닥청소솔!\n욕실·베란다·매장 등의 바닥 청소에 활용하기 좋은 제품입니다. 대형 1개 구성으로 랜덤 발송됩니다.",
+      "image": "https://thumbnail13.coupangcdn.com/thumbnails/remote/212x212ex/image/1025_amir_coupang_oct_80k/6b65/fa213cec3d170d8959b81e7476dac7d9ec65d118d40396095263d20643d5.jpg",
+      "url": "https://link.coupang.com/a/iATQsX0tNs",
+      "active": true,
+      "order": 100,
+      "category": "청소용품"
+    },
+    {
+      "id": "6ede2174-8c30-43e5-9ea2-0be3ee8d386d",
+      "name": "월드크린 샤프 야외 도로 빗자루 대, 1개, 혼합색상",
+      "description": "마당·주차장·건물 주변 청소에 활용하는 월드크린 샤프 야외 도로 빗자루!\n낙엽과 먼지 등을 쓸어 모을 때 사용하기 좋은 대형 빗자루입니다. 혼합색상",
+      "image": "https://thumbnail15.coupangcdn.com/thumbnails/remote/212x212ex/image/rs_quotation_api/w5h1tavz/81f710d0f6eb4eb38e93a4575d393a8d.jpg",
+      "url": "https://link.coupang.com/a/iATybpXFBY",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "7c5dbf1a-57ee-4d76-9589-81cf05701e6a",
+      "name": "월드크린 유리 닦이 걸레 40x40cm, 10개, 블루",
+      "description": "창문부터 거울까지, 유리 청소용 걸레는 따로 준비하세요!\n\n월드크린 유리 닦이 걸레는 40 × 40cm 크기, 10개 구성으로 가정과 청소 현장에서 유리용으로 구분해 사용하기 좋은 제품입니다.",
+      "image": "https://t4c.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/285371318740938-73dc615b-063b-4b89-b634-aedafdc15a71.jpg",
+      "url": "https://link.coupang.com/a/iAStai5gom",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "e39fd1b1-68c3-466e-9770-0d35e09869f8",
+      "name": "유한락스 멀티액션 곰팡이제거제, 510ml, 3개",
+      "description": "욕실 곰팡이 청소에 활용하는 유한락스 멀티액션 곰팡이제거제!\n곰팡이 오염을 관리할 때 사용하는 제품으로, 510ml 3개 구성이라 청소용과 교체용을 여유 있게 준비하기 좋습니다.",
+      "image": "https://thumbnail12.coupangcdn.com/thumbnails/remote/212x212ex/image/1025_amir_coupang_oct_80k/f42b/01be20961602c5fb0d86ba7d942badebaac4a76519af0723ec4fddf70bb7.jpg",
+      "url": "https://link.coupang.com/a/iAUeMDtN1w",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "5574511e-8b10-4851-a43f-38256b9c5a96",
+      "name": "코멧 스프레이 밀대걸레 + 극세사 패드 5개 + 다용도 클리너 1개",
+      "description": "밀대와 교체용 패드를 한 번에 준비하는 코멧 스프레이 밀대걸레 세트!\n극세사 패드 5개와 다용도 클리너 1개가 함께 구성되어 있습니다.",
+      "image": "https://thumbnail14.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/252614527151735-ea5f3371-e0ec-46ae-83d8-7f1b99f20faa.jpg",
+      "url": "https://link.coupang.com/a/iAUiWHxm7U",
+      "active": true,
+      "order": 100,
+      "category": "청소용품"
+    },
+    {
+      "id": "4adb5fc5-9ba1-453a-a80e-49a3aabe389e",
+      "name": "크린메이트 파워 면대걸레 60cm 2p + 자루 세트, 1세트, 혼합색상",
+      "description": "60cm 면대걸레 2개와 자루를 함께 준비하는 크린메이트 파워 면대걸레 세트!\n걸레를 번갈아 사용하며 매장·사무실·복도 등 넓은 바닥을 관리하기 좋습니다. 혼합색상 1세트 구성입니다.",
+      "image": "https://thumbnail12.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/f1aba446-d08b-4e13-962a-8e514dda119c16755751730180023571.png",
+      "url": "https://link.coupang.com/a/iASOJeU6Sa",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "d6eb1b33-9e10-424f-a704-d41c545bebfb",
+      "name": "폴리보이 오가닉 유리 거울 클리너 스프레이, 500ml, 1개",
+      "description": "창문과 거울 청소에 활용하기 좋은 폴리보이 오가닉 유리·거울 클리너!\n500ml 스프레이형으로 가정·매장·사무실의 유리와 거울을 일상적으로 관리할 때 사용하기 좋습니다. 1개 구성입니다.",
+      "image": "https://thumbnail13.coupangcdn.com/thumbnails/remote/212x212ex/image/vendor_inventory/9fbe/4d30aab411b7f4b9afae8c828b277d9129ffce365ff359e070e5c707aa78.jpg",
+      "url": "https://link.coupang.com/a/iAS0qTZ1mm",
+      "active": true,
+      "order": 100,
+      "category": "청소용품"
+    },
+    {
+      "id": "a3953522-2568-4e92-b11e-029788d8d009",
+      "name": "퓨어썬데이 국내제조 빨아쓰는 데일리 행주, 50개입, 3개",
+      "description": "빨아서 다시 사용하는 퓨어썬데이 국내제조 데일리 행주!\n50개입 3팩, 총 150장 구성으로 주방과 매장에서 용도별로 나눠 쓰거나 교체용을 넉넉히 준비하기 좋습니다.",
+      "image": "https://thumbnail5.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/487056159044531-251876a8-b513-47b1-a835-0e799e4881a3.jpg",
+      "url": "https://link.coupang.com/a/iAUwAeIjAG",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "7ec7d145-93aa-4704-88bc-14c80725fb51",
+      "name": "홈스타 바르는 곰팡이 싹 세정제, 120ml, 1개",
+      "description": "**곰팡이 오염 부위에 발라 사용하는 홈스타 바르는 곰팡이 싹 세정제!** \n필요한 부위의 곰팡이 오염을 관리할 때 활용하기 좋은 제품입니다. 120ml 1개 구성입니다.",
+      "image": "https://t3c.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/342188912460101-548780de-e2d6-48fd-9d7c-d32a45c61d8b.jpg",
+      "url": "https://link.coupang.com/a/iAUUbT0CqG",
+      "active": true,
+      "order": 100,
+      "category": "추천제품"
+    },
+    {
+      "id": "83322068-a561-4614-87b1-4d86e422a3d4",
+      "name": "홈스타 핑크파워 욕실 찌든때 클리너, 750ml, 1개",
+      "description": "**욕실의 찌든 때 청소에 활용하는 홈스타 핑크파워 욕실 클리너!** \n욕실에 쌓인 오염을 관리할 때 사용하는 제품으로, 750ml 1개 구성입니다.",
+      "image": "https://t3a.coupangcdn.com/thumbnails/remote/212x212ex/image/retail/images/246329067077882-53120089-e24f-4525-b10f-e39f0685cc15.jpg",
+      "url": "https://link.coupang.com/a/iAUmvtLMC4",
+      "active": true,
+      "order": 100,
+      "category": "청소용품"
+    }
+  ]
+}

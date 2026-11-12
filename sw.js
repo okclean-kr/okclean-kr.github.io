@@ -1,7 +1,7 @@
 // 고객 홈페이지 전용 캐시. 관리자·인증 경로와 다른 앱의 캐시는 건드리지 않습니다.
 const BASE = new URL('./', self.registration.scope);
 const PREFIX = 'okclean-customer-' + encodeURIComponent(BASE.pathname) + '-';
-const CACHE = PREFIX + 'consultation-20261112-v3';
+const CACHE = PREFIX + 'consultation-20261112-v4';
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
 self.addEventListener('activate', event => event.waitUntil(
   caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith(PREFIX) && key !== CACHE).map(key => caches.delete(key))))

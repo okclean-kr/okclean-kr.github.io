@@ -298,7 +298,8 @@
     const target = allowed(declaredKind, TARGETS, inSheet ? pendingContact : 'direct');
     const details = { service: selectedService(), placement: placementFor(element), target };
     const explicit = element.getAttribute('data-analytics-event');
-    if (explicit) { void track(explicit, details); return; }
+    // shop_open은 다음 문서의 도착 시점에만 기록하여 클릭과 도착을 중복 집계하지 않습니다.
+    if (explicit) { if (explicit !== 'shop_open') void track(explicit, details); return; }
     if (element.id === 'qKakao') { pendingContact = 'quote'; void track('contact_prepare', { ...details, target: 'quote' }); return; }
     if (element.id === 'qSms') { void track('sms_open', { ...details, target: 'quote' }); return; }
     if (element.closest('#qTier, #qVar') || element.id === 'qMinus' || element.id === 'qPlus') quoteInteraction();
@@ -307,9 +308,6 @@
     if (/^sms:/i.test(href)) { void track('sms_open', details); return; }
     try {
       const target = new URL(href, env.location.origin);
-      if (page !== 'shop' && target.origin === env.location.origin && ['/shop/', '/shop/index.html'].includes(target.pathname)) {
-        void track('shop_open', { ...details, target: 'none' }); return;
-      }
       const caseLocation = element.getAttribute('data-placement');
       const caseLink = ['hero', 'featured', 'cases'].includes(caseLocation) || element.closest('#cases, #featured-work, .case, .featured-card');
       if (caseLink && ['blog.naver.com', 'm.blog.naver.com'].includes(target.hostname) && /^\/[^/]+\/\d+\/?$/.test(target.pathname)) {
@@ -317,6 +315,18 @@
       }
       if (target.hostname === 'open.kakao.com' || target.hostname === 'pf.kakao.com') void track('kakao_open', details);
     } catch (_) { /* 측정 오류로 상담 동작을 막지 않습니다. */ }
+  }
+
+  function isInternalShopArrival() {
+    if (page !== 'shop') return false;
+    try {
+      // 새로고침은 이전 referrer를 유지할 수 있으므로 navigation 종류도 확인합니다.
+      if (!env.performance || typeof env.performance.getEntriesByType !== 'function') return false;
+      const navigation = env.performance.getEntriesByType('navigation');
+      if (!navigation || !navigation[0] || navigation[0].type !== 'navigate') return false;
+      const referrer = new URL(env.document.referrer);
+      return referrer.origin === env.location.origin && !/^\/shop(?:\/|$)/.test(referrer.pathname);
+    } catch (_) { return false; }
   }
 
   function init() {
@@ -345,6 +355,7 @@
       if (event.target && event.target.id === 'qQty') quoteInteraction();
     });
     void track('page_view', { service: serviceFromPath(env.location.pathname), placement: 'other' });
+    if (isInternalShopArrival()) void track('shop_open', { service: 'unknown', placement: 'other', target: 'none' });
   }
 
   function status() {

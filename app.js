@@ -70,6 +70,14 @@ function drawForm(){
     $("qUnit").textContent = s.unit;
   }
   if(!quote) $("qOpt").innerHTML = (s.options || []).map((o, i) => `<label><input type="checkbox" data-o="${i}"${cur.opts.includes(i) ? " checked" : ""}><span>${esc(o.name)}</span><small>${optText(o, s)}</small></label>`).join("");
+  const optionsDisclosure = $("qOptF").closest("details");
+  if(optionsDisclosure) optionsDisclosure.hidden = $("qOptF").hidden;
+  if($("qScopeBody")){
+    const includes = s.includes || [], excludes = s.excludes || [];
+    $("qScopeBody").innerHTML = (includes.length ? `<h3>기본 작업</h3><ul>${includes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "")
+      + (excludes.length ? `<h3>별도 확인 항목</h3><ul>${excludes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "")
+      + `<p>공간 구조와 오염 상태를 사진으로 확인한 뒤 최종 범위와 비용을 안내합니다.</p><a href="services/${encodeURIComponent(s.id)}.html">${esc(s.name)} 자세히 보기 →</a>`;
+  }
   calc();
 }
 function estimate(){
@@ -180,7 +188,7 @@ document.querySelectorAll("#services .cats .chip").forEach(b => b.addEventListen
 }));
 
 // ── 시공 사례 (블로그 후기 자동 연동: update.py 가 cases.json 으로 정리) ──
-let CASES = [], caseF = "", caseN = 8;
+let CASES = [], TIPS = [], caseF = "", caseN = 8, tipN = 6;
 // 네이버 블로그 사진: 외부 사이트에서도 잘 열리는 서버(mblogthumb-phinf)의 큰 사진을 먼저 쓰고, 안 되면 원래 썸네일로
 function naverImgs(src){
   if(!/pstatic\.net/.test(src)) return [src, src];
@@ -199,24 +207,39 @@ function drawCases(){
   $("caseChips").innerHTML = used.length > 1 ? `<button class="chip" data-f="" aria-pressed="${!caseF}">전체</button>` + used.map(id => { const s = SV.find(x => x.id === id); return s ? `<button class="chip" data-f="${esc(id)}" aria-pressed="${caseF === id}">${esc(s.name)}</button>` : ""; }).join("") : "";
   $("caseList").innerHTML = list.slice(0, caseN).map(x => {
     const s = SV.find(v => v.id === x.svc);
-    return `<a class="case" href="${esc(x.link)}" target="_blank" rel="noopener">${x.img ? (() => { const [big, alt] = naverImgs(x.img); return `<img class="ph" src="${esc(big)}" data-alt="${esc(alt)}" alt="" loading="lazy" referrerpolicy="no-referrer">`; })() : `<div class="ph"></div>`}
+    return `<a class="case" href="${esc(x.link)}" target="_blank" rel="noopener" data-placement="cases">${x.img ? (() => { const [big, alt] = naverImgs(x.img); return `<img class="ph" src="${esc(big)}" data-alt="${esc(alt)}" alt="${esc(x.title)} 관련 이미지" width="365" height="274" loading="lazy" decoding="async" referrerpolicy="no-referrer">`; })() : `<div class="ph"></div>`}
       <div class="tx"><div class="tg">${esc([x.region, s && s.name].filter(Boolean).join(" "))}</div><div class="tt">${esc(x.title)}</div></div></a>`;
   }).join("") + (list.length > caseN ? `<button class="btn line small" id="caseMore" type="button" style="grid-column:1/-1">시공 사례 더 보기 (${list.length - caseN}건)</button>` : "");
 }
 $("caseList").addEventListener("click", e => { if(e.target.id === "caseMore"){ caseN += 8; drawCases(); } });
 $("caseChips").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if(!b) return; caseF = b.dataset.f; caseN = 8; drawCases(); });
-fetch("cases.json?t=" + Date.now(), {cache: "no-store"}).then(r => r.ok ? r.json() : {cases: []}).catch(() => ({cases: []})).then(d => {
+function drawTips(){
+  $("tipList").innerHTML = TIPS.slice(0, tipN).map(x => `<li><a href="${esc(x.link)}" target="_blank" rel="noopener"><span>${esc(x.title)}</span><small>${esc((x.date || "").slice(0, 10).replace(/-/g, "."))}</small></a></li>`).join("");
+  if($("tipMore")) $("tipMore").hidden = TIPS.length <= tipN;
+}
+if($("tipMore")) $("tipMore").onclick = () => { tipN += 6; drawTips(); };
+Promise.all([
+  fetch("cases.json", {cache:"no-cache"}).then(r => r.ok ? r.json() : {cases:[]}).catch(() => ({cases:[]})),
+  fetch("case-classification.json", {cache:"no-cache"}).then(r => r.ok ? r.json() : null).catch(() => null)
+]).then(([d, classification]) => {
   const ex = (C.excludeWords || []).map(w => w.replace(/\s/g, ""));
-  const all = (d.cases || []).filter(x => x.link && x.title && !ex.some(w => x.title.replace(/\s/g, "").includes(w))).sort((p, q) => (q.date || "").localeCompare(p.date || ""));
+  const validClassification = classification && classification.schemaVersion === 1 && classification.overrides && typeof classification.overrides === "object" && !Array.isArray(classification.overrides);
+  const overrides = validClassification ? classification.overrides : {};
+  const verifiedLinks = new Set(Array.from(document.querySelectorAll("#featured-work .featured-card"), a => a.href));
+  const all = (Array.isArray(d?.cases) ? d.cases : []).filter(x => x && typeof x.link === "string" && typeof x.title === "string" && x.link && x.title && !ex.some(w => x.title.replace(/\s/g, "").includes(w))).map(x => ({...x, kind:validClassification ? (overrides[x.link]?.kind || x.kind || "case") : (verifiedLinks.has(x.link) ? "case" : x.kind === "tip" ? "tip" : "review")})).sort((p, q) => (q.date || "").localeCompare(p.date || ""));
   CASES = all.filter(x => (x.kind || "case") === "case");
-  const tips = all.filter(x => x.kind === "tip").slice(0, 6);
-  if(tips.length){
-    $("tipList").innerHTML = tips.map(x => `<li><a href="${esc(x.link)}" target="_blank" rel="noopener"><span>${esc(x.title)}</span><small>${esc((x.date || "").slice(0, 10).replace(/-/g, "."))}</small></a></li>`).join("");
+  TIPS = all.filter(x => x.kind === "tip");
+  if(TIPS.length){
+    drawTips();
     $("tips").hidden = false;
   }
+  const others = all.filter(x => x.kind !== "case" && x.kind !== "tip");
+  if(others.length && $("otherList")){
+    $("otherList").innerHTML = others.map(x => `<li><a href="${esc(x.link)}" target="_blank" rel="noopener"><span>${esc(x.title)}</span><small>${esc((x.date || "").slice(0,10).replace(/-/g,"."))}</small></a></li>`).join("");
+    $("blog-records").hidden = false;
+  }
   if(CASES.length) drawCases();
-  else if(C.sample || !BLOGS.length) $("caseList").outerHTML = `<div class="hint">${BLOGS.length ? "블로그 후기를 불러오는 중이에요. 1시간 안에 자동으로 채워져요." : "config.json 의 blog 에 네이버 블로그 아이디를 넣으면, 블로그에 올린 시공 후기가 여기에 자동으로 모여요."}</div>`;
-  else $("cases").hidden = true;
+  else $("caseList").innerHTML = `<p class="hint">작업 기록을 불러오지 못했어요. <a href="https://blog.naver.com/boss6008" target="_blank" rel="noopener">블로그에서 확인하기 ↗</a></p>`;
 });
 
 // ── 계절 달력 ──
@@ -297,6 +320,7 @@ if(M){
       MEMBER={...draft,requestId:saved.id,saved:true};
       store.set("member_v2",MEMBER);
       joinDone(); calc();
+      window.OKCleanAnalytics?.track('signup_complete', {placement:'other',target:'none'});
     }catch(e){
       console.error("회원 저장 실패",e);
       MEMBER=null;

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-12",
+  "dateMeaning": "date is the existing blog publication date, not a verified work date.",
+  "cases": [
+    {
+      "id": "school-windows",
+      "title": "춘천 학교 창가 청소",
+      "summary": "학교 창가를 닦는 작업 모습을 담은 현장 기록입니다.",
+      "img": "case-images/e644898b9e4ee7752e33.jpg",
+      "alt": "학교 창가를 천으로 닦는 작업 모습",
+      "link": "https://blog.naver.com/cleankoreacoop/224367465550",
+      "date": "2026-08-04 09:03",
+      "dateLabel": "글 게시일",
+      "region": "춘천",
+      "svc": "regular",
+      "imageKind": "work-photo",
+      "sourceTitle": "춘천 학교 대청소도 역시 클린코리아입니다."
+    },
+    {
+      "id": "venue-mat",
+      "title": "춘천문화예술회관 매트 청소",
+      "summary": "회전 장비로 매트를 세척하는 현장 기록입니다.",
+      "img": "case-images/7d1c475b6643a93de024.jpg",
+      "alt": "보양한 바닥 위 매트를 회전 장비로 세척하는 모습",
+      "link": "https://blog.naver.com/boss6008/223660550800",
+      "date": "2024-11-14 17:45",
+      "dateLabel": "글 게시일",
+      "region": "춘천",
+      "svc": "carpet",
+      "imageKind": "work-photo",
+      "sourceTitle": "화천 오케이청소 춘천문화예술회관 매트청소했어요"
+    },
+    {
+      "id": "church-aircon",
+      "title": "화천교회 천장형 에어컨 청소",
+      "summary": "천장형 에어컨의 하부를 분해하는 작업 모습을 확인할 수 있습니다.",
+      "img": "case-images/ad5baefd5e5f4bf40875.jpg",
+      "alt": "천장형 에어컨의 하부를 분해하는 작업 모습",
+      "link": "https://blog.naver.com/boss6008/224002535713",
+      "date": "2025-09-10 13:24",
+      "dateLabel": "글 게시일",
+      "region": "화천",
+      "svc": "aircon",
+      "imageKind": "work-photo",
+      "sourceTitle": "화천청소업체 오케이청소 화천교회 천정형 냉난방기 청소"
+    }
+  ]
+}

@@ -3,6 +3,12 @@
   "reviewedAt": "2026-11-12",
   "preserveSource": true,
   "overrides": {
+    "https://blog.naver.com/cleankoreacoop/224367465550": {
+      "kind": "case",
+      "displayTitle": "화천 학교 대청소 작업 기록",
+      "region": "화천",
+      "reason": "원문 첫 문장에 기재된 화천 지역을 근거로 표시 제목과 지역을 정정하며, 원문 제목은 보존"
+    },
     "https://blog.naver.com/boss6008/224462359992": {
       "kind": "tip",
       "reason": "필터 관리 방법을 안내하는 글로 시공 실적과 구분"

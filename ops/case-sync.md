@@ -60,6 +60,31 @@ python -m unittest discover -s tests -p 'test_case_sync.py' -v
 
 일정 실행이 장기간 멈추면 Actions의 workflow 활성화 상태도 확인합니다. GitHub는 공개 저장소에서 60일 동안 활동이 없을 때 일정 workflow를 자동 비활성화할 수 있습니다. 필요하면 Actions에서 다시 활성화합니다. 중단하려면 이 workflow를 Disable하고 `cases.json`은 그대로 두면 됩니다.
 
+## 최초 운영 성공 확인 — 2026-11-12
+
+[PR #39](https://github.com/okclean-kr/okclean-kr.github.io/pull/39)가 `main`에 병합된 뒤 실제 자동 갱신과 공개 배포를 확인했습니다. 아래 수치와 해시는 최초 검증 시점의 기록입니다.
+
+| 확인 항목 | 실제 결과 |
+| --- | --- |
+| 배포 전 기준 | 병합 커밋 `a7fe1373d2298dd0aef5b3541e68bc0b51209e0d`의 기존 58건 |
+| 최초 RSS 실행 | [43169207974](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43169207974), `push` 이벤트, `completed / success` |
+| 추가 내용 | 새 글 11건: 관리 팁(`tip`) 9건, 원문에 작업 근거가 명시된 작업 기록(`case`) 2건 |
+| 갱신 커밋 | [da13bc457c26148b87ce4e7f468061393edb6c79](https://github.com/okclean-kr/okclean-kr.github.io/commit/da13bc457c26148b87ce4e7f468061393edb6c79) |
+| Pages 배포 | [43169230456](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43169230456), `completed / success` |
+| 공개 자료 | [cases.json](https://okclean-kr.github.io/cases.json), HTTP 200, 총 69건, 26,816바이트 |
+| 기존 자료 보존 | `a7fe1373d2298dd0aef5b3541e68bc0b51209e0d`의 58개 객체 내용과 순서가 갱신 후에도 동일 |
+| 학교 현장 지역 | 글 `224367465550`의 `region`은 `화천`, 원문 제목은 보존 |
+
+봇 커밋의 파일과 공개 파일의 크기·SHA-256이 일치했습니다.
+
+```text
+947a057ba250f00c4ec99c9c22c114d29b3f00ea566ea3389ff808d23929733f
+```
+
+RSS 실행의 보호 검사·수집·자료 커밋·Pages 빌드 요청 및 공개 자료 검증 단계가 모두 성공했습니다. Pages 실행의 `build`, `report-build-status`, `deploy` 작업과 각 단계도 모두 성공했습니다.
+
+운영 `main`의 [workflow 설정](https://github.com/okclean-kr/okclean-kr.github.io/blob/main/.github/workflows/sync-blog-cases.yml)은 `17 * * * *`, 즉 매시간 17분 실행입니다. 이번 최초 성공은 `push` 실행으로 확인했으며, 일정 실행은 GitHub의 처리 상황에 따라 지연되거나 생략될 수 있습니다. 공개 사이트 주소는 [https://okclean-kr.github.io/](https://okclean-kr.github.io/)입니다.
+
 ## 공식 동작 근거
 
 - [GitHub Actions schedule](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)

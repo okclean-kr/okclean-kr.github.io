@@ -375,8 +375,14 @@
     "rulesPublishedAt": "2026-11-12T15:26:00+09:00",
     "rulesProjectId": "okclean-admin",
     "rulesCurrentVersionConfirmed": true,
-    "clientPageDeploymentVerified": false,
-    "expiredRecordServerQueryVerified": false,
-    "productionDeletionAttemptedByTest": false
+    "clientPageDeploymentVerified": true,
+    "expiredRecordServerQueryVerified": true,
+    "productionDeletionAttemptedByTest": false,
+    "clientPageDeploymentRun": "https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43169230456",
+    "automaticCheckAt": "2026-11-12T15:36:00+09:00",
+    "readOnlyCheckAt": "2026-11-12T15:38:00+09:00",
+    "readOnlyCutoff": "2026-08-14T15:38:00+09:00",
+    "expiredRecordsMatched": 0,
+    "productionRecordsDeleted": 0
   }
 }

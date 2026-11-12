@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const api = require('../analytics.js');
 const source = fs.readFileSync(require.resolve('../analytics.js'), 'utf8');
 
-function tracker({search='?src=blog',path='/',referrer='',settings={},debug=true,choice=null,storageFails=false,session={}}={}) {
+function tracker({search='?src=blog',path='/',referrer='',navigationType='navigate',performanceAvailable=true,performanceThrows=false,settings={},debug=true,choice=null,storageFails=false,session={}}={}) {
   const values=new Map(debug?[['okclean_analytics_debug_v1','true']]:[]),listeners={},timers=new Map();
   for(const [key,value] of Object.entries(session))values.set(key,value);
   const preferences=new Map(choice===null?[]:[['okclean_analytics_choice_v1',choice]]),windowListeners={};
@@ -13,6 +13,7 @@ function tracker({search='?src=blog',path='/',referrer='',settings={},debug=true
   const window={
     OKCLEAN_ANALYTICS:settings,
     location:{pathname:path,search,origin:'https://okclean-kr.github.io'},
+    performance:performanceAvailable?{getEntriesByType:type=>{if(performanceThrows)throw new Error('unavailable');return type==='navigation'&&navigationType?[{type:navigationType}]:[];}}:undefined,
     sessionStorage:{getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)},
     localStorage:{getItem:key=>{if(storageFails)throw new Error('blocked');return preferences.get(key)??null;},setItem:(key,value)=>{if(storageFails)throw new Error('blocked');preferences.set(key,value);}},
     addEventListener:(name,fn)=>{windowListeners[name]=fn;},
@@ -178,7 +179,7 @@ test('초기 기본 가격은 견적 조작으로 세지 않고 연속 입력은
   assert.equal(rows.filter(row=>row.event==='quote_result').length,1);
 });
 
-test('실제 사례 링크와 추천제품 이동만 별도 사건으로 기록한다',()=>{
+test('실제 사례 링크를 기록하며 추천제품 클릭은 도착 이벤트를 미리 기록하지 않는다',()=>{
   const t=tracker(),initial=t.api.debugEvents().length;
   t.click({href:'#cases',attrs:{'data-placement':'hero'}});
   t.click({href:'https://blog.naver.com/boss6008'});
@@ -187,12 +188,49 @@ test('실제 사례 링크와 추천제품 이동만 별도 사건으로 기록�
   t.click({href:'https://blog.naver.com/boss6008/224002535713?phone=private',attrs:{'data-placement':'hero'}});
   t.click({href:'https://blog.naver.com/cleankoreacoop/224367465550',attrs:{'data-placement':'featured'}});
   t.click({href:'shop/?src=home&private=hidden'});
-  const events=t.api.debugEvents().slice(-3);
+  t.click({href:'shop/?src=home',attrs:{'data-analytics-event':'shop_open'}});
+  const events=t.api.debugEvents().slice(initial);
+  assert.equal(events.length,2);
   assert.equal(events[0].event,'case_open');assert.equal(events[0].placement,'hero');
   assert.equal(events[1].event,'case_open');assert.equal(events[1].placement,'service');
-  assert.equal(events[2].event,'shop_open');assert.equal(events[2].target,'none');
+  assert.equal(events.some(event=>event.event==='shop_open'),false);
   assert.equal(JSON.stringify(events).includes('224002535713'),false);
   assert.equal(JSON.stringify(events).includes('private'),false);
+});
+
+test('추천제품 내부 이동 도착은 채널·시험 표식을 보존해 문서당 한 번 기록한다',()=>{
+  const origin='https://okclean-kr.github.io';
+  const landing=tracker({search:'?src=youtube&analytics_test=1'});
+  landing.click({href:'/shop/?src=home'});
+  const shop=tracker({path:'/shop/',search:'?src=home&private=hidden',referrer:`${origin}/?src=youtube&private=hidden`,session:Object.fromEntries(landing.values)});
+  shop.api.init();shop.api.init();
+  shop.click({href:'/shop/index.html'});
+  const events=shop.api.debugEvents().filter(event=>event.event==='shop_open');
+  assert.equal(events.length,1);
+  assert.equal(events[0].source,'youtube');assert.equal(events[0].page,'shop');assert.equal(events[0].test,true);
+  assert.equal(events[0].service,'unknown');assert.equal(events[0].placement,'other');assert.equal(events[0].target,'none');
+  assert.equal(JSON.stringify(events).includes('private'),false);assert.equal(JSON.stringify(events).includes(origin),false);
+});
+
+test('외부 진입·새로고침·뒤로가기·shop 자체 이동·확인 불가 항목은 도착으로 세지 않는다',()=>{
+  const origin='https://okclean-kr.github.io';
+  const excluded=[
+    {referrer:''},{referrer:'https://www.youtube.com/'},{referrer:'https://okclean-kr.github.io.other.example/'},{referrer:'invalid url'},
+    ...['/shop','/shop/','/shop/index.html','/shop/product'].map(path=>({referrer:origin+path})),
+    ...['reload','back_forward','prerender',null].map(navigationType=>({referrer:origin+'/',navigationType})),
+    {referrer:origin+'/',performanceAvailable:false},{referrer:origin+'/',performanceThrows:true}
+  ];
+  for(const options of excluded){
+    const t=tracker({path:'/shop/',search:'?src=youtube',...options});
+    assert.equal(t.api.debugEvents().filter(event=>event.event==='shop_open').length,0,JSON.stringify(options));
+    assert.equal(t.api.debugEvents().filter(event=>event.event==='page_view').length,1);
+  }
+});
+
+test('수집 거부 상태의 추천제품 도착은 조회·도착 이벤트를 모두 남기지 않는다',()=>{
+  const t=tracker({path:'/shop/',referrer:'https://okclean-kr.github.io/',choice:'off',settings:{enabled:true,verified:true}});
+  assert.equal(t.api.status().optedOut,true);assert.equal(t.api.debugEvents().length,0);
+  assert.equal(t.values.has('okclean_analytics_source_v1'),false);
 });
 
 test('페이지에서 사용하는 위치 속성을 서버의 허용된 위치로 변환한다',()=>{

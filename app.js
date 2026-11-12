@@ -226,7 +226,16 @@ Promise.all([
   const validClassification = classification && classification.schemaVersion === 1 && classification.overrides && typeof classification.overrides === "object" && !Array.isArray(classification.overrides);
   const overrides = validClassification ? classification.overrides : {};
   const verifiedLinks = new Set(Array.from(document.querySelectorAll("#featured-work .featured-card"), a => a.href));
-  const all = (Array.isArray(d?.cases) ? d.cases : []).filter(x => x && typeof x.link === "string" && typeof x.title === "string" && x.link && x.title && !ex.some(w => x.title.replace(/\s/g, "").includes(w))).map(x => ({...x, kind:validClassification ? (overrides[x.link]?.kind || x.kind || "case") : (verifiedLinks.has(x.link) ? "case" : x.kind === "tip" ? "tip" : "review")})).sort((p, q) => (q.date || "").localeCompare(p.date || ""));
+  const all = (Array.isArray(d?.cases) ? d.cases : []).filter(x => x && typeof x.link === "string" && typeof x.title === "string" && x.link && x.title && !ex.some(w => x.title.replace(/\s/g, "").includes(w))).map(x => {
+    const candidate = Object.prototype.hasOwnProperty.call(overrides, x.link) ? overrides[x.link] : null;
+    const display = candidate && typeof candidate === "object" && !Array.isArray(candidate) ? candidate : {};
+    return {
+      ...x,
+      title: typeof display.displayTitle === "string" && display.displayTitle.trim() ? display.displayTitle.trim() : x.title,
+      region: typeof display.region === "string" && display.region.trim() ? display.region.trim() : x.region,
+      kind: validClassification ? (overrides[x.link]?.kind || x.kind || "case") : (verifiedLinks.has(x.link) ? "case" : x.kind === "tip" ? "tip" : "review")
+    };
+  }).sort((p, q) => (q.date || "").localeCompare(p.date || ""));
   CASES = all.filter(x => (x.kind || "case") === "case");
   TIPS = all.filter(x => x.kind === "tip");
   if(TIPS.length){

@@ -1,7 +1,7 @@
-// 미적용 초안. 기존 isAdmin() 함수 및 나머지 규칙은 유지합니다.
-// 기존 match /{document=**}의 일괄 거부보다 앞에 아래 블록만 검토하여 추가합니다.
-// 이 파일을 저장하는 행위는 운영 Firestore 권한을 바꾸지 않습니다.
-// 새 쓰기 경로를 활성화하는 변경이므로 실제 규칙과 권한 범위를 확인한 배포가 필요합니다.
+// 2026-11-12 적용한 site_events 블록의 참고용 발췌입니다.
+// 실제 운영 전체 규칙: ops/firestore.rules.current.txt
+// 기존 isAdmin() 및 회원·상품 규칙은 보존했습니다.
+// 이 파일 자체는 Firebase 배포 설정이 아닙니다.
 
 function validSiteEvent(d) {
   return d.keys().hasOnly([
@@ -10,6 +10,7 @@ function validSiteEvent(d) {
     && d.keys().hasAll([
       'schema','event','source','page','service','placement','target','test','at'
     ])
+    && d.schema is int
     && d.schema == 1
     && d.event in [
       'page_view','case_open','shop_open','quote_start','quote_result','contact_prepare',
@@ -20,7 +21,7 @@ function validSiteEvent(d) {
       'naver','google','profile','share','direct','other'
     ]
     && d.page in ['home','service','area','shop','other']
-    && d.service in [
+    && d['service'] in [
       'move-in','regular','special-home','office','clinic','post-build',
       'window','aircon','washer','mattress','carpet','disinfect','unknown'
     ]
@@ -29,6 +30,7 @@ function validSiteEvent(d) {
     ]
     && d.target in ['quote','direct','none','test']
     && d.test is bool
+    && d.at is timestamp
     && d.at == request.time
     && ((d.test == false && d.event != 'diagnostic') || (d.test == true && isAdmin()));
 }

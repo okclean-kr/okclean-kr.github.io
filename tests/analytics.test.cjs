@@ -5,13 +5,17 @@ const vm = require('node:vm');
 const api = require('../analytics.js');
 const source = fs.readFileSync(require.resolve('../analytics.js'), 'utf8');
 
-function tracker({search='?src=blog',path='/',settings={},debug=true}={}) {
+function tracker({search='?src=blog',path='/',settings={},debug=true,choice=null,storageFails=false,session={}}={}) {
   const values=new Map(debug?[['okclean_analytics_debug_v1','true']]:[]),listeners={},timers=new Map();
+  for(const [key,value] of Object.entries(session))values.set(key,value);
+  const preferences=new Map(choice===null?[]:[['okclean_analytics_choice_v1',choice]]),windowListeners={};
   let timerId=0;
   const window={
     OKCLEAN_ANALYTICS:settings,
     location:{pathname:path,search,origin:'https://okclean-kr.github.io'},
-    sessionStorage:{getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value)},
+    sessionStorage:{getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)},
+    localStorage:{getItem:key=>{if(storageFails)throw new Error('blocked');return preferences.get(key)??null;},setItem:(key,value)=>{if(storageFails)throw new Error('blocked');preferences.set(key,value);}},
+    addEventListener:(name,fn)=>{windowListeners[name]=fn;},
     document:{referrer:'',getElementById:id=>id==='qSvc'?{value:'aircon'}:null,addEventListener:(name,fn)=>{listeners[name]=fn;}},
     setTimeout:fn=>{timers.set(++timerId,fn);return timerId;},clearTimeout:id=>timers.delete(id)
   };
@@ -20,7 +24,7 @@ function tracker({search='?src=blog',path='/',settings={},debug=true}={}) {
     if(selector==='a, button')return true;
     return selector.split(',').map(s=>s.trim()).some(s=>parents.includes(s))?{}:null;
   }});
-  return {api:window.OKCleanAnalytics,values,click(options){const el=element(options);listeners.click({target:{closest:()=>el}});},change(){listeners.change({target:{closest:()=>({})}});},flush(){for(const fn of timers.values())fn();timers.clear();}};
+  return {api:window.OKCleanAnalytics,values,preferences,click(options){const el=element(options);listeners.click({target:{closest:()=>el}});},change(){listeners.change({target:{closest:()=>({})}});},flush(){for(const fn of timers.values())fn();timers.clear();},externalChoice(value){preferences.set('okclean_analytics_choice_v1',value);windowListeners.storage({key:'okclean_analytics_choice_v1'});}};
 }
 
 test('전송 객체에는 허용된 열거값만 남고 개인 필드는 버린다',()=>{
@@ -159,4 +163,63 @@ test('날짜별 집계는 KST 자정을 기준으로 운영 이벤트만 계산�
   assert.equal(rows[0].counts.phone_open,0);
   assert.equal(rows[1].counts.page_view,1);
   assert.equal(api.aggregateByDay([{event:'page_view',test:true,at:'2026-11-12T05:00:00.000Z'}]).length,0);
+});
+
+test('저장된 거부 선택을 초기 출처 저장·일반 이벤트·시험 쓰기보다 먼저 존중한다',async()=>{
+  const t=tracker({choice:'off',settings:{enabled:true,verified:true},debug:true,session:{quote:'{"svc":"aircon"}',member_v2:'{"saved":true}'}});
+  assert.equal(t.api.status().optedOut,true);
+  assert.equal((await t.api.track('page_view',{})).status,'opted_out');
+  assert.equal((await t.api.sendTest()).status,'opted_out');
+  assert.equal(t.values.has('okclean_analytics_source_v1'),false);
+  assert.equal(t.values.has('okclean_analytics_debug_events_v1'),false);
+  assert.equal(t.values.get('quote'),'{"svc":"aircon"}');
+  assert.equal(t.values.get('member_v2'),'{"saved":true}');
+});
+
+test('수집 끄기는 측정용 키·타이머만 정리하고 선택 키 하나만 저장한다',()=>{
+  const t=tracker({session:{quote:'견적 보존',member_v2:'회원 보존'}});
+  t.change();
+  const result=t.api.setCollectionAllowed(false);
+  t.flush();
+  assert.equal(result.preferenceSaved,true);assert.equal(result.optedOut,true);
+  assert.deepEqual([...t.preferences.entries()],[['okclean_analytics_choice_v1','off']]);
+  assert.deepEqual([...t.values.entries()],[['quote','견적 보존'],['member_v2','회원 보존']]);
+});
+
+test('수집 켜기는 운영 설정을 켜거나 이전 행동을 재전송하지 않는다',async()=>{
+  const t=tracker({choice:'off',debug:false,settings:{enabled:false,verified:false}});
+  const result=t.api.setCollectionAllowed(true);
+  assert.equal(result.preferenceSaved,true);assert.equal(result.optedOut,false);
+  assert.equal(result.enabled,false);assert.equal(result.verified,false);
+  assert.equal(t.api.debugEvents().length,0);
+  assert.equal((await t.api.track('page_view',{})).status,'disabled');
+  assert.equal(t.api.debugEvents().length,0);
+});
+
+test('SDK 준비 중 껐다 켜더라도 이전 이벤트는 실제 쓰기를 시작하지 않는다',async()=>{
+  const t=tracker({debug:false});
+  let release,writes=0;
+  const prepared=new Promise(resolve=>{release=resolve;});
+  const pending=t.api._guardCollectionWrite(()=>prepared,()=>{writes+=1;});
+  t.api.setCollectionAllowed(false);t.api.setCollectionAllowed(true);release({});
+  await assert.rejects(pending,error=>error.code==='collection-disabled');
+  assert.equal(writes,0);
+});
+
+test('다른 탭에서 끈 선택도 준비 중인 쓰기 직전에 반영한다',async()=>{
+  const t=tracker({debug:false});
+  let release,writes=0;
+  const pending=t.api._guardCollectionWrite(()=>new Promise(resolve=>{release=resolve;}),()=>{writes+=1;});
+  t.externalChoice('off');release({});
+  await assert.rejects(pending,error=>error.code==='collection-disabled');
+  assert.equal(writes,0);assert.equal(t.api.status().optedOut,true);
+});
+
+test('선택 저장소를 읽을 수 없으면 수집을 시작하지 않는다',async()=>{
+  const t=tracker({storageFails:true,settings:{enabled:true,verified:true}});
+  assert.equal(t.api.status().choiceStorageAvailable,false);
+  assert.equal((await t.api.track('kakao_open',{})).status,'opted_out');
+  assert.equal((await t.api.sendTest()).status,'opted_out');
+  const result=t.api.setCollectionAllowed(true);
+  assert.equal(result.preferenceSaved,false);assert.equal(result.optedOut,true);
 });

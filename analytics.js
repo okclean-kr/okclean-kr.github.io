@@ -24,6 +24,7 @@
   const DEBUG_KEY = 'okclean_analytics_debug_v1';
   const LOG_KEY = 'okclean_analytics_debug_events_v1';
   const SOURCE_KEY = 'okclean_analytics_source_v1';
+  const CHOICE_KEY = 'okclean_analytics_choice_v1';
   const MAX_DEBUG = 80;
   let initialized = false;
   let backendPromise;
@@ -35,6 +36,9 @@
   let lastError = '';
   let sessionStorageAvailable = true;
   let pendingContact = 'direct';
+  let choiceStorageAvailable = true;
+  let memoryOptOut = false;
+  let choiceRevision = 0;
 
   function allowed(value, values, fallback) {
     return typeof value === 'string' && values.includes(value) ? value : fallback;
@@ -59,6 +63,52 @@
 
   function debugEnabled() { return storageRead(DEBUG_KEY, false) === true; }
   function liveEnabled() { const s = settings(); return s.enabled && s.verified; }
+
+  function optedOut() {
+    try {
+      if (!env.localStorage) throw new Error('storage-unavailable');
+      const choice = env.localStorage.getItem(CHOICE_KEY);
+      choiceStorageAvailable = true;
+      return memoryOptOut || (choice !== null && choice !== 'on');
+    } catch (_) { choiceStorageAvailable = false; return true; }
+  }
+
+  function clearLocalMeasurement() {
+    env.clearTimeout(quoteTimer);
+    quoteStarted = false;
+    for (const key of [SOURCE_KEY, DEBUG_KEY, LOG_KEY]) {
+      try { if (env.sessionStorage) env.sessionStorage.removeItem(key); }
+      catch (_) { sessionStorageAvailable = false; }
+    }
+  }
+
+  function setCollectionAllowed(allow) {
+    const requested = allow === true ? 'on' : 'off';
+    choiceRevision += 1;
+    memoryOptOut = requested === 'off';
+    let saved = false;
+    try {
+      if (!env.localStorage) throw new Error('storage-unavailable');
+      env.localStorage.setItem(CHOICE_KEY, requested);
+      saved = env.localStorage.getItem(CHOICE_KEY) === requested;
+      if (!saved) throw new Error('storage-unavailable');
+      choiceStorageAvailable = true;
+    } catch (_) { memoryOptOut = true; choiceStorageAvailable = false; }
+    if (!saved || requested === 'off') clearLocalMeasurement();
+    if (env.dispatchEvent && env.CustomEvent) env.dispatchEvent(new env.CustomEvent('okclean:analytics-choice'));
+    return { ...status(), preferenceSaved: saved };
+  }
+
+  // 준비 작업 중 선택이 바뀐 경우에도 SDK가 뒤늦게 쓰기를 시작하지 못하게 합니다.
+  async function guardCollectionWrite(prepare, write, revision = choiceRevision) {
+    const check = () => {
+      if (optedOut() || revision !== choiceRevision) throw { code: 'collection-disabled' };
+    };
+    check();
+    const resource = await prepare();
+    check();
+    return write(resource);
+  }
 
   function normalizeSource(value) {
     if (typeof value !== 'string') return 'other';
@@ -125,7 +175,7 @@
   }
 
   function localLog(payload, delivery, error) {
-    if (!debugEnabled()) return;
+    if (optedOut() || !debugEnabled()) return;
     const rows = storageRead(LOG_KEY, []);
     const safeRows = Array.isArray(rows) ? rows.slice(-(MAX_DEBUG - 1)) : [];
     safeRows.push({ ...payload, recordedAt: new Date().toISOString(), delivery, error: error || '' });
@@ -146,21 +196,25 @@
     return backendPromise;
   }
 
-  async function persist(payload) {
-    const { app, db, firestore } = await backend();
-    if (payload.test) {
-      // 시험 페이지에서도 기존 관리자 로그인 상태만 복원합니다. 새 로그인/익명 계정은 만들지 않습니다.
-      const authModule = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
-      const auth = authModule.getAuth(app);
-      await new Promise((resolve, reject) => {
-        let unsubscribe = () => {};
-        unsubscribe = authModule.onAuthStateChanged(auth, () => { unsubscribe(); resolve(); }, reject);
-      });
-      const user = auth.currentUser;
-      if (!user || user.uid !== 'H1MfdqGkFRZzU8qkqwXTsiKv3CO2' || !user.providerData.some(item => item.providerId === 'google.com')) throw { code: 'admin-required' };
-    }
-    const ref = await firestore.addDoc(firestore.collection(db, 'site_events'), { ...payload, at: firestore.serverTimestamp() });
-    return ref.id;
+  async function persist(payload, revision = choiceRevision) {
+    return guardCollectionWrite(async () => {
+      const resource = await backend();
+      if (payload.test) {
+        // 기존 관리자 로그인 상태만 복원하며 새 로그인/익명 계정을 만들지 않습니다.
+        const authModule = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
+        const auth = authModule.getAuth(resource.app);
+        await new Promise((resolve, reject) => {
+          let unsubscribe = () => {};
+          unsubscribe = authModule.onAuthStateChanged(auth, () => { unsubscribe(); resolve(); }, reject);
+        });
+        const user = auth.currentUser;
+        if (!user || user.uid !== 'H1MfdqGkFRZzU8qkqwXTsiKv3CO2' || !user.providerData.some(item => item.providerId === 'google.com')) throw { code: 'admin-required' };
+      }
+      return resource;
+    }, async ({ db, firestore }) => {
+      const ref = await firestore.addDoc(firestore.collection(db, 'site_events'), { ...payload, at: firestore.serverTimestamp() });
+      return ref.id;
+    }, revision);
   }
 
   function withDeadline(promise) {
@@ -171,6 +225,8 @@
   }
 
   async function track(name, details) {
+    if (optedOut()) return { status: 'opted_out' };
+    const revision = choiceRevision;
     const test = debugEnabled() || !!(env.location && new URLSearchParams(env.location.search).get('analytics_test') === '1');
     const payload = buildEvent(name, details, { source, page, test });
     if (!payload) return { status: 'rejected' };
@@ -180,12 +236,12 @@
     }
     if (lastError === 'permission-denied') return { status: 'blocked', error: lastError };
     try {
-      const id = await withDeadline(persist(payload));
+      const id = await withDeadline(persist(payload, revision));
       lastDelivery = 'acknowledged'; lastError = '';
       localLog(payload, lastDelivery, '');
       return { status: lastDelivery, id };
     } catch (error) {
-      lastDelivery = 'failed'; lastError = safeError(error);
+      lastDelivery = safeError(error) === 'collection-disabled' ? 'opted_out' : 'failed'; lastError = safeError(error);
       localLog(payload, lastDelivery, lastError);
       return { status: lastDelivery, error: lastError };
     }
@@ -257,6 +313,13 @@
   function init() {
     if (initialized || !env.document || !env.location) return;
     initialized = true;
+    if (env.addEventListener) env.addEventListener('storage', event => {
+      if (event.key !== CHOICE_KEY && event.key !== null) return;
+      choiceRevision += 1; memoryOptOut = false;
+      if (optedOut()) clearLocalMeasurement();
+      if (env.dispatchEvent && env.CustomEvent) env.dispatchEvent(new env.CustomEvent('okclean:analytics-choice'));
+    });
+    if (optedOut()) { clearLocalMeasurement(); return; }
     if (new URLSearchParams(env.location.search).get('analytics_test') === '1') storageWrite(DEBUG_KEY, true);
     page = resolvePage(env.location.pathname);
     // 관리자·회원 관리·기타 페이지의 행동은 자동 수집하지 않습니다.
@@ -276,14 +339,16 @@
   }
 
   function status() {
+    const off = optedOut();
     return Object.freeze({
       enabled: liveEnabled(), configured: settings().enabled, verified: settings().verified,
       debug: debugEnabled(), lastDelivery, lastError, sessionStorageAvailable,
-      collection: 'site_events', source, page
+      collection: 'site_events', source, page, optedOut: off, choiceStorageAvailable,
+      collectionAllowed: !off, effectiveCollectionEnabled: liveEnabled() && !off
     });
   }
 
-  function setDebug(enabled) { storageWrite(DEBUG_KEY, enabled === true); return status(); }
+  function setDebug(enabled) { if (!optedOut()) storageWrite(DEBUG_KEY, enabled === true); return status(); }
   function debugEvents() { const rows = storageRead(LOG_KEY, []); return Array.isArray(rows) ? rows : []; }
 
   function aggregateByDay(rows) {
@@ -301,9 +366,11 @@
 
   // 운영 설정을 바꾸지 않는 관리자 수동 시험. 규칙은 test=true 쓰기/읽기를 관리자만 허용해야 합니다.
   async function sendTest() {
+    if (optedOut()) return { status: 'opted_out', error: 'collection-disabled' };
+    const revision = choiceRevision;
     const payload = buildEvent('diagnostic', { service: 'unknown', placement: 'test', target: 'test' }, { source: 'profile', page: 'home', test: true });
     try {
-      const id = await withDeadline(persist(payload));
+      const id = await withDeadline(persist(payload, revision));
       const { db, firestore } = await backend();
       const snapshot = await withDeadline(firestore.getDocFromServer(firestore.doc(db, 'site_events', id)));
       if (!snapshot.exists() || snapshot.data().test !== true || snapshot.data().event !== 'diagnostic') return { status: 'unverified', id };
@@ -326,5 +393,7 @@
     return { rows, capped: snapshot.size === 2000, days: range, checkedAt: new Date().toISOString() };
   }
 
-  return Object.freeze({ init, track, status, setDebug, debugEvents, sendTest, readEvents, aggregateByDay, backend, buildEvent, resolveSource, resolvePage, normalizeSource, serviceFromPath, safeError, constants: Object.freeze({ EVENTS, SOURCES, PAGES, SERVICES, PLACEMENTS, TARGETS, FIREBASE }) });
+  const api = { init, track, status, setCollectionAllowed, setDebug, debugEvents, sendTest, readEvents, aggregateByDay, backend, buildEvent, resolveSource, resolvePage, normalizeSource, serviceFromPath, safeError, constants: Object.freeze({ EVENTS, SOURCES, PAGES, SERVICES, PLACEMENTS, TARGETS, FIREBASE }) };
+  if (typeof module === 'object' && module.exports) api._guardCollectionWrite = guardCollectionWrite;
+  return Object.freeze(api);
 });

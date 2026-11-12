@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-12",
+  "preserveSource": true,
+  "overrides": {
+    "https://blog.naver.com/boss6008/224462359992": {
+      "kind": "tip",
+      "reason": "필터 관리 방법을 안내하는 글로 시공 실적과 구분"
+    },
+    "https://blog.naver.com/boss6008/224451329620": {
+      "kind": "tip",
+      "reason": "세탁기 청소 방법을 안내하는 글로 시공 실적과 구분"
+    },
+    "https://blog.naver.com/boss6008/224446234177": {
+      "kind": "tip",
+      "reason": "김장 전 얼룩 제거 방법을 안내하는 글로 시공 실적과 구분"
+    },
+    "https://blog.naver.com/boss6008/224444898530": {
+      "kind": "tip",
+      "reason": "에어컨 보관 방법 안내"
+    },
+    "https://blog.naver.com/boss6008/224445617389": {
+      "kind": "notice",
+      "reason": "서비스·FAQ·이벤트 종합 공지"
+    },
+    "https://blog.naver.com/cleankoreacoop/224369730738": {
+      "kind": "review",
+      "reason": "제목과 보관 자료만으로 실제 시공 여부 확인 불가"
+    },
+    "https://blog.naver.com/cleankoreacoop/224262538219": {
+      "kind": "review",
+      "reason": "제목과 보관 자료만으로 실제 시공 여부 확인 불가"
+    },
+    "https://blog.naver.com/cleankoreacoop/224310775703": {
+      "kind": "personal",
+      "reason": "생각 청소 주제의 개인 글"
+    },
+    "https://blog.naver.com/cleankoreacoop/224258386608": {
+      "kind": "personal",
+      "reason": "생각 청소 주제의 개인 글"
+    },
+    "https://blog.naver.com/cleankoreacoop/224254116447": {
+      "kind": "personal",
+      "reason": "생각 청소 주제의 개인 글"
+    },
+    "https://blog.naver.com/cleankoreacoop/224252895492": {
+      "kind": "personal",
+      "reason": "생각 청소 주제의 개인 글"
+    },
+    "https://blog.naver.com/cleankoreacoop/224238355507": {
+      "kind": "personal",
+      "reason": "마음 청소 주제의 개인 글"
+    },
+    "https://blog.naver.com/boss6008/223788873217": {
+      "kind": "personal",
+      "reason": "영화 관련 개인 글"
+    },
+    "https://blog.naver.com/boss6008/223604278501": {
+      "kind": "review",
+      "reason": "제목과 보관 자료만으로 실제 시공 여부 확인 불가"
+    },
+    "https://blog.naver.com/boss6008/223595310478": {
+      "kind": "personal",
+      "reason": "영화 감상 글"
+    },
+    "https://blog.naver.com/boss6008/223587368400": {
+      "kind": "personal",
+      "reason": "개인 독서·생각 글"
+    },
+    "https://blog.naver.com/boss6008/223594357004": {
+      "kind": "case",
+      "reason": "장소와 후드청소 방문을 명시한 작업 기록"
+    }
+  }
+}

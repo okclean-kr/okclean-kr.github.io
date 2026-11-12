@@ -35,9 +35,10 @@
     const ok = await window.copyText(text);
     sheet(title, `<p class="send-ok">${ok ? "✓ 아래 내용을 복사해 두었어요" : "아래 내용을 길게 눌러 복사해 주세요"}</p>
       <pre class="send-pre">${esc(text)}</pre>
-      <ol class="send-steps"><li>아래 <b>카톡 열기</b>를 누르세요.</li><li>대화 입력칸을 <b>길게 눌러 '붙여넣기'</b> 하세요.</li><li><b>전송</b>하면 끝! 현장 사진도 함께 보내주시면 더 정확해요.</li></ol>
-      <a class="btn glove" href="${esc(S.kakao)}" target="_blank" rel="noopener" data-close>카톡 열기</a>
-      ${ok ? "" : `<button class="btn line small" type="button" data-copy-again style="width:100%;margin-top:8px">다시 복사하기</button>`}`);
+      <p class="send-steps-compact"><b>카톡을 열고 붙여넣기 → 전송</b>하면 문의가 전달돼요. 현장 사진도 함께 보내주세요.</p>
+      <div class="send-actions"><a class="btn glove" href="${esc(S.kakao)}" target="_blank" rel="noopener" data-placement="quote-sheet">카톡 열고 문의하기 ↗</a>
+      <button class="btn line small" type="button" data-copy-again>문의 내용 다시 복사</button>
+      <button class="link" type="button" data-close>닫기</button></div>`);
     const again = document.querySelector("[data-copy-again]");
     if(again) again.onclick = async () => { if(await window.copyText(text)) window.toast("복사했어요."); };
   };

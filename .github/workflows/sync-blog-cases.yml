@@ -1,0 +1,75 @@
+name: Sync official blog posts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-blog-cases.yml'
+      - 'scripts/sync_blog_cases.py'
+      - 'scripts/ensure_case_pages.py'
+      - 'tests/test_case_sync.py'
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Fetch and validate only; do not commit or publish'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: sync-official-blog-posts-main
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'okclean-kr/okclean-kr.github.io' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      DRY_RUN: ${{ inputs.dry_run || false }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.13'
+      - name: Verify preservation and classification safeguards
+        run: python -m unittest discover -s tests -p 'test_case_sync.py' -v
+      - name: Collect new posts from both owned blogs
+        shell: bash
+        run: |
+          args=(--report "$RUNNER_TEMP/case-sync-report.json")
+          if [[ "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
+          python scripts/sync_blog_cases.py "${args[@]}"
+      - name: Commit only the updated case data
+        if: env.DRY_RUN != 'true'
+        shell: bash
+        run: |
+          if git diff --quiet -- cases.json; then
+            echo "No new posts; existing case data retained."
+            exit 0
+          fi
+          unexpected=$(git diff --name-only -- . ':!cases.json')
+          if [[ -n "$unexpected" ]]; then
+            echo "Unexpected changed files; refusing to commit."
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- cases.json
+          git commit -m 'chore: append new official blog posts'
+          # A concurrent main update rejects this normal push; never overwrite it.
+          git push origin HEAD:main
+      - name: Request Pages build when needed and verify public data
+        if: env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/ensure_case_pages.py

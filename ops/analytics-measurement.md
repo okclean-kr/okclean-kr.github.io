@@ -7,7 +7,8 @@
 - `analytics-config.js`: 공통 수집 설정. `enabled: true`, `verified: true`. 둘 중 하나라도 false이면 새 방문·상담 이벤트 전송은 중지된다.
 - `analytics.js`: 허용된 이벤트/유입 출처/페이지 종류/서비스 종류/버튼 위치/상담 종류만 만드는 수집 모듈. 실제 운영 전송은 두 설정이 모두 true일 때만 가능하다.
 - `admin/analytics.html`: 기존 Google 관리자 UID로 조회하며, 실패·권한 미확인은 숫자 0으로 대신하지 않는다. 실제 문의·예약 수는 표시하지 않는다.
-- `ops/firestore.rules.current.txt`: 2026-11-12 실제 적용한 전체 규칙. 날짜가 붙은 `firestore.rules.analytics-20261112.txt`는 검증 당시와 같은 바이트의 보관본이다.
+- `ops/firestore.rules.current.txt`: 2026-11-12 실제 적용한 전체 규칙. 현재는 90일 정리 조건을 포함한 `firestore.rules.retention-20261112.txt`와 동일하다. 초기 수집 규칙의 보관본은 `firestore.rules.analytics-20261112.txt`이다.
+- `analytics-maintenance.js`: 기존 Google 관리자 인증을 확인한 뒤 `site_events`의 90일 초과 자료만 조회·정리한다. 관리자 화면 접속 시 1회 실행하며 자동 예약 작업은 아니다. 세부 적용 상태는 [보관기간 문서](analytics-retention.md)를 따른다.
 - `ops/firestore-site-events.proposed.txt`: 적용한 블록의 참고용 발췌. 파일 이름은 기존 검토 문서 링크를 유지하기 위해 보존했다.
 - `ops/firestore-validation-20261112.json`: 격리된 Emulator 검증 63건과 실제 서버 시험 저장·조회 확인 근거.
 
@@ -58,18 +59,20 @@ window.OKCleanAnalytics?.track('signup_complete', { placement: 'other', target: 
 
 끄기는 예약된 견적 점검 타이머와 analytics 전용 source/debug/log 세션 키만 정리하며 기존 회원·견적 저장은 건드리지 않는다. 같은 브라우저의 다른 탭에서도 `storage` 변경을 확인한다. 켜기는 운영 `enabled`/`verified`를 변경하지 않으며, 이후 새로 발생한 행동에 적용한다. 과거 행동을 모아 두거나 재전송하지 않는다. 선택 저장 자체가 실패하면 해당 페이지에서 수집을 멈추고 저장 실패를 표시한다.
 
-`privacy.html` 1~6항은 유지하고 이 기능의 항목·목적·저장 수단·직접 식별자 미저장·출처 재사용 기한·자동 삭제 미설정 사실을 추가했다. 이번 활성화 배포는 두 설정을 true로 변경하며, 서버 수집을 중단하려면 두 값을 false로 돌려서 배포한다. 이미 저장된 자료나 기존 회원 기능은 이 설정으로 변경되지 않는다.
+`privacy.html` 1~6항은 유지하고 이 기능의 항목·목적·저장 수단·직접 식별자 미저장·출처 재사용 기한·`site_events` 90일 보관 기준과 관리자 접속 시 정리 방식, `product_clicks` 자동 삭제 미설정 사실을 추가했다. 이번 활성화 배포는 두 설정을 true로 변경하며, 서버 수집을 중단하려면 두 값을 false로 돌려서 배포한다. 이미 저장된 자료나 기존 회원 기능은 이 설정으로 변경되지 않는다.
 
 `?analytics_test=1`은 이 탭의 점검 모드를 켜며, 전송 시에는 `test: true`만 붙인다. 점검 모드는 관리자 화면에서 끌 수 있다. 운영 설정이 꺼져 있으면 점검 기록은 현재 탭에만 최대 80건 남고 외부 전송은 없다. 시험 저장은 규칙상 기존 관리자에게만 허용한다.
 
 ## 확인한 운영 연결과 검증
 
 - 2026-11-12 14:54 KST: Firebase Console에 검증된 전체 규칙을 게시했다. 기존 운영 규칙에서 새 `site_events` 블록을 제외한 부분은 바이트 단위로 보존했다.
-- 적용 규칙 SHA-256: `bb32ebf0395169c6e6a8d649c1a9f1466f8f9c7249ca3c8d8298ffa06d0e97f4`.
+- 초기 수집 규칙 SHA-256: `bb32ebf0395169c6e6a8d649c1a9f1466f8f9c7249ca3c8d8298ffa06d0e97f4`.
+- 2026-11-12 15:26 KST: Firebase Console에서 90일 초과 `site_events` 삭제를 기존 Google 관리자에게만 허용하는 전체 규칙 게시를 확인했다. 현재 규칙 SHA-256: `7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db`. 관리자 페이지 배포와 운영 서버의 만료자료 확인 결과는 [보관기간 문서](analytics-retention.md)에 별도로 기록한다.
 - 14:55 KST: 관리자 화면에서 `diagnostic`, `test: true` 이벤트를 저장하고 `getDocFromServer`로 같은 문서를 다시 읽었다. 확인 문서: `nFsOggpbUuHrPnAZYAK6`.
 - 14:58 KST: 서버 목록 조회 성공. 활성화 전 운영 이벤트 0건, 시험 1건은 운영 집계에서 제외된 상태를 확인했다. 이 0건은 과거 홍보 기간의 방문자가 0명이었다는 뜻이 아니다.
 - 실제 Firestore Emulator: 63/63 통과. 공개 정상 이벤트 생성, 일반인의 조회 거부, 기존 Google 관리자만 조회·시험 생성, 개인정보/알 수 없는 필드/잘못된 타입·시간·ID 차단, 기존 회원·접수증·상품 규칙을 검증했다. 테스트는 격리된 `demo-okclean-rules-audit`에서 실행했으며 운영 고객 자료를 쓰지 않았다.
-- `node --test tests/analytics.test.cjs`: 18/18 통과. 허용 필드, 출처 분류, 초기 가격 제외, 상담 경로 구분, 한국시간 집계, 선택 끄기/켜기, 저장소 실패, 준비 중 취소와 다른 탭 변경을 확인했다.
+- `node --test tests/analytics.test.cjs`: 24/24 통과. 허용 필드, 출처 분류·내부 이동 시 유지, 채널 시험 저장 결과, 초기 가격 제외, 상담 경로 구분, 한국시간 집계, 선택 끄기/켜기, 저장소 실패, 준비 중 취소와 다른 탭 변경을 확인했다.
+- 보관기간 기능은 모듈·관리자 화면 23건, 실제 Emulator의 삭제 조건 22건과 기존 규칙 63건 재검증을 통과했다. 결과는 [통계 보관기간 문서](analytics-retention.md)와 `firestore-retention-validation-20261112.json`에 있다.
 
 운영 배포 후에는 실제 홈페이지의 조회·견적·상담 링크 클릭을 관리자 화면에서 확인한다. 점검 모드는 관리자만 `test: true`로 저장하며 집계에서 제외한다. 일반 모드 배포 점검은 운영 이벤트에 포함되므로 최초 기록을 고객 반응으로 해석하지 않는다. 카톡 메시지·전화 통화·문자 전송·회원가입을 시험 목적으로 실제 접수하지 않는다.
 

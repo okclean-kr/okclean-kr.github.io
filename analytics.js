@@ -11,6 +11,7 @@
 
   const EVENTS = Object.freeze(['page_view', 'case_open', 'shop_open', 'quote_start', 'quote_result', 'contact_prepare', 'kakao_open', 'phone_open', 'sms_open', 'signup_complete', 'diagnostic']);
   const SOURCES = Object.freeze(['youtube', 'shorts', 'instagram', 'reels', 'threads', 'blog', 'naver', 'google', 'profile', 'share', 'direct', 'other']);
+  const CHANNEL_SOURCES = Object.freeze(['youtube', 'instagram', 'threads', 'blog']);
   const PAGES = Object.freeze(['home', 'service', 'area', 'shop', 'other']);
   const SERVICES = Object.freeze(['move-in', 'regular', 'special-home', 'office', 'clinic', 'post-build', 'window', 'aircon', 'washer', 'mattress', 'carpet', 'disinfect', 'unknown']);
   const PLACEMENTS = Object.freeze(['hero', 'sticky', 'quote', 'header', 'footer', 'service', 'other', 'test']);
@@ -120,11 +121,15 @@
   function resolveSource(search, referrer, origin, previous) {
     try {
       const params = new URLSearchParams(typeof search === 'string' ? search : '');
-      const explicit = params.get('src') || params.get('utm_source');
-      if (explicit && explicit !== 'home') return normalizeSource(explicit);
+      let ref;
+      try { if (referrer) ref = new URL(referrer); } catch (_) { /* 유효한 출처 태그는 별도로 확인합니다. */ }
+      // 내부 이동의 src는 새 유입이 아닙니다. 유효 기간이 남은 출처만 이어받습니다.
+      if (ref && ref.origin === origin) return allowed(previous, SOURCES, 'direct');
+      const src = params.get('src');
+      const explicit = src && src.toLowerCase() !== 'home' ? src : params.get('utm_source');
+      if (explicit && explicit.toLowerCase() !== 'home') return normalizeSource(explicit);
       if (referrer) {
-        const ref = new URL(referrer);
-        if (ref.origin === origin) return allowed(previous, SOURCES, 'direct');
+        if (!ref) return 'other';
         const host = ref.hostname.toLowerCase();
         if (host === 'youtu.be' || host === 'youtube.com' || host.endsWith('.youtube.com')) return 'youtube';
         if (host === 'instagram.com' || host.endsWith('.instagram.com')) return 'instagram';
@@ -136,6 +141,10 @@
       }
     } catch (_) { return 'other'; }
     return allowed(previous, SOURCES, 'direct');
+  }
+
+  function channelUrl(channel) {
+    return CHANNEL_SOURCES.includes(channel) ? `https://okclean-kr.github.io/?src=${channel}` : null;
   }
 
   function resolvePage(pathname) {
@@ -364,17 +373,32 @@
     return [...groups.values()].sort((a, b) => b.day.localeCompare(a.day));
   }
 
-  // 운영 설정을 바꾸지 않는 관리자 수동 시험. 규칙은 test=true 쓰기/읽기를 관리자만 허용해야 합니다.
-  async function sendTest() {
+  function testPayload(testSource) {
+    if (testSource !== 'profile' && !CHANNEL_SOURCES.includes(testSource)) return null;
+    return buildEvent('diagnostic', { service: 'unknown', placement: 'test', target: 'test' }, { source: testSource, page: 'home', test: true });
+  }
+
+  function testReceipt(payload, data) {
+    if (!payload || !data || !Object.keys(payload).every(key => data[key] === payload[key])) return null;
+    try {
+      const date = data.at && typeof data.at.toDate === 'function' ? data.at.toDate() : null;
+      return date && Number.isFinite(date.getTime()) ? date.toISOString() : null;
+    } catch (_) { return null; }
+  }
+
+  // 출처별 시험도 항상 diagnostic/test=true이며 운영 설정·세션 출처를 바꾸지 않습니다.
+  async function sendTest(testSource = 'profile') {
     if (optedOut()) return { status: 'opted_out', error: 'collection-disabled' };
     const revision = choiceRevision;
-    const payload = buildEvent('diagnostic', { service: 'unknown', placement: 'test', target: 'test' }, { source: 'profile', page: 'home', test: true });
+    const payload = testPayload(testSource);
+    if (!payload) return { status: 'rejected', error: 'invalid-test-source' };
     try {
       const id = await withDeadline(persist(payload, revision));
       const { db, firestore } = await backend();
       const snapshot = await withDeadline(firestore.getDocFromServer(firestore.doc(db, 'site_events', id)));
-      if (!snapshot.exists() || snapshot.data().test !== true || snapshot.data().event !== 'diagnostic') return { status: 'unverified', id };
-      return { status: 'verified_test', id, at: snapshot.data().at && snapshot.data().at.toDate().toISOString() };
+      const at = snapshot.exists() ? testReceipt(payload, snapshot.data()) : null;
+      if (!at) return { status: 'unverified', id };
+      return { status: 'verified_test', id, source: payload.source, at };
     } catch (error) { return { status: 'failed', error: safeError(error) }; }
   }
 
@@ -393,7 +417,11 @@
     return { rows, capped: snapshot.size === 2000, days: range, checkedAt: new Date().toISOString() };
   }
 
-  const api = { init, track, status, setCollectionAllowed, setDebug, debugEvents, sendTest, readEvents, aggregateByDay, backend, buildEvent, resolveSource, resolvePage, normalizeSource, serviceFromPath, safeError, constants: Object.freeze({ EVENTS, SOURCES, PAGES, SERVICES, PLACEMENTS, TARGETS, FIREBASE }) };
-  if (typeof module === 'object' && module.exports) api._guardCollectionWrite = guardCollectionWrite;
+  const api = { init, track, status, setCollectionAllowed, setDebug, debugEvents, sendTest, readEvents, aggregateByDay, backend, buildEvent, resolveSource, resolvePage, normalizeSource, channelUrl, serviceFromPath, safeError, constants: Object.freeze({ EVENTS, SOURCES, CHANNEL_SOURCES, PAGES, SERVICES, PLACEMENTS, TARGETS, FIREBASE }) };
+  if (typeof module === 'object' && module.exports) {
+    api._guardCollectionWrite = guardCollectionWrite;
+    api._testPayload = testPayload;
+    api._testReceipt = testReceipt;
+  }
   return Object.freeze(api);
 });

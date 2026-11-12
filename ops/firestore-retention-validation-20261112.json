@@ -1,0 +1,382 @@
+{
+  "projectId": "demo-okclean-retention-audit",
+  "productionAccess": false,
+  "emulatorHost": "127.0.0.1:8088",
+  "candidateSha256": "7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db",
+  "passed": 22,
+  "failed": 0,
+  "boundaryMethod": "same production predicate, emulator-only rule match with exact request.time-relative arguments",
+  "results": [
+    {
+      "name": "Google admin can delete a genuinely older-than-90-days event",
+      "passed": true
+    },
+    {
+      "name": "public cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "other Google UID cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "same UID password cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "missing Google provider cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "admin cannot delete fresh event",
+      "passed": true
+    },
+    {
+      "name": "admin cannot delete less than 90 days event",
+      "passed": true
+    },
+    {
+      "name": "admin cannot delete future event",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp string is not deletable",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp number is not deletable",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp null is not deletable",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp map is not deletable",
+      "passed": true
+    },
+    {
+      "name": "missing timestamp is not deletable",
+      "passed": true
+    },
+    {
+      "name": "expired diagnostic records follow the same retention policy",
+      "passed": true
+    },
+    {
+      "name": "admin cannot change at or another event field before deletion",
+      "passed": true
+    },
+    {
+      "name": "a mixed fresh/expired batch is wholly rejected",
+      "passed": true
+    },
+    {
+      "name": "server query used by maintenance is authorized for admin only",
+      "passed": true
+    },
+    {
+      "name": "product_clicks deletion stays denied even for admin and old data",
+      "passed": true
+    },
+    {
+      "name": "subcollections and unrelated collection do not inherit retention rights",
+      "passed": true
+    },
+    {
+      "name": "server-time predicate at 90 days equal has expected strict boundary",
+      "passed": true
+    },
+    {
+      "name": "server-time predicate at 90 days older has expected strict boundary",
+      "passed": true
+    },
+    {
+      "name": "server-time predicate at 90 days newer has expected strict boundary",
+      "passed": true
+    }
+  ],
+  "baselineVerification": {
+    "baselinePath": "ops/firestore.rules.analytics-20261112.txt",
+    "baselineSha256": "bb32ebf0395169c6e6a8d649c1a9f1466f8f9c7249ca3c8d8298ffa06d0e97f4",
+    "currentRulesSha256": "7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db",
+    "outsideSiteEventsSha256": "a9d8df5e23b412abf946c26f3cb8952c8baa9867cf5fda202b213f49cc456818",
+    "outsideSiteEventsByteIdentical": true,
+    "privacySections1to6Sha256": "5f1a69020801c873d35dad48ecae34ce8a54c9fdd8d2288b8bacdb2058210ef7",
+    "privacySections1to6ByteIdentical": true
+  },
+  "existingRulesRegression": {
+    "passed": 63,
+    "failed": 0,
+    "results": [
+      {
+        "name": "unauthenticated valid create with server timestamp is allowed",
+        "passed": true
+      },
+      {
+        "name": "public get is denied",
+        "passed": true
+      },
+      {
+        "name": "public list is denied",
+        "passed": true
+      },
+      {
+        "name": "existing Google admin get is allowed",
+        "passed": true
+      },
+      {
+        "name": "existing Google admin list is allowed",
+        "passed": true
+      },
+      {
+        "name": "other Google user get is denied",
+        "passed": true
+      },
+      {
+        "name": "same UID with password provider get is denied",
+        "passed": true
+      },
+      {
+        "name": "unauthenticated test event is denied",
+        "passed": true
+      },
+      {
+        "name": "existing Google admin test event is allowed",
+        "passed": true
+      },
+      {
+        "name": "same UID with password provider test event is denied",
+        "passed": true
+      },
+      {
+        "name": "other Google user test event is denied",
+        "passed": true
+      },
+      {
+        "name": "diagnostic event with test false is denied",
+        "passed": true
+      },
+      {
+        "name": "extra PII or unapproved field name is denied",
+        "passed": true
+      },
+      {
+        "name": "extra PII or unapproved field phone is denied",
+        "passed": true
+      },
+      {
+        "name": "extra PII or unapproved field ownerUid is denied",
+        "passed": true
+      },
+      {
+        "name": "extra PII or unapproved field memo is denied",
+        "passed": true
+      },
+      {
+        "name": "extra PII or unapproved field url is denied",
+        "passed": true
+      },
+      {
+        "name": "extra PII or unapproved field userAgent is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field schema is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field event is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field source is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field page is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field service is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field placement is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field target is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field test is denied",
+        "passed": true
+      },
+      {
+        "name": "missing required field at is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid event enum is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid source enum is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid page enum is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid service enum is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid placement enum is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid target enum is denied",
+        "passed": true
+      },
+      {
+        "name": "invalid schema version is denied",
+        "passed": true
+      },
+      {
+        "name": "noninteger schema is denied",
+        "passed": true
+      },
+      {
+        "name": "string boolean is denied",
+        "passed": true
+      },
+      {
+        "name": "past client timestamp is denied",
+        "passed": true
+      },
+      {
+        "name": "future client timestamp is denied",
+        "passed": true
+      },
+      {
+        "name": "string timestamp is denied",
+        "passed": true
+      },
+      {
+        "name": "null timestamp is denied",
+        "passed": true
+      },
+      {
+        "name": "short document ID is denied",
+        "passed": true
+      },
+      {
+        "name": "nonalphanumeric document ID is denied",
+        "passed": true
+      },
+      {
+        "name": "nested subcollection creation is denied",
+        "passed": true
+      },
+      {
+        "name": "public update is denied",
+        "passed": true
+      },
+      {
+        "name": "admin update is denied",
+        "passed": true
+      },
+      {
+        "name": "public delete is denied",
+        "passed": true
+      },
+      {
+        "name": "admin delete is denied",
+        "passed": true
+      },
+      {
+        "name": "listed production event case_open is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event shop_open is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event quote_start is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event quote_result is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event contact_prepare is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event kakao_open is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event phone_open is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event sms_open is allowed",
+        "passed": true
+      },
+      {
+        "name": "listed production event signup_complete is allowed",
+        "passed": true
+      },
+      {
+        "name": "preserved member and receipt atomic create is allowed for owner",
+        "passed": true
+      },
+      {
+        "name": "preserved member private read remains denied to owner",
+        "passed": true
+      },
+      {
+        "name": "preserved receipt own get remains allowed",
+        "passed": true
+      },
+      {
+        "name": "preserved member admin get remains allowed",
+        "passed": true
+      },
+      {
+        "name": "preserved products admin create remains allowed",
+        "passed": true
+      },
+      {
+        "name": "preserved products public read remains allowed",
+        "passed": true
+      },
+      {
+        "name": "preserved products public write remains denied",
+        "passed": true
+      }
+    ]
+  },
+  "maintenanceUnitAndPageTests": {
+    "passed": 23,
+    "failed": 0
+  },
+  "analyticsUnitTests": {
+    "passed": 24,
+    "failed": 0
+  },
+  "liveVerification": {
+    "rulesPublishedAt": "2026-11-12T15:26:00+09:00",
+    "rulesProjectId": "okclean-admin",
+    "rulesCurrentVersionConfirmed": true,
+    "clientPageDeploymentVerified": false,
+    "expiredRecordServerQueryVerified": false,
+    "productionDeletionAttemptedByTest": false
+  }
+}

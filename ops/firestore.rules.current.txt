@@ -219,8 +219,9 @@ service cloud.firestore {
 
     // 사이트 이용통계: 아래 열거값 8개와 서버 시각 at만 저장합니다.
     // 이름·연락처·상담 본문·사용자 ID 필드는 허용하지 않습니다.
-    // 방문자는 운영 이벤트 생성만, 기존 Google 관리자는 조회·시험 생성만 가능합니다.
-    // 운영 기록의 수정·삭제 및 하위 컬렉션 접근은 허용하지 않습니다.
+    // 방문자는 운영 이벤트 생성만, 기존 Google 관리자는 조회·시험 생성이 가능합니다.
+    // 수정은 항상 거부하며, 90일이 지난 통계만 기존 Google 관리자가 정리합니다.
+    // 하위 컬렉션과 다른 컬렉션은 이 정리 권한에 포함되지 않습니다.
     function validSiteEvent(d) {
       return d.keys().hasOnly([
           'schema','event','source','page','service','placement','target','test','at'
@@ -253,12 +254,18 @@ service cloud.firestore {
         && ((d.test == false && d.event != 'diagnostic') || (d.test == true && isAdmin()));
     }
 
+    function expiredSiteEventAt(at) {
+      return at is timestamp
+        && at < request.time - duration.value(90, 'd');
+    }
+
     match /site_events/{eventId} {
       allow read: if isAdmin();
       allow create: if eventId.size() == 20
         && eventId.matches('^[A-Za-z0-9]+$')
         && validSiteEvent(request.resource.data);
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if isAdmin() && expiredSiteEventAt(resource.data.at);
     }
 
     // 나머지는 전부 차단

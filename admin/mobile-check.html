@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>화면 너비 점검 | 오케이청소 관리자</title>
+<link rel="icon" href="../icon-192.png">
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#152949;background:#f3f6fb;line-height:1.55}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1380px;margin:auto;padding:24px 20px 40px}h1{font-size:26px;letter-spacing:-.04em;margin:10px 0}p{margin:8px 0}.muted{color:#596b83;font-size:14px}.notice{max-width:960px;padding:12px 15px;border:1px solid #d8e3f1;border-radius:10px;background:white;font-size:14px}.controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:18px 0}fieldset{border:0;padding:0;margin:0}legend,label{font-size:14px;font-weight:700;margin-bottom:6px}.widths{display:flex;flex-wrap:wrap;gap:7px}button,select,.button{font:inherit;color:#173460;background:white;border:1px solid #c4d4e9;border-radius:8px;padding:9px 12px;cursor:pointer;text-decoration:none}button[aria-pressed="true"]{color:white;background:#1644a3;border-color:#1644a3}a{color:#1644a3}.stage{overflow:auto;background:#e7edf5;border-radius:12px;padding:18px;min-height:820px}.viewport{width:390px;margin:0 auto;outline:1px solid #a7b9d2;background:white}iframe{display:block;width:100%;height:800px;border:0;background:white}.status{font-size:14px;font-variant-numeric:tabular-nums;margin:12px 0}.small{font-size:13px}@media(max-width:620px){.wrap{padding:18px 12px 30px}h1{font-size:23px}.stage{padding:10px}.controls{align-items:flex-start}.viewport{margin:0}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<a href="./analytics.html" id="endCheck">← 점검 종료·방문 통계로</a>
+<h1>화면 너비별 점검</h1>
+<p class="muted">같은 사이트를 아래 프레임에 실제 CSS 너비로 표시합니다. 화면을 축소한 이미지가 아니며, 넓은 화면은 가로로 스크롤할 수 있습니다.</p>
+<div class="notice">
+  <p><strong>이 도구는 브라우저 너비 점검입니다.</strong> Android·iOS 실기기, 모바일 키보드, 앱 전환, 실제 채널 유입을 검증하지 않습니다.</p>
+  <p>기존 Google 관리자 로그인을 확인한 뒤에만 점검 페이지를 엽니다. 로그인이 필요하면 <a href="./analytics.html">방문 통계 화면</a>에서 로그인해 주세요. 점검 페이지에는 <code>analytics_test=1</code>을 붙이며 시험 기록은 운영 집계에서 제외합니다. 통계 수집을 꺼 둔 브라우저에서는 시험을 전송하지 않습니다.</p>
+  <p>견적의 서비스·크기 선택을 점검할 수 있습니다. 고객 개인정보를 입력하거나 실제 상담 발송·가입·구매를 진행하지 마세요.</p>
+</div>
+<div class="controls">
+  <fieldset id="widthControls" disabled><legend>프레임 너비</legend><div class="widths" id="widths">
+    <button type="button" data-width="360" aria-pressed="false">360 px</button>
+    <button type="button" data-width="390" aria-pressed="true">390 px</button>
+    <button type="button" data-width="768" aria-pressed="false">768 px</button>
+    <button type="button" data-width="1280" aria-pressed="false">1280 px</button>
+  </div></fieldset>
+  <div><label for="page">점검 페이지</label><br><select id="page" disabled>
+    <option value="home">홈페이지</option>
+    <option value="service">입주·이사 청소 서비스</option>
+    <option value="shop">추천제품</option>
+  </select></div>
+  <button type="button" id="reload" disabled>선택 페이지 다시 열기</button>
+</div>
+<p class="status" id="frameStatus" role="status">관리자 로그인을 확인하고 있습니다. 아직 점검 페이지를 열지 않았습니다.</p>
+<div class="stage"><div class="viewport" id="viewport"><iframe id="preview" title="홈페이지 · 390 px 너비 점검" src="about:blank" allow="clipboard-write"></iframe></div></div>
+<p class="muted small">프레임은 같은 사이트의 실제 페이지입니다. 이 도구를 나가면 여기서 켠 탭 점검 표시만 해제하고, 들어오기 전에 켜져 있던 점검 설정은 유지합니다.</p>
+</main>
+<script src="../analytics-config.js"></script>
+<script src="../analytics.js"></script>
+<script>
+(function(){
+  'use strict';
+  const api=window.OKCleanAnalytics;
+  const debugBefore=api.status().debug;
+  const pages={home:{path:'../',label:'홈페이지'},service:{path:'../services/move-in.html',label:'입주·이사 청소 서비스'},shop:{path:'../shop/',label:'추천제품'}};
+  const page=document.getElementById('page'),frame=document.getElementById('preview'),viewport=document.getElementById('viewport'),status=document.getElementById('frameStatus');
+  const buttons=[...document.querySelectorAll('[data-width]')];
+  let width=390,authorized=false,opened=false;
+  function restoreDebug(){if(opened&&!debugBefore)api.setDebug(false);}
+  function describe(){
+    if(!authorized)return;
+    frame.title=`${pages[page.value].label} · ${width} px 너비 점검`;
+    try{
+      if(frame.contentWindow.location.origin!==location.origin){status.textContent=`프레임 너비 ${width} px · 선택 페이지를 다시 열어 점검해 주세요.`;return;}
+      const measured=frame.contentWindow.innerWidth;
+      status.textContent=`선택 너비 ${width} px · 프레임 내부 너비 ${measured} px · 선택 페이지: ${pages[page.value].label}`;
+    }catch(_){status.textContent=`프레임 너비 ${width} px · 선택 페이지를 다시 열어 점검해 주세요.`;}
+  }
+  function openPage(){
+    if(!authorized)return;
+    const target=new URL(pages[page.value].path,location.href);
+    target.searchParams.set('src','profile');target.searchParams.set('analytics_test','1');
+    status.textContent=`${pages[page.value].label} · ${width} px · 시험 페이지를 불러오고 있습니다…`;
+    opened=true;frame.src=target.href;
+  }
+  for(const button of buttons)button.addEventListener('click',()=>{
+    if(!authorized)return;
+    width=Number(button.dataset.width);viewport.style.width=`${width}px`;
+    for(const item of buttons)item.setAttribute('aria-pressed',String(item===button));
+    requestAnimationFrame(describe);
+  });
+  page.addEventListener('change',openPage);document.getElementById('reload').addEventListener('click',openPage);frame.addEventListener('load',describe);
+  window.addEventListener('pagehide',restoreDebug);
+  window.addEventListener('pageshow',event=>{if(event.persisted&&authorized)openPage();});
+  void (async()=>{
+    try{
+      const [{getAuth,onAuthStateChanged},{app}]=await Promise.all([
+        import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),api.backend()
+      ]);
+      onAuthStateChanged(getAuth(app),user=>{
+        authorized=!!(user&&user.uid==='H1MfdqGkFRZzU8qkqwXTsiKv3CO2'&&user.providerData.some(item=>item.providerId==='google.com'));
+        document.getElementById('widthControls').disabled=!authorized;page.disabled=!authorized;document.getElementById('reload').disabled=!authorized;
+        if(authorized){openPage();return;}
+        restoreDebug();opened=false;frame.src='about:blank';
+        status.textContent='관리자 로그인 확인 전에는 점검 페이지를 열지 않습니다. 방문 통계 화면에서 기존 관리자 계정으로 로그인해 주세요.';
+      },()=>{status.textContent='관리자 로그인 상태를 확인하지 못했습니다. 점검 페이지를 열지 않았습니다.';});
+    }catch(_){status.textContent='관리자 연결을 준비하지 못했습니다. 방문 통계 화면에서 연결 상태를 확인해 주세요.';}
+  })();
+})();
+</script>
+</body>
+</html>

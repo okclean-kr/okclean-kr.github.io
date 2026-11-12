@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const api = require('../analytics.js');
 const source = fs.readFileSync(require.resolve('../analytics.js'), 'utf8');
 
-function tracker({search='?src=blog',path='/',settings={},debug=true,choice=null,storageFails=false,session={}}={}) {
+function tracker({search='?src=blog',path='/',referrer='',settings={},debug=true,choice=null,storageFails=false,session={}}={}) {
   const values=new Map(debug?[['okclean_analytics_debug_v1','true']]:[]),listeners={},timers=new Map();
   for(const [key,value] of Object.entries(session))values.set(key,value);
   const preferences=new Map(choice===null?[]:[['okclean_analytics_choice_v1',choice]]),windowListeners={};
@@ -16,7 +16,7 @@ function tracker({search='?src=blog',path='/',settings={},debug=true,choice=null
     sessionStorage:{getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)},
     localStorage:{getItem:key=>{if(storageFails)throw new Error('blocked');return preferences.get(key)??null;},setItem:(key,value)=>{if(storageFails)throw new Error('blocked');preferences.set(key,value);}},
     addEventListener:(name,fn)=>{windowListeners[name]=fn;},
-    document:{referrer:'',getElementById:id=>id==='qSvc'?{value:'aircon'}:null,addEventListener:(name,fn)=>{listeners[name]=fn;}},
+    document:{referrer,getElementById:id=>id==='qSvc'?{value:'aircon'}:null,addEventListener:(name,fn)=>{listeners[name]=fn;}},
     setTimeout:fn=>{timers.set(++timerId,fn);return timerId;},clearTimeout:id=>timers.delete(id)
   };
   vm.runInNewContext(source,{window,URL,URLSearchParams,module:{exports:{}},console});
@@ -51,6 +51,71 @@ test('유입 파라미터와 리퍼러의 원문을 보존하지 않는다',()=>
   assert.equal(api.resolveSource('','https://blog.naver.com/user/private?phone=01012345678','https://okclean-kr.github.io','direct'),'blog');
   assert.equal(api.resolveSource('','https://youtube.com.evil.example/private','https://okclean-kr.github.io','direct'),'other');
   assert.equal(api.resolveSource('','https://okclean-kr.github.io/area/private?phone=x','https://okclean-kr.github.io','threads'),'threads');
+});
+
+test('네 채널의 공유 링크에는 정해진 출처만 있고 시험 표식이나 식별자가 없다',()=>{
+  assert.deepEqual(api.constants.CHANNEL_SOURCES,['youtube','instagram','threads','blog']);
+  for(const channel of api.constants.CHANNEL_SOURCES){
+    assert.equal(api.channelUrl(channel),`https://okclean-kr.github.io/?src=${channel}`);
+  }
+  for(const invalid of ['profile','yt','youtube&analytics_test=1','private-person',null,{}])assert.equal(api.channelUrl(invalid),null);
+});
+
+test('같은 사이트 이동의 src가 기존 채널 출처를 덮어쓰지 않는다',()=>{
+  const origin='https://okclean-kr.github.io';
+  for(const channel of api.constants.CHANNEL_SOURCES){
+    for(const search of ['','?src=home','?src=share','?src=youtube','?src=private-person']){
+      assert.equal(api.resolveSource(search,`${origin}/`,origin,channel),channel);
+    }
+    const landing=tracker({search:`?src=${channel}`});
+    const shop=tracker({path:'/shop/',search:'?src=home',referrer:`${origin}/`,session:Object.fromEntries(landing.values)});
+    assert.equal(shop.api.status().source,channel);
+    assert.equal(shop.api.debugEvents().at(-1).source,channel);
+    assert.equal(shop.api.debugEvents().at(-1).page,'shop');
+    assert.equal(api.resolveSource('?src=home','',origin,channel),channel);
+  }
+});
+
+test('새 외부 채널 진입은 출처를 바꾸고 만료된 내부 출처는 재사용하지 않는다',()=>{
+  const origin='https://okclean-kr.github.io';
+  assert.equal(api.resolveSource('?src=instagram','https://l.instagram.com/',origin,'youtube'),'instagram');
+  assert.equal(api.resolveSource('?src=threads','',origin,'blog'),'threads');
+  assert.equal(api.resolveSource('?src=home&utm_source=blog','',origin,'direct'),'blog');
+  assert.equal(api.resolveSource('?src=home','https://www.youtube.com/',origin,'blog'),'youtube');
+  const expired=tracker({path:'/shop/',search:'?src=home',referrer:`${origin}/`,session:{okclean_analytics_source_v1:JSON.stringify({source:'youtube',expiresAt:Date.now()-1000})}});
+  assert.equal(expired.api.status().source,'direct');
+});
+
+test('채널 시험은 diagnostic과 test=true로 고정되어 운영 집계에 섞이지 않는다',()=>{
+  const tests=api.constants.CHANNEL_SOURCES.map(channel=>{
+    const payload=api._testPayload(channel);
+    assert.equal(payload.source,channel);assert.equal(payload.event,'diagnostic');assert.equal(payload.test,true);
+    assert.deepEqual(Object.keys(payload).sort(),['event','page','placement','schema','service','source','target','test'].sort());
+    return {...payload,at:'2026-11-12T05:00:00.000Z'};
+  });
+  assert.equal(api._testPayload('profile').source,'profile');
+  assert.equal(api.aggregateByDay(tests).length,0);
+  const groups=api.aggregateByDay([...tests,{event:'page_view',test:false,at:'2026-11-12T05:00:00.000Z'}]);
+  assert.equal(groups.length,1);assert.equal(groups[0].counts.page_view,1);
+});
+
+test('출처 시험은 임의 값이나 객체를 서버 준비 전에 거부한다',async()=>{
+  const t=tracker({path:'/admin/analytics.html',debug:false,settings:{enabled:true,verified:true}});
+  for(const invalid of ['other','private-person','youtube&name=secret',{source:'youtube',test:false},null]){
+    const result=await t.api.sendTest(invalid);
+    assert.equal(result.status,'rejected');assert.equal(result.error,'invalid-test-source');
+  }
+  assert.equal(t.api.status().source,'direct');assert.equal(t.api.status().debug,false);assert.equal(t.api.debugEvents().length,0);
+});
+
+test('시험 재조회는 같은 출처·시험 표식·모든 허용 필드·서버 시각을 확인한다',()=>{
+  const payload=api._testPayload('youtube');
+  const record={...payload,at:{toDate:()=>new Date('2026-11-12T05:00:00.000Z')}};
+  assert.equal(api._testReceipt(payload,record),'2026-11-12T05:00:00.000Z');
+  for(const changed of [{source:'blog'},{test:false},{event:'page_view'},{schema:2},{placement:'hero'},{at:null},{at:{toDate:()=>new Date('invalid')}}]){
+    assert.equal(api._testReceipt(payload,{...record,...changed}),null);
+  }
+  assert.equal(api._testReceipt(payload,null),null);
 });
 
 test('페이지와 서비스 분류에도 전체 경로가 남지 않는다',()=>{
@@ -170,6 +235,7 @@ test('저장된 거부 선택을 초기 출처 저장·일반 이벤트·시험 
   assert.equal(t.api.status().optedOut,true);
   assert.equal((await t.api.track('page_view',{})).status,'opted_out');
   assert.equal((await t.api.sendTest()).status,'opted_out');
+  for(const channel of api.constants.CHANNEL_SOURCES)assert.equal((await t.api.sendTest(channel)).status,'opted_out');
   assert.equal(t.values.has('okclean_analytics_source_v1'),false);
   assert.equal(t.values.has('okclean_analytics_debug_events_v1'),false);
   assert.equal(t.values.get('quote'),'{"svc":"aircon"}');

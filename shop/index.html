@@ -113,18 +113,8 @@
 </div></footer>
 <script>
 (function(){
- const p=new URLSearchParams(location.search),src=p.get('src')||'profile',wanted=p.get('product')||'';
+ const p=new URLSearchParams(location.search),wanted=p.get('product')||'';
  document.addEventListener('click',async e=>{
-   const a=e.target.closest('.buy-link');
-   if(a){
-     try{
-       const key='okclean_product_clicks';
-       const log=JSON.parse(localStorage.getItem(key)||'[]');
-       log.push({product:a.dataset.product,src:src,at:new Date().toISOString()});
-       localStorage.setItem(key,JSON.stringify(log.slice(-100)));
-     }catch(e){}
-     return;
-   }
    const b=e.target.closest('.share-product');
    if(b){
      const u=new URL(location.origin+location.pathname);
@@ -150,10 +140,12 @@ try{
  const db=getFirestore(initializeApp(cfg));
  document.addEventListener('click',e=>{
    const a=e.target.closest('.buy-link'); if(!a)return;
-   const src=new URLSearchParams(location.search).get('src')||'profile';
+   const measurement=window.OKCleanAnalytics?.status();
+   if(!measurement || measurement.optedOut || measurement.debug)return;
+   const src=measurement.source;
    addDoc(collection(db,'product_clicks'),{
      product:String(a.dataset.product||'').slice(0,128),
-     src:String(src).slice(0,32),
+     src:src,
      at:serverTimestamp()
    }).catch(()=>{});
  });

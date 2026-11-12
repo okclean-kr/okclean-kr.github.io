@@ -40,7 +40,17 @@
 <p>언제든지 개인정보 열람·수정·삭제와 이벤트 수신 거부를 요청할 수 있습니다. 삭제 요청이 접수되면 본인 확인 후 관리자만 회원 접수정보와 쿠폰 확인정보를 함께 삭제하도록 운영합니다. 아래 연락처로 요청해 주세요.</p>
 <h2>6. 문의</h2>
 <p>오케이청소 · 대표 이근영 · 033-911-4457 </p>
-<p style="color:var(--muted);font-size:14px">현재 홈페이지에는 별도 방문 통계 수집 코드를 연결하지 않았습니다.</p>
+<section aria-labelledby="analytics-privacy-title" style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line)">
+<h2 id="analytics-privacy-title">방문·상담 통계와 수집 선택</h2>
+<p>방문·상담 통계의 운영 수집이 활성화되면 홈페이지 개선과 유입 채널별 반응 확인을 위해 페이지 조회, 작업 기록 열기, 추천제품 이동, 견적 조작, 카톡·전화·문자 버튼 선택, 신규 가입 저장 완료 같은 행동을 기록합니다. 이 통계에는 <b>행동 종류, 유입 채널 분류, 페이지·서비스 종류, 버튼 위치·상담 경로, 시험 여부, 저장 시각</b>을 담습니다. 별도로 <b>추천제품의 판매처 버튼을 누르면 제품 식별자·유입 채널 분류·저장 시각</b>을 기록합니다. 두 통계 모두 Google Firebase의 Cloud Firestore에 저장하며, 관리자만 조회합니다.</p>
+<p>이름·전화번호·상세 주소·상담 본문·원본 URL·쿼리·리퍼러 주소·회원 ID·쿠폰번호·사용자 및 광고 식별자는 서버 통계에 저장하지 않습니다. 실제 통화 내용이나 카톡·문자 메시지 내용도 이 통계 기능으로 수집하지 않습니다.</p>
+<p>이 통계 기능은 별도 쿠키를 설정하지 않습니다. 같은 탭의 임시 저장소(sessionStorage)에 출처 분류와 만료 시각을 두고, 다음 페이지에서 <b>30분 이내의 출처 분류만 이어서 참고</b>합니다. 30분은 출처 재사용 기한이며 저장 기록이 그때 자동 삭제된다는 뜻은 아닙니다.</p>
+<p><b>서버 통계 원본의 자동 삭제 기간은 현재 설정되어 있지 않습니다.</b> 아래 수집 끄기는 앞으로 이 브라우저에서 보내는 새 통계를 중지하는 기능이며, 이미 전송된 기록을 삭제하는 기능은 아닙니다. 회원·상담 정보의 보관 기준은 위 3항을 따릅니다.</p>
+<p>아래 선택은 <b>방문·상담 통계와 추천제품 판매처 버튼 통계에 함께 적용</b>됩니다. 선택은 이 브라우저의 localStorage에 허용·거부 값 하나로 저장합니다. 회원가입·견적 이용·제품 구매 링크에는 영향을 주지 않습니다. 수집을 다시 켜도 끄기 전에 했던 행동을 다시 전송하지 않습니다.</p>
+<div class="cta2" style="margin:14px 0"><button class="btn line" type="button" id="analyticsDisable" disabled>이 브라우저 수집 끄기</button><button class="btn line" type="button" id="analyticsEnable" disabled>이 브라우저 수집 켜기</button></div>
+<p class="note" id="analyticsChoiceStatus" role="status" aria-live="polite">이 브라우저의 수집 선택을 확인하고 있습니다.</p>
+<noscript><p class="note">이 통계 기능은 JavaScript가 꺼져 있으면 실행되지 않습니다.</p></noscript>
+</section>
 </div>
 </main>
 <section class="recruit"><div class="wrap"><div><b>함께 일할 분을 상시 모집해요</b><p>청소 일꾼(경력·초보 모두) 상시 채용, 인테리어·부동산·건물관리 업체 협업 문의를 받아요.</p></div><a class="btn line" href="https://open.kakao.com/o/s3TIhwSi" target="_blank" rel="noopener">카톡으로 채용·협업 문의</a></div></section><footer><div class="wrap">
@@ -56,4 +66,22 @@
 <div class="modal" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT" hidden><div class="modal-box"><button class="x" type="button" data-close aria-label="닫기">×</button><h2 id="sheetT"></h2><div id="sheetB"></div></div></div>
 <script>window.SITE={name:"오케이청소",url:"https://okclean-kr.github.io",kakao:"https://open.kakao.com/o/s3TIhwSi",tagline:"깨끗한 공간, 더 좋은 일상",root:""};</script>
 <script src="site.js"></script>
+<script src="analytics-config.js"></script>
+<script src="analytics.js"></script>
+<script>
+(function(){
+  const api=window.OKCleanAnalytics,off=document.getElementById('analyticsDisable'),on=document.getElementById('analyticsEnable'),message=document.getElementById('analyticsChoiceStatus');
+  if(!api){message.textContent='수집 선택 기능을 불러오지 못했습니다. 페이지를 새로 열어 주세요.';return;}
+  function render(result){
+    const state=api.status();
+    off.disabled=false;on.disabled=false;
+    off.setAttribute('aria-pressed',String(state.optedOut));on.setAttribute('aria-pressed',String(!state.optedOut));
+    if(result&&result.preferenceSaved===false){message.textContent='선택을 브라우저에 저장하지 못했습니다. 현재 페이지에서는 통계 수집을 중지했습니다. 다음 페이지에서도 선택 상태를 확인해 주세요.';return;}
+    if(!state.choiceStorageAvailable){message.textContent='브라우저 저장소에서 선택 상태를 확인할 수 없어 통계 수집을 중지했습니다.';return;}
+    message.textContent=state.optedOut?'이 브라우저의 방문·상담 통계와 추천제품 판매처 버튼 통계 수집이 꺼져 있습니다.':state.enabled?'이 브라우저의 두 통계 수집이 허용되어 있습니다. 이전 행동은 다시 전송하지 않습니다.':'이 브라우저는 두 통계 수집을 허용한 상태입니다. 방문·상담 통계의 운영 설정은 현재 꺼져 있으며, 기존 추천제품 판매처 버튼 통계에도 이 선택이 적용됩니다.';
+  }
+  off.onclick=()=>render(api.setCollectionAllowed(false));on.onclick=()=>render(api.setCollectionAllowed(true));
+  window.addEventListener('okclean:analytics-choice',()=>render());render();
+})();
+</script>
 </body></html>

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-12T15:35:43+09:00",
+  "updated": "2026-11-13T10:28:48+09:00",
   "cases": [
     {
       "title": "춘천 에어컨청소 필터만 씻으면 끝일까요",
@@ -723,6 +723,19 @@
       "publishedAt": "2026-11-05T13:16:52+09:00",
       "source": "naver-rss",
       "classificationReason": "explicit-work-in-source"
+    },
+    {
+      "title": "마루 바닥에 스팀청소기 써도 될까? 재질별 확인법",
+      "link": "https://blog.naver.com/boss6008/224472702176",
+      "date": "2026-11-13 09:00",
+      "img": "https://blogthumb.pstatic.net/MjAyNjExMTFfOSAg/MDAxNzk0MzYxNjg1NDk1.Xqd6afcGD1rurGPa0Xu2KGvnkbskNKD5Yuiq9gbeRNIg.40-ICbMHUsCTJwVgUqx1TrGbs8ERKrIv2bF7brtU4uQg.PNG/%B4%D9%BF%EE%B7%CE%B5%E5_%286%29.png?type=s3",
+      "svc": "regular",
+      "kind": "review",
+      "region": "",
+      "blog": "boss6008",
+      "publishedAt": "2026-11-13T09:00:00+09:00",
+      "source": "naver-rss",
+      "classificationReason": "insufficient-work-evidence"
     }
   ]
 }

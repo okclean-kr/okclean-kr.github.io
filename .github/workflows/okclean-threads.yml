@@ -1,0 +1,38 @@
+name: OKClean Threads publishing
+on:
+  schedule:
+    - cron: '0 23 * * *' # 08:00 KST
+    - cron: '0 4 * * *'  # 13:00 KST
+    - cron: '0 11 * * *' # 20:00 KST
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: okclean-threads-publisher
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      THREADS_ENABLED: ${{ vars.OKC_THREADS_ENABLED }}
+      THREADS_ACCESS_TOKEN: ${{ secrets.OKC_THREADS_ACCESS_TOKEN }}
+      THREADS_EXPECTED_USERNAME: ky.lee0912
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate and publish eligible post
+        run: node scripts/okclean-threads-publish.mjs
+      - name: Commit publication ledger
+        if: always()
+        run: |
+          if git diff --quiet -- ops/threads-posted.json; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ops/threads-posted.json
+          git commit -m "chore: record Threads publishing state"
+          git push

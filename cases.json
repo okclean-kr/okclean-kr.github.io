@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-13T10:28:48+09:00",
+  "updated": "2026-11-14T10:24:57+09:00",
   "cases": [
     {
       "title": "춘천 에어컨청소 필터만 씻으면 끝일까요",
@@ -734,6 +734,19 @@
       "region": "",
       "blog": "boss6008",
       "publishedAt": "2026-11-13T09:00:00+09:00",
+      "source": "naver-rss",
+      "classificationReason": "insufficient-work-evidence"
+    },
+    {
+      "title": "사무실 카펫에 커피 쏟았을 때, 먼저 할 4가지",
+      "link": "https://blog.naver.com/boss6008/224472706181",
+      "date": "2026-11-14 09:10",
+      "img": "https://blogthumb.pstatic.net/MjAyNjExMTFfMTE5/MDAxNzk0MzYxOTAzNzk5.8vNVLNOGay0KZPITIUzSHw0WKVz_glpn8LuQ6aBaUcsg.JeHBY9EMajfKunQKIhs4WyFb_70IIryULB9D_yKoctgg.PNG/%B4%D9%BF%EE%B7%CE%B5%E5_%289%29.png?type=s3",
+      "svc": "carpet",
+      "kind": "review",
+      "region": "",
+      "blog": "boss6008",
+      "publishedAt": "2026-11-14T09:10:00+09:00",
       "source": "naver-rss",
       "classificationReason": "insufficient-work-evidence"
     }

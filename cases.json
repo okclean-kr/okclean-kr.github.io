@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-14T10:24:57+09:00",
+  "updated": "2026-11-15T10:28:49+09:00",
   "cases": [
     {
       "title": "춘천 에어컨청소 필터만 씻으면 끝일까요",
@@ -749,6 +749,19 @@
       "publishedAt": "2026-11-14T09:10:00+09:00",
       "source": "naver-rss",
       "classificationReason": "insufficient-work-evidence"
+    },
+    {
+      "title": "욕실 실리콘 검은 얼룩, 닦아도 다시 생기는 이유와 해결 기준",
+      "link": "https://blog.naver.com/boss6008/224472711130",
+      "date": "2026-11-15 09:20",
+      "img": "https://blogthumb.pstatic.net/MjAyNjExMTFfNzcg/MDAxNzk0MzYyMDc5ODIw.Rld8UpFovjtbY7nnb2HBg3KFmJn-DzCr8WSZ_S5uErAg.VVCsEY2SRSnwbq5b9iZZZP1qwFtG2oT1O8zg6YptfZ4g.PNG/%B4%D9%BF%EE%B7%CE%B5%E5_%2812%29.png?type=s3",
+      "svc": "regular",
+      "kind": "tip",
+      "region": "",
+      "blog": "boss6008",
+      "publishedAt": "2026-11-15T09:20:00+09:00",
+      "source": "naver-rss",
+      "classificationReason": "instruction-title"
     }
   ]
 }

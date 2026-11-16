@@ -17,7 +17,7 @@
 
 2. **GitHub Pages 재배포**
    - Pages 배포가 성공했는지 Actions에서 확인한다.
-   - 핵심 경로 `/`, `/shop/`, `/app/`, `/admin/`, `/admin/products.html`을 확인한다.
+   - 핵심 경로 `/`, `/shop/`, `/app/`, `/admin/`, `/admin/products.html`, `/quote/`, `/admin/quotes.html`을 확인한다.
 
 3. **Firebase 프로젝트 연결 확인**
    - 프로젝트: `okclean-admin`
@@ -27,7 +27,7 @@
 4. **Firestore Rules 적용**
    - 복구 파일: `ops/firestore.rules.current.txt`
    - Firebase Console의 Firestore Rules에 전체 복사 후 게시한다.
-   - `member_requests`, `member_receipts`, `products`, `product_clicks` 규칙이 모두 포함됐는지 확인한다.
+   - `member_requests`, `member_receipts`, `products`, `product_clicks`, `site_events`, `quote_requests`, `quote_receipts`, `quote_limits` 및 견적 사진·이력 규칙이 모두 포함됐는지 확인한다. 현재 규칙을 먼저 백업·비교하고, 오래된 회원 전용 규칙으로 덮어쓰지 않는다.
 
 5. **회원 데이터 확인**
    - 관리자 로그인 후 회원 목록이 표시되는지 확인한다.
@@ -62,11 +62,29 @@
 13. **최종 운영 테스트**
    - 고객 사이트 → 회원가입 → 관리자 회원 확인 → 쿠폰/무료서비스 확인 → /shop/ → 구매버튼 → 쿠팡 이동 → 클릭통계 순서로 검증한다.
 
+14. **상세 견적·알림 확인**
+   - `/quote/`의 서비스별 질문·계산 결과와 `/admin/quotes.html`의 기존 Google 관리자 조회를 확인한다.
+   - 운영 저장 시험은 관리자 시험 모드(`test:true`)로만 수행해 실제 고객·계약 통계와 분리한다.
+   - 알림 패널의 불러온 실제 접수 중 미확인·실패 건수를 확인한다. 브라우저 알림 재표시는 접수 확인 완료를 의미하지 않는다.
+   - 알림 결과 기록 미저장은 연결 회복 후 다시 확인한다. 알림 오류 때문에 고객 접수·사진을 삭제하거나 재접수시키지 않는다.
+   - 화면을 닫은 동안의 외부 문자·메일·푸시는 지원하지 않는다. 다시 열면 서버 목록에서 미확인 접수를 확인한다.
+
+## 2026-11-16 알림 보완 직전 소스 복원 검증
+
+- 영구 기준점: `backup/quote-notify-before-20261116-a99f7fa`, SHA `a99f7fab3ab7bd93b139e7900b3d934703a73e32`.
+- 이 기준점으로 git bundle을 생성하고 `git bundle verify`, 별도 임시 디렉터리 clone, `git fsck --no-reflogs`를 통과했다. 홈페이지·회원·견적·규칙·블로그/Threads 워크플로 등 주요 파일 10개가 기준 커밋과 동일했다.
+- bundle은 복원 연습용 임시 사본이다. 지속 보관 기준은 위 GitHub 백업 브랜치이며, 실제 Firebase 고객 데이터 내보내기 또는 복원 검증을 의미하지 않는다.
+- 알림 보완에 문제가 있으면 해당 변경만 `git revert`하여 정상 Pages 배포를 확인한다. 그 이후 쌓인 블로그·작업 사례·고객 자료를 과거 상태로 강제 덮어쓰지 않는다. 이번 알림 보완에는 Firebase 규칙 변경이 없으므로 소스 복구를 위해 규칙을 되돌릴 필요가 없다.
+
 ## 주요 Firestore 컬렉션
 - `member_requests`: 회원/상담/쿠폰/무료서비스 상태
 - `member_receipts`: 회원별 쿠폰 발급 영수증
 - `products`: 상품명, 설명, 이미지 URL, 쿠팡 링크, 정렬, 노출상태
 - `product_clicks`: 상품별/유입경로별 클릭 기록
+- `site_events`: 방문·상담 버튼 등 구분된 이벤트
+- `quote_requests`: 상세 견적·상담 상태·알림 상태 (`photos`, `history` 하위 컬렉션 포함)
+- `quote_receipts`: 본인 확인용 접수번호
+- `quote_limits`: 연속 접수 제한 기록
 
 ## 운영 복구 판정
 아래가 모두 정상일 때 복구 완료로 본다.

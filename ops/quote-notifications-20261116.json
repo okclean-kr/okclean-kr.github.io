@@ -1,0 +1,57 @@
+{
+  "dateKST": "2026-11-16",
+  "status": "local_verified_pending_deployment",
+  "scope": "Administrator foreground notifications only; no external recipient, paid service, Firebase rule or customer form changes",
+  "backup": {
+    "branch": "backup/quote-notify-before-20261116-a99f7fa",
+    "commit": "a99f7fab3ab7bd93b139e7900b3d934703a73e32",
+    "scope": "public git source only, not Firebase customer-data export",
+    "restorationDrill": {
+      "bundleVerified": true,
+      "cloneToSeparateTemporaryDirectory": true,
+      "gitFsck": true,
+      "trackedFilesCompared": 10,
+      "allMatch": true,
+      "bundleSHA256": "3994903e500010f36aad4744ccce520893b881404ce2a4003e166f2dfd8cdda9",
+      "temporaryBundleNotDurableBackup": true
+    }
+  },
+  "checks": {
+    "adminDOMAssertions": 9,
+    "newNotificationEmulatorAssertions": 2,
+    "quoteRulesEmulatorPassed": 45,
+    "memberRulesEmulatorPassed": 12,
+    "unitAndDOMPassed": 81,
+    "skipped": 1,
+    "pythonPassed": 23,
+    "totalPassed": 161,
+    "priceComparisonsPreserved": 296
+  },
+  "assertions": [
+    "initial actual unread/failed counts exclude tests",
+    "new real request alerts only",
+    "notification failure history preserves request/photos",
+    "recovered notification stays unread until acknowledgment",
+    "unsaved notification outcome is visible and retryable",
+    "repeated retry clicks and concurrent same-request alerts prevented",
+    "permission rejection/errors keep request list available",
+    "logout stops later notifications and stale messages",
+    "first server snapshot read even when cache has identical data"
+  ],
+  "untouched": [
+    "existing member sync and coupon settings",
+    "Firebase rules and permissions",
+    "customer quote form and price settings",
+    "existing customer records",
+    "blog workflow",
+    "Threads workflow"
+  ],
+  "liveCustomerDataMutation": false,
+  "liveExternalNotificationSent": false,
+  "remainingLimitations": [
+    "No notification while the administrator page is closed",
+    "OS alert failure/recovery is simulated in DOM tests, not forced on the operating browser",
+    "Source restoration drill is not a customer database restore",
+    "No physical mobile-device test"
+  ]
+}

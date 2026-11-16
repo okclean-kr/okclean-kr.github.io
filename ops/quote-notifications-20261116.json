@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-16",
-  "status": "local_verified_pending_deployment",
+  "status": "merged_deployed_and_live_readonly_verified",
   "scope": "Administrator foreground notifications only; no external recipient, paid service, Firebase rule or customer form changes",
   "backup": {
     "branch": "backup/quote-notify-before-20261116-a99f7fa",
@@ -25,7 +25,11 @@
     "skipped": 1,
     "pythonPassed": 23,
     "totalPassed": 161,
-    "priceComparisonsPreserved": 296
+    "priceComparisonsPreserved": 296,
+    "prRun": 43831345517,
+    "mainRun": 43831446165,
+    "pagesRun": 43831445068,
+    "conclusion": "success"
   },
   "assertions": [
     "initial actual unread/failed counts exclude tests",
@@ -53,5 +57,31 @@
     "OS alert failure/recovery is simulated in DOM tests, not forced on the operating browser",
     "Source restoration drill is not a customer database restore",
     "No physical mobile-device test"
-  ]
+  ],
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/46",
+  "mergeCommit": "d854c831fa92916f6bc94114c7eb3d5d6ab6cb86",
+  "liveVerification": {
+    "adminURL": "https://okclean-kr.github.io/admin/quotes.html",
+    "existingGoogleAdminServerRead": true,
+    "initialUnreadAndFailureCountShown": true,
+    "actualCustomerQuotes": 0,
+    "actualCustomerContracts": 0,
+    "actualUnreadNotificationCount": 0,
+    "testQuotes": 2,
+    "testContracts": 1,
+    "testRequestsExcludedFromActualUnreadAndRetry": true,
+    "restoredViewToActualCustomers": true,
+    "liveOSFailureNotForced": true,
+    "httpByteComparison": {
+      "paths": [
+        "admin/quotes.html",
+        "admin/quotes.mjs",
+        "quote/config.js",
+        "member-sync.js",
+        "ops/firestore.rules.current.txt"
+      ],
+      "allStatus200": true,
+      "allMatch": true
+    }
+  }
 }

@@ -126,7 +126,8 @@
     42,
     43,
     44,
-    45
+    45,
+    46
   ],
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
@@ -206,5 +207,15 @@
       "allStatus200": true,
       "allMatch": true
     }
+  },
+  "notificationFollowup": {
+    "evidence": "ops/quote-notifications-20261116.json",
+    "pullRequest": 46,
+    "mergeCommit": "d854c831fa92916f6bc94114c7eb3d5d6ab6cb86",
+    "status": "live_verified",
+    "automatedPassed": 161,
+    "skipped": 1,
+    "firebaseRulesChanged": false,
+    "liveCustomerDataMutation": false
   }
 }

@@ -2,7 +2,8 @@ import{compressPhoto}from'./photos.mjs';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let catalog,step=1,photos=[],busy=false,photoBusy=false,requestId,frozen=null;
 const answersByService=new Map(),params=new URLSearchParams(location.search);
-const enabled=()=>window.OKCLEAN_QUOTES?.enabled===true&&window.OKCLEAN_QUOTES?.verified===true;
+const preview=params.get('quote_preview')==='1';
+const enabled=()=>!preview&&window.OKCLEAN_QUOTES?.enabled===true&&window.OKCLEAN_QUOTES?.verified===true;
 const track=name=>{if(enabled())void window.OKCleanAnalytics?.track(name,{service:service(),placement:'quote',target:'quote'});};
 const service=()=>document.querySelector('[name=service]:checked')?.value||'';
 const choices={purpose:['입주청소','이사청소'],unit:['평','㎡'],space:['아파트','빌라','오피스텔','단독주택','그 외'],condition:['보통','오염 심함','곰팡이·악취','확인 필요'],frequency:['일회성','정기'],stain:['없음','얼룩','냄새','얼룩·냄새 모두','확인 필요']};
@@ -23,7 +24,7 @@ function questions(){
   }$('questions').append(div);
  }updateEstimate();
 }
-function updateEstimate(){if(!catalog||!service())return;const a=readAnswers();answersByService.set(service(),a);const s=catalog.services.find(s=>s.id===service()),r=core.formEstimate(s,a);$('estimate').textContent=r?'참고 예상 비용: '+Math.ceil(r.lo/1000).toLocaleString('ko-KR')+'천원'+(r.hi===null?'부터':r.hi===r.lo?'':' ~ '+Math.ceil(r.hi/1000).toLocaleString('ko-KR')+'천원')+' (추가 작업·출장비 별도 확인)':'현장 사진과 작업 범위를 확인한 후 비용을 안내합니다.';}
+function updateEstimate(){if(!catalog||!service())return;const a=readAnswers();answersByService.set(service(),a);const s=catalog.services.find(s=>s.id===service()),r=core.formEstimate(s,a);$('estimate').textContent=r?'참고 예상 비용: '+(Math.ceil(r.lo/1000)*1000).toLocaleString('ko-KR')+'원'+(r.hi===null?'부터':r.hi===r.lo?'':' ~ '+(Math.ceil(r.hi/1000)*1000).toLocaleString('ko-KR')+'원')+' (추가 작업·출장비 별도 확인)':'현장 사진과 작업 범위를 확인한 후 비용을 안내합니다.';}
 function showStep(n){step=n;document.querySelectorAll('[data-step]').forEach(el=>el.hidden=+el.dataset.step!==n);document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(+el.dataset.stepLabel===n)el.setAttribute('aria-current','step');});$('previous').hidden=n===1;$('next').hidden=n===3;$('submit').hidden=n!==3;$('formError').textContent='';if(n===2)questions();document.querySelector('[data-step="'+n+'"] legend')?.scrollIntoView({block:'start',behavior:'smooth'});}
 function currentValid(){const fs=document.querySelector('[data-step="'+step+'"]');for(const el of fs.querySelectorAll('input,select'))if(!el.checkValidity()){el.reportValidity();return false;}return true;}
 function read(){return{service:service(),answers:readAnswers(),date:$('date').value,region:$('region').value,name:$('name').value,phone:$('phone').value,contactTime:$('contactTime').value,consent:$('consent').checked,source:core.source(window.OKCleanAnalytics?.status().source||'direct')};}
@@ -56,7 +57,7 @@ try{const response=await fetch('catalog.json',{cache:'no-cache'});if(!response.o
  for(const s of catalog.services){const label=document.createElement('label'),input=document.createElement('input');input.type='radio';input.name='service';input.value=s.id;input.checked=s.id===params.get('svc');input.onchange=()=>track('quote_start');label.append(input,document.createTextNode(s.name));$('services').append(label);}
  $('region').append(new Option('선택해 주세요',''),...catalog.regions.map(x=>new Option(x,x)));if(catalog.regions.includes(params.get('region')))$('region').value=params.get('region');
  $('contactTime').append(...catalog.contactTimes.map(x=>new Option(x,x)));$('date').min=new Date(Date.now()+9*3600000).toISOString().slice(0,10);
- $('availability').textContent=enabled()?'온라인 접수 가능 · 저장 성공을 확인한 뒤 접수번호를 안내합니다.':'온라인 접수 연결을 점검 중입니다. 작업 내용을 미리 정리하거나 아래 카카오톡·전화로 바로 상담해 주세요.';
+ $('availability').textContent=preview?'미리보기 화면입니다. 접수 저장과 통계 수집은 하지 않습니다. 실제 신청은 홈페이지의 상세 견적에서 진행해 주세요.':enabled()?'온라인 접수 가능 · 저장 성공을 확인한 뒤 접수번호를 안내합니다.':'온라인 접수 연결을 점검 중입니다. 작업 내용을 미리 정리하거나 아래 카카오톡·전화로 바로 상담해 주세요.';
  $('submit').disabled=!enabled();
 }catch(error){$('formError').textContent='서비스 정보를 불러오지 못했습니다. 아래 상담 버튼을 이용해 주세요.';$('next').disabled=true;}
 window.addEventListener('beforeunload',e=>{if(busy){e.preventDefault();e.returnValue='';}});

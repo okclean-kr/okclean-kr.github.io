@@ -1,6 +1,7 @@
-import{getBackend,saveAdminChange,purgeExpiredQuote}from'../quote/quote-store.mjs';
+import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}from'../quote/quote-store.mjs';
+import{compressPhoto}from'../quote/photos.mjs';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
-let b,catalog,unsub,rows=new Map(),lastVisible=null,initial=true,capped=false;
+let b,catalog,unsub,rows=new Map(),lastVisible=null,initial=true,capped=false,testRequestId=null;
 const format=at=>at?.toDate?at.toDate().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):'서버 시각 확인 중';
 const date=at=>at?.toDate?new Date(+at.toDate()+9*3600000).toISOString().slice(0,10):'';
 const serviceName=id=>catalog.services.find(s=>s.id===id)?.name||id;
@@ -48,6 +49,44 @@ $('permission').onclick=async()=>{if(!('Notification'in window)){$('notification
 function clear(){unsub?.();unsub=null;rows.clear();$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
 async function start(){initial=true;rows.clear();const{f,db}=b;const q=f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.limit(500));unsub=f.onSnapshot(q,snap=>{if(!admin(b.auth.currentUser)||snap.metadata.fromCache)return;for(const change of snap.docChanges()){if(change.type==='removed')rows.delete(change.doc.id);else{const row={id:change.doc.id,...change.doc.data()};rows.set(row.id,row);if(!initial&&change.type==='added')void notify(row);}}if(initial)lastVisible=snap.docs.at(-1)||null;capped=capped||snap.size===500;initial=false;render();$('authStatus').textContent='관리자 권한으로 서버 접수 목록을 확인했습니다.';},showError);}
 $('older').onclick=async()=>{if(!lastVisible)return;try{const{f,db}=b,snap=await f.getDocs(f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.startAfter(lastVisible),f.limit(500)));snap.docs.forEach(d=>rows.set(d.id,{id:d.id,...d.data()}));lastVisible=snap.docs.at(-1)||null;capped=snap.size===500;render();}catch(e){showError(e);}};
+$('testSubmit').onclick=async()=>{
+ if(!admin(b?.auth.currentUser))return;
+ const files=[...$('testPhotos').files];if(!testRequestId&&(!files.length||files.length>5)){$('testResult').textContent='시험 사진을 1~5장 선택해 주세요.';return;}
+ $('testSubmit').disabled=true;$('testResult').textContent='시험 접수와 사진을 저장하고 서버 접수증을 확인합니다…';
+ try{
+  const photos=[];for(const file of files)photos.push(await compressPhoto(file));
+  testRequestId||=newRequestId();
+  const input={service:'aircon',answers:{type:'벽걸이',count:'1',condition:'보통'},date:'',region:'춘천',name:'운영 연결 시험',phone:'010-0000-0000',contactTime:'언제나 가능',consent:true,source:'direct'};
+  const result=await submitQuote(catalog,testRequestId,input,photos,{backend:b,test:true});
+  if(!admin(b.auth.currentUser))return;
+  const check=await b.f.getDocFromServer(b.f.doc(b.db,'quote_requests',testRequestId));
+  const imageCheck=await b.f.getDocs(b.f.collection(b.db,'quote_requests',testRequestId,'photos'));
+  if(!check.exists()||check.data().test!==true||imageCheck.size!==check.data().photoCount)throw new Error('서버 접수·사진을 다시 확인해 주세요.');
+  $('testResult').textContent=(result.existing?'동일 접수 재조회 확인 · ':'시험 접수·서버 재조회 확인 · ')+core.receipt(testRequestId)+' · 사진 '+imageCheck.size+'장 · 실제 고객 집계 제외';
+  $('testPhotos').disabled=true;$('testAccess').disabled=false;
+ }catch(e){$('testResult').textContent='시험을 완료하지 못했습니다: '+(e.code||e.message||'연결 확인 필요');}
+ finally{$('testSubmit').disabled=false;}
+};
+$('testAccess').onclick=async()=>{
+ if(!admin(b?.auth.currentUser)||!testRequestId)return;
+ $('testAccess').disabled=true;
+ let readerApp,readerAuth;
+ try{
+  const apps=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js');
+  readerApp=apps.initializeApp(catalog.firebase,'quote-permission-check-'+Date.now());
+  readerAuth=b.h.getAuth(readerApp);await b.h.signInAnonymously(readerAuth);
+  const db=b.f.getFirestore(readerApp),paths=[
+   ()=>b.f.getDocFromServer(b.f.doc(db,'quote_requests',testRequestId)),
+   ()=>b.f.getDocs(b.f.collection(db,'quote_requests')),
+   ()=>b.f.getDocs(b.f.collection(db,'quote_requests',testRequestId,'photos')),
+   ()=>b.f.getDocFromServer(b.f.doc(db,'quote_receipts',b.auth.currentUser.uid+'_'+testRequestId))
+  ];
+  let denied=0;for(const read of paths){try{await read();}catch(e){if(e.code==='permission-denied')denied++;else throw e;}}
+  if(denied!==paths.length)throw new Error('접근 차단 결과를 확인해야 합니다. 온라인 접수를 활성화하지 마세요.');
+  $('testResult').textContent='운영 서버 권한 검증: 다른 고객의 신청 원본·목록·사진·접수증 접근 4개 모두 차단 · 기존 관리자 로그인 유지';
+ }catch(e){$('testResult').textContent='권한 검증 미완료: '+(e.code||e.message);}
+ finally{if(readerAuth)await b.h.signOut(readerAuth).catch(()=>{});if(readerApp){const apps=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js');await apps.deleteApp(readerApp);}if(admin(b.auth.currentUser))$('testAccess').disabled=false;}
+};
 $('retention').onclick=()=>{const expired=[...rows.values()].filter(r=>core.retentionDue(r));$('retentionStatus').textContent='불러온 자료 중 180일 지난 새 견적 '+expired.length+'건';$('expired').replaceChildren();for(const row of expired){const button=node('button',core.receipt(row.id)+' 만료 자료 정리');button.onclick=async()=>{if(!confirm('이 새 견적과 사진·이력을 영구 삭제합니까? 계약 자료의 별도 보관 필요 여부를 먼저 확인하세요.'))return;try{await purgeExpiredQuote(b,row);rows.delete(row.id);button.remove();render();}catch(e){showError(e);}};$('expired').append(button);}};
 for(const id of['from','to','filterService','filterStatus','filterSource','showTest'])$(id).onchange=render;
 try{catalog=await fetch('../quote/catalog.json').then(r=>r.json());catalog.services.forEach(s=>$('filterService').append(new Option(s.name,s.id)));Object.entries(core.STATES).forEach(([k,v])=>$('filterStatus').append(new Option(v,k)));core.SOURCES.forEach(s=>$('filterSource').append(new Option(s,s)));b=await getBackend(catalog.firebase);const provider=new b.h.GoogleAuthProvider();provider.setCustomParameters({prompt:'select_account'});$('login').onclick=()=>b.h.signInWithPopup(b.auth,provider).catch(showError);$('logout').onclick=()=>b.h.signOut(b.auth);

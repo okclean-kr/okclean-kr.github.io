@@ -2,9 +2,11 @@
 
 ## 현재 적용 범위
 
-웹 화면과 접수·관리 코드, 격리 검증, 복구 경로를 준비했다. `quote/config.js`의 `enabled:false, verified:false`를 유지한다. 실제 Firebase 서버 규칙·관리자 인증·사진 저장 재조회가 확인되기 전에는 고객의 온라인 저장 버튼을 활성화하지 않는다. 카카오톡·전화 상담과 기존 계산기·회원가입·쿠폰은 계속 이용한다.
+온라인 상세 견적과 관리자 접수 관리를 개통한다. 기존 Google 관리자가 실제 운영 Firestore의 시험 접수·사진 1장 저장/재조회, 동일 ID 재시도, 다른 고객 원본·목록·사진·접수증 접근 차단 4개를 확인했다. 실제 신청 화면에서는 사진 5장 접수·접수번호·관리자 열람과 저장 거절 후 입력/사진 보존·동일 신청 재시도를 확인했다. 시험 접수는 실제 고객/계약 집계에서 제외되며 외부 메시지를 발송하지 않았다.
 
-**운영 Firebase 검증 차단 근거:** CLI `firestore:databases:list --project okclean-admin`은 `Failed to authenticate, have you run firebase login?`를 반환했다. Firebase 콘솔은 기존 Google 계정의 본인 인증/재로그인 화면을 표시했다. 현재 데이터베이스 edition·요금제·실제 최신 규칙과 고객 데이터의 백업 상태를 직접 확인하지 못했다. 에뮬레이터는 Standard edition의 데모 프로젝트만 사용했다.
+대상은 `okclean-admin`의 `(default)` Standard / Firestore native, `asia-northeast3`, Spark 무료 요금제다. 2026-11-16 15:53 KST 게시한 규칙 전체는 후보 SHA256 `4642e57b3c1b82026950c2560390dd7e3c5bdbf7455a00375c1c7dfe00e532df`와 일치한다. 적용 직전 규칙은 `ops/firestore.rules.before-quotes-20261116.txt`, SHA256 `7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db`로 백업했다. 상세 기록은 `ops/quote-verification-20261116.json`에 있다. 고객 데이터 삭제·초기화나 요금제 변경은 수행하지 않았다.
+
+390px iframe(실제 viewport 388px)에서 서비스·질문·연락처/동의 화면이 한 열로 표시되고 가로 넘침이 없음을 확인했다. 실제 휴대폰 하드웨어 시험은 별개다. 미리보기(`quote_preview=1`)는 개통 후에도 저장과 통계를 차단한다. 관리자 시험 신청(`quote_test=1`)은 기존 Google 관리자만 가능하며 test:true로 저장하고 운영 통계를 보내지 않는다.
 
 ## 기존 소스 점검
 
@@ -47,7 +49,7 @@
 
 ## 무료 범위·비용 검토
 
-- 새 결제·요금제 변경·Cloud Storage/Functions 배포는 수행하지 않는다. 운영 요금제 자체는 로그인 후 확인해야 한다.
+- 새 결제·요금제 변경·Cloud Storage/Functions 배포는 수행하지 않는다. 운영 요금제는 콘솔에서 Spark로 확인했다.
 - 한 접수는 기본 3문서 + 사진 수(최대 5), 즉 최대 8개 문서 쓰기다. 본인 영수증 확인 읽기와 보안 규칙의 의존 문서 읽기가 추가된다.
 - 사진은 접수당 최대 약 800KB의 data URI 텍스트다. 인덱스·문서 메타데이터·기존 저장량은 별도다. 사진이 많은 경우 1GiB에 이르기 전에 보관기간을 줄이거나 별도 저장 대안을 검토해야 한다.
 - Firebase 공식 Standard 무료 할당은 1GiB, 일 50,000회 읽기·20,000회 쓰기다. 기존 회원/통계와 공유된다. 관리자 목록은 최신 500건부터 가져오며 더보기 전 합계가 전체가 아님을 표시한다. 규칙 읽기와 실시간 재접속 비용도 확인한다.
@@ -66,7 +68,7 @@ I've set up prototype Security Rules to keep the data in Firestore safe. They ar
 
 ## 서버 활성화 순서
 
-1. Firebase 콘솔 재인증 후 실제 대상 `(default)`의 edition·요금제·현재 규칙을 확인한다. 현재 규칙이 보관본과 다르면 덮어쓰지 말고 변경 차이를 반영한다. 최신 규칙/설정 백업은 공개 저장소에 비밀정보 없이 남긴다.
+1. Firebase 콘솔 재인증 후 실제 대상 `(default)`의 edition·요금제·현재 규칙을 확인한다. 향후 현재 규칙이 보관본과 다르면 덮어쓰지 말고 변경 차이를 반영한다. 최신 규칙/설정 백업은 공개 저장소에 비밀정보 없이 남긴다.
 2. 후보 `ops/firestore.rules.quotes-20261116.txt`를 검토하고 격리 검사를 재실행한다. 기존 회원·접수증·통계·상품 규칙은 보존한다.
 3. 인증된 CLI에서 `firebase deploy --project okclean-admin --only firestore:rules --config firebase.quote.json`으로 규칙만 적용한다. 기존 호스팅·Auth·Storage는 배포하지 않는다.
 4. 기존 Google 관리자로 합성 시험 접수(`test:true`)·실제 JPEG 사진 저장/재조회·상태 변경·계약 이력·알림 실패 복구를 확인한다. 일반 고객 인증의 타 고객 데이터 접근 차단도 서버에서 확인한다. 시험 기록은 실제 접수 집계와 분리한다.

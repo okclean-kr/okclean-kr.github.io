@@ -1,0 +1,69 @@
+{
+  "dateKST": "2026-11-16",
+  "status": "frontend_deployed_backend_not_activated",
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/41",
+  "releaseCommit": "7a93fb9b8f3fdc72297f25241bb9e6329a32f6db",
+  "checks": {
+    "prRun": 43816178718,
+    "mainRun": 43816343990,
+    "pagesRun": 43816343931,
+    "conclusion": "success",
+    "unitPassed": 63,
+    "unitSkipped": 1,
+    "emulatorPassed": 43,
+    "pythonPassed": 23,
+    "priceComparisons": 296
+  },
+  "backup": {
+    "branch": "backup/quote-before-20261116-70495bb",
+    "commit": "70495bb770959b45bd4f6f42e956ccb9fc0a2f7e",
+    "scope": "public git source only; not Firebase customer-data backup"
+  },
+  "liveVerification": {
+    "httpAndByteComparison": {
+      "paths": [
+        "index.html",
+        "quote/config.js",
+        "quote/quote-form.mjs",
+        "quote/quote-store.mjs",
+        "quote/quote-core.js",
+        "admin/quotes.html",
+        "admin/quotes.mjs",
+        "sw.js"
+      ],
+      "allMatch": true
+    },
+    "browserPC": {
+      "quoteServiceQuestions": true,
+      "wallAircon2Units": "20만원~ (original calculator)",
+      "regionFilter": "Hwacheon shows two existing records and hides Chuncheon record",
+      "memberBenefitDisplay": "10000 KRW coupon and one free service retained; no live signup submitted",
+      "photoSelectionAndCompression": {
+        "input": "existing public work JPEG used only as test fixture",
+        "jpegDataUriCharacters": 21035,
+        "preview": true,
+        "serverUpload": false
+      },
+      "submitDisabledBeforeBackendVerification": true
+    },
+    "mobileDeviceTest": false,
+    "liveFirebaseRuleDeployment": false,
+    "liveQuoteSaveAndReceiptRead": false,
+    "liveAdminPhotoRead": false,
+    "liveAdminStatusUpdate": false,
+    "liveSignupAndCouponIssue": false
+  },
+  "blockers": [
+    "Firebase CLI is unauthenticated",
+    "Google Console requires reauthentication",
+    "Current Firestore edition/plan/latest rules not independently confirmed"
+  ],
+  "notificationScope": "Only while authorized admin page is open; no external mail/SMS/background push configured",
+  "untouched": [
+    "existing member sync",
+    "existing coupon settings",
+    "existing blog workflow",
+    "existing Threads workflow and queues",
+    "existing customer records"
+  ]
+}

@@ -125,7 +125,8 @@
     41,
     42,
     43,
-    44
+    44,
+    45
   ],
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
@@ -135,7 +136,7 @@
   ],
   "membershipRegression": {
     "dateKST": "2026-11-16",
-    "status": "isolated_tests_passed_and_rules_published",
+    "status": "merged_deployed_and_readonly_live_verified",
     "finding": "Own UID receipt could previously be created without a corresponding member document; normal UI already used an atomic pair.",
     "fix": "Receipt creation requires getAfter member ownerUid/code match and joined == request.time.",
     "previousRulesSHA256": "4642e57b3c1b82026950c2560390dd7e3c5bdbf7455a00375c1c7dfe00e532df",
@@ -176,6 +177,34 @@
     ],
     "liveSignupAndCouponIssue": false,
     "liveMemberDataMutation": false,
-    "scope": "No production signup or coupon issued; synthetic data only in local emulator. Published rules copied through Firebase Console UI and compared in full."
+    "scope": "No production signup or coupon issued; synthetic data only in local emulator. Published rules copied through Firebase Console UI and compared in full.",
+    "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/45",
+    "mergeCommit": "422624a0a7423a4a6241ed1f2973600813446dd3",
+    "checks": {
+      "prRun": 43827026173,
+      "mainRun": 43827305903,
+      "pagesRun": 43827305500,
+      "conclusion": "success"
+    },
+    "liveReadOnlyRegression": {
+      "existingMemberAdminGoogleLoginAndServerList": true,
+      "quoteAdminServerList": true,
+      "existingTestQuoteCount": 2,
+      "testContractCount": 1,
+      "actualCustomerQuoteCount": 0,
+      "testViewRestoredToActualCustomers": true
+    },
+    "liveHTTPByteComparison": {
+      "paths": [
+        "index.html",
+        "member-sync.js",
+        "quote/config.js",
+        "quote/quote-form.mjs",
+        "admin/quotes.mjs",
+        "ops/firestore.rules.current.txt"
+      ],
+      "allStatus200": true,
+      "allMatch": true
+    }
   }
 }

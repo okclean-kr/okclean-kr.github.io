@@ -2,6 +2,8 @@ import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}fro
 import{compressPhoto}from'../quote/photos.mjs';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let b,catalog,unsub,rows=new Map(),lastVisible=null,initial=true,capped=false,testRequestId=null;
+let notificationMessage='',notificationSession=0;
+const notificationInFlight=new Set(),notificationUnsaved=new Set();
 const format=at=>at?.toDate?at.toDate().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):'서버 시각 확인 중';
 const date=at=>at?.toDate?new Date(+at.toDate()+9*3600000).toISOString().slice(0,10):'';
 const serviceName=id=>catalog.services.find(s=>s.id===id)?.name||id;
@@ -17,6 +19,7 @@ function render(){
  const keep=new Map([...$('requests').querySelectorAll('article')].map(el=>[el.dataset.id,el]));const fragment=document.createDocumentFragment();for(const row of list){const old=keep.get(row.id);if(old&&(old.dataset.version===String(row.version)||old.querySelector('details[open]'))){fragment.append(old);}else fragment.append(renderRequest(row));}$('requests').replaceChildren(fragment);
  if(!list.length)$('requests').append(node('p','이 조건의 접수 자료가 없습니다.','notice'));
  $('capNotice').textContent=capped?'최신 500건부터 불러왔습니다. 이전 자료를 추가하기 전 합계는 전체 합계가 아닙니다.':'불러온 접수 범위에서 집계합니다. 2026년 11월 16일 이전 신규 접수 이력은 소급 생성하지 않습니다.';
+ renderNotificationStatus();
 }
 function renderRequest(row){
  const article=node('article');article.dataset.id=row.id;article.dataset.version=String(row.version);const head=node('h2',serviceName(row.service)+' · '+core.STATES[row.status]);head.style.fontSize='19px';
@@ -41,13 +44,73 @@ async function fillDetails(details,row){
  }catch(e){message.textContent=e.message||e.code;}finally{save.disabled=false;}};box.append(save,message);
  const history=node('button','견적·상태 변경 이력 보기');history.onclick=async()=>{history.disabled=true;try{const snap=await b.f.getDocs(b.f.query(b.f.collection(b.db,'quote_requests',row.id,'history'),b.f.orderBy('at','desc'),b.f.limit(100)));if(!admin(b.auth.currentUser)||!details.isConnected)return;const list=node('ul');for(const doc of snap.docs){const h=doc.data();list.append(node('li',format(h.at)+' · '+core.STATES[h.status]+' · '+(h.amount??'미입력')+'원 · '+h.note));}if(snap.empty)list.append(node('li','변경 이력이 없습니다.'));box.append(list);history.remove();}catch(e){history.disabled=false;box.append(node('p','이력 조회 실패. 재시도할 수 있습니다.','error'));}};box.append(history);
 }
-async function notify(row){if(row.notification==='seen'||row.test)return;try{if('Notification'in window&&Notification.permission==='granted')new Notification('오케이청소 새 견적 접수',{body:serviceName(row.service)+' · '+row.region,tag:row.id});$('notificationStatus').textContent='미확인 견적 '+core.receipt(row.id)+' · '+serviceName(row.service);}
- catch(e){try{await saveAdminChange(b,row.id,row,{notification:'failed',notificationAttempts:Math.min(row.notificationAttempts+1,100),notificationError:'browser-notification-failed'});}catch(_){}$('notificationStatus').textContent='알림 표시 실패. 견적 접수는 저장돼 있습니다. 다시 확인 버튼을 이용하세요.';}}
-$('retryNotifications').onclick=async()=>{for(const row of rows.values())if(row.notification!=='seen')await notify(row);};
-$('permission').onclick=async()=>{if(!('Notification'in window)){$('notificationStatus').textContent='이 브라우저는 알림을 지원하지 않습니다. 접수 목록을 이용해 주세요.';return;}const permission=await Notification.requestPermission();$('notificationStatus').textContent=permission==='granted'?'관리자 화면이 열린 동안 새 견적을 알립니다.':'브라우저 알림이 허용되지 않았습니다. 접수 목록 확인은 계속 가능합니다.';};
+function renderNotificationStatus(){
+ if(!admin(b?.auth.currentUser)){$('notificationStatus').textContent='';return;}
+ const unread=[...rows.values()].filter(r=>r.test===false&&r.notification!=='seen');
+ for(const id of notificationUnsaved)if(!unread.some(r=>r.id===id))notificationUnsaved.delete(id);
+ const failed=unread.filter(r=>r.notification==='failed').length;
+ $('notificationStatus').textContent='불러온 실제 접수 중 미확인 '+unread.length+'건 · 알림 실패 '+failed+'건'
+  +(notificationUnsaved.size?' · 알림 결과 기록 미저장 '+notificationUnsaved.size+'건':'')
+  +(notificationMessage?' · '+notificationMessage:'');
+}
+function notificationStatus(message){notificationMessage=message;renderNotificationStatus();}
+async function notify(candidate){
+ const row=rows.get(candidate.id);
+ if(!admin(b?.auth.currentUser)||!row||row.test||row.notification==='seen'||notificationInFlight.has(row.id))return;
+ const session=notificationSession;
+ if(!('Notification'in window)||Notification.permission!=='granted'){
+  notificationStatus('브라우저 알림이 허용되지 않았습니다. 미확인 접수는 목록에서 확인할 수 있습니다.');return;
+ }
+ notificationInFlight.add(row.id);
+ let failed=false;
+ try{new Notification('오케이청소 새 견적 접수',{body:serviceName(row.service)+' · '+row.region,tag:row.id});}catch(e){failed=true;}
+ try{
+  // A retried alert remains unread until the administrator acknowledges it.
+  // Use the latest snapshot version, without overwriting another screen's edits.
+  const latest=rows.get(row.id);
+  if(!admin(b?.auth.currentUser)||session!==notificationSession||!latest||latest.notification==='seen')return;
+  if(failed||latest.notification==='failed'||notificationUnsaved.has(row.id)){
+   await saveAdminChange(b,row.id,latest,{notification:failed?'failed':'pending',notificationAttempts:Math.min(latest.notificationAttempts+1,100),notificationError:failed?'browser-notification-failed':''});
+  }
+  if(!admin(b?.auth.currentUser)||session!==notificationSession)return;
+  notificationUnsaved.delete(row.id);
+  notificationStatus(failed?'알림 표시 실패를 기록했습니다. 접수는 보존돼 있으며 다시 확인할 수 있습니다.':'알림을 표시했습니다. 접수 확인 완료 전까지 미확인으로 유지됩니다.');
+ }catch(e){
+  if(admin(b?.auth.currentUser)&&session===notificationSession){notificationUnsaved.add(row.id);notificationStatus('알림 결과 기록을 서버에 저장하지 못했습니다. 접수는 보존돼 있습니다. 연결 확인 후 다시 확인 버튼을 눌러 주세요.');}
+ }finally{if(session===notificationSession)notificationInFlight.delete(row.id);}
+}
+$('retryNotifications').onclick=async()=>{
+ if(!admin(b?.auth.currentUser)||$('retryNotifications').disabled)return;
+ const session=notificationSession;$('retryNotifications').disabled=true;
+ try{for(const row of [...rows.values()]){if(session!==notificationSession||!admin(b?.auth.currentUser))break;await notify(row);}}
+ finally{if(session===notificationSession)$('retryNotifications').disabled=false;}
+};
+$('permission').onclick=async()=>{
+ if(!admin(b?.auth.currentUser))return;
+ const session=notificationSession;
+ if(!('Notification'in window)){notificationStatus('이 브라우저는 알림을 지원하지 않습니다. 접수 목록을 이용해 주세요.');return;}
+ try{const permission=await Notification.requestPermission();if(session===notificationSession&&admin(b?.auth.currentUser))notificationStatus(permission==='granted'?'관리자 화면이 열린 동안 새 견적을 알립니다.':'브라우저 알림이 허용되지 않았습니다. 접수 목록 확인은 계속 가능합니다.');}
+ catch(e){if(session===notificationSession&&admin(b?.auth.currentUser))notificationStatus('브라우저 알림 허용 요청을 완료하지 못했습니다. 미확인 접수는 목록에서 확인해 주세요.');}
+};
 
-function clear(){unsub?.();unsub=null;rows.clear();$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
-async function start(){initial=true;rows.clear();const{f,db}=b;const q=f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.limit(500));unsub=f.onSnapshot(q,snap=>{if(!admin(b.auth.currentUser)||snap.metadata.fromCache)return;for(const change of snap.docChanges()){if(change.type==='removed')rows.delete(change.doc.id);else{const row={id:change.doc.id,...change.doc.data()};rows.set(row.id,row);if(!initial&&change.type==='added')void notify(row);}}if(initial)lastVisible=snap.docs.at(-1)||null;capped=capped||snap.size===500;initial=false;render();$('authStatus').textContent='관리자 권한으로 서버 접수 목록을 확인했습니다.';},showError);}
+function clear(){unsub?.();unsub=null;rows.clear();lastVisible=null;capped=false;initial=true;notificationSession++;notificationMessage='';notificationInFlight.clear();notificationUnsaved.clear();$('retryNotifications').disabled=false;$('notificationStatus').textContent='';$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
+async function start(){
+ initial=true;rows.clear();const{f,db}=b,session=notificationSession;
+ const q=f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.limit(500));
+ unsub=f.onSnapshot(q,{includeMetadataChanges:true},snap=>{
+  if(!admin(b.auth.currentUser)||session!==notificationSession||snap.metadata.fromCache)return;
+  if(initial){
+   // The cache event may already contain identical documents. Read the full
+   // first server snapshot even when its docChanges() contains no additions.
+   for(const doc of snap.docs)rows.set(doc.id,{id:doc.id,...doc.data()});
+   lastVisible=snap.docs.at(-1)||null;
+  }else for(const change of snap.docChanges()){
+   if(change.type==='removed')rows.delete(change.doc.id);
+   else{const row={id:change.doc.id,...change.doc.data()};rows.set(row.id,row);if(change.type==='added')void notify(row);}
+  }
+  capped=capped||snap.size===500;initial=false;render();$('authStatus').textContent='관리자 권한으로 서버 접수 목록을 확인했습니다.';
+ },showError);
+}
 $('older').onclick=async()=>{if(!lastVisible)return;try{const{f,db}=b,snap=await f.getDocs(f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.startAfter(lastVisible),f.limit(500)));snap.docs.forEach(d=>rows.set(d.id,{id:d.id,...d.data()}));lastVisible=snap.docs.at(-1)||null;capped=snap.size===500;render();}catch(e){showError(e);}};
 $('testSubmit').onclick=async()=>{
  if(!admin(b?.auth.currentUser))return;

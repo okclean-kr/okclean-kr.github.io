@@ -26,6 +26,19 @@ try{
  await ok('고객의 시험 접수 위장 차단',()=>assertFails(submitQuote(catalog,('Q'.repeat(19)+'3'),input,[],{backend:backend(other,'customer-b'),test:true})));
  await ok('실패한 배치에 고아 사진·접수 문서 없음',async()=>{assert.equal((await f.getDoc(f.doc(admin,'quote_requests',('Q'.repeat(19)+'3')))).exists(),false);});
  await ok('관리자 시험 접수 별도 표시',()=>assertSucceeds(submitQuote(catalog,adminId,input,[photo],{backend:backend(admin,uid),test:true})));
+ await ok('알림 실패 기록도 접수·사진을 보존하고 별도 이력 생성',async()=>{
+  const ref=f.doc(admin,'quote_requests',adminId),before=(await f.getDoc(ref)).data();
+  await assertSucceeds(saveAdminChange(backend(admin,uid),adminId,before,{notification:'failed',notificationAttempts:1,notificationError:'browser-notification-failed'}));
+  const saved=(await f.getDoc(ref)).data();assert.equal(saved.notification,'failed');assert.equal(saved.status,before.status);assert.equal(saved.photoCount,1);assert.equal(saved.phone,before.phone);
+  assert.equal((await f.getDocs(f.collection(admin,'quote_requests',adminId,'photos'))).size,1);
+  const history=await f.getDocs(f.collection(admin,'quote_requests',adminId,'history'));assert.equal(history.size,1);assert.equal(history.docs[0].data().kind,'notification');assert.notEqual(history.docs[0].data().event,'contract_completed');
+ });
+ await ok('알림 재시도 복구는 미확인 유지·고객 접수증 보존',async()=>{
+  const ref=f.doc(admin,'quote_requests',adminId),before=(await f.getDoc(ref)).data();
+  await assertSucceeds(saveAdminChange(backend(admin,uid),adminId,before,{notification:'pending',notificationAttempts:2,notificationError:''}));
+  const saved=(await f.getDoc(ref)).data();assert.equal(saved.notification,'pending');assert.equal(saved.notificationAttempts,2);assert.equal(saved.notificationError,'');assert.equal(saved.version,before.version+1);
+  assert.equal((await f.getDoc(f.doc(admin,'quote_receipts',uid+'_'+adminId))).exists(),true);assert.equal((await f.getDocs(f.collection(admin,'quote_requests',adminId,'history'))).size,2);
+ });
  let row=()=>f.getDoc(f.doc(admin,'quote_requests',id)).then(s=>s.data());
  await ok('고객 상태·소유권·가격 변경 차단',async()=>{for(const patch of[{status:'contracted'},{ownerUid:'customer-b'},{amount:-1},{admin:true}])await assertFails(f.updateDoc(f.doc(a,'quote_requests',id),patch));});
  await ok('신규에서 계약 바로 완료 차단',async()=>{const previous=await row();await assertFails(saveAdminChange(backend(admin,uid),id,previous,{status:'contracted'}));});

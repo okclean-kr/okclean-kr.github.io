@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "implemented_local_verified_pending_private_project_authorization",
+  "status": "private_project_code_saved_manifest_awaiting_specific_user_approval",
   "backupBranch": "backup/private-email-alert-before-20261117-ad1fd16",
   "backupCommit": "ad1fd168992b51a506f310dec51a566706bf92a2",
   "scope": "Private standalone Apps Script that polls minimal quote metadata and sends generic email to its own execution account",
@@ -15,7 +15,7 @@
   "firebasePlanChanged": false,
   "customerAndAutomationRuntimeChanged": false,
   "newUnitPassed": 24,
-  "privateProjectCodeSaved": false,
+  "privateProjectCodeSaved": true,
   "newOAuthGrantApproved": false,
   "productionReadPreflightPassed": false,
   "setupTestMailAccepted": false,
@@ -23,8 +23,27 @@
   "triggerCreated": false,
   "scheduledRunVerified": false,
   "remaining": [
-    "Save source and explicit scope manifest in private project owned by existing business administrator",
-    "User must review new Firestore/mail/external-request/trigger/email-identity authorization",
-    "Verify production read-only preflight, test mail delivery and one scheduled run"
-  ]
+    "Specific user approval to persist the new OAuth scopes manifest; automatic review rejected the save as a new access/permission declaration",
+    "Google authorization for the private project; datastore scope can allow IAM-authorized read/write although code only queries projected metadata",
+    "Verify production read-only preflight, setup test mail delivery and one scheduled run before activating normal delivery"
+  ],
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/51",
+  "testedSourceCommit": "fcdf3cbcedcaf6b20e4a02777e55bf174eafa5cb",
+  "privateProjectCodeReadbackMatches": true,
+  "manifestDraftVisible": true,
+  "manifestSavedConfirmed": false,
+  "permissionSaveBlockedByAutomaticReview": true,
+  "specificUserApprovalRequired": true,
+  "checks": {
+    "nodePassed": 158,
+    "nodeSkipped": 0,
+    "quoteRulesPassed": 45,
+    "memberRulesPassed": 12,
+    "backupRulesPassed": 6,
+    "caseSyncPythonPassed": 23,
+    "standardTotalPassed": 244,
+    "totalSkipped": 0,
+    "prRun": 43896418690,
+    "conclusion": "success"
+  }
 }

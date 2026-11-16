@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "google_authorization_pending_unverified_app_review",
+  "status": "source_merged_and_deployed_google_authorization_pending",
   "backupBranch": "backup/private-email-alert-before-20261117-ad1fd16",
   "backupCommit": "ad1fd168992b51a506f310dec51a566706bf92a2",
   "scope": "Private standalone Apps Script that polls minimal quote metadata and sends generic email to its own execution account",
@@ -45,7 +45,12 @@
     "prRun": 43906011131,
     "conclusion": "success",
     "mailRESTIntegrationPassed": 6,
-    "originalImplementationPRRun": 43896418690
+    "originalImplementationPRRun": 43896418690,
+    "headPRRun": 43906386405,
+    "headPRCommit": "6cec2c32ee71ecaea65f2ac741fc50a64c511d15",
+    "mainRun": 43911265160,
+    "mainJob": 133453468871,
+    "pagesRun": 43911264196
   },
   "userApprovedManifestAndAuthorizationProcedure": true,
   "userApprovalDateKST": "2026-11-17",
@@ -73,5 +78,99 @@
     "doesNotVerifyGoogleOAuthIAMOrEmailDelivery": true,
     "prRun": 43906011131,
     "testedSourceCommit": "563c31333564ae54c004094ee7c199fbeab1eed5"
+  },
+  "sourceMerged": true,
+  "mergeCommit": "131f28586df074a32d7959c606f6ac7dddeb915d",
+  "releaseBackupBranch": "backup/mail-source-release-before-20261117-ad1fd16",
+  "liveHTTPVerification": {
+    "checkedAtUTC": "2026-11-16T16:48:23.026987+00:00",
+    "sourceCommit": "131f28586df074a32d7959c606f6ac7dddeb915d",
+    "files": [
+      {
+        "path": "index.html",
+        "status": 200,
+        "bytes": 56006,
+        "matchesSource": true,
+        "sha256": "ec79770aaf2209f4a8f4c96a5c60aa38692dbff19bfe4f690523584eda6c92bb"
+      },
+      {
+        "path": "app.js",
+        "status": 200,
+        "bytes": 23676,
+        "matchesSource": true,
+        "sha256": "9d69af82dba3ad5b333f7533e5d66a0e0ffc72689f09259807b5b10bf8da5873"
+      },
+      {
+        "path": "member-sync.js",
+        "status": 200,
+        "bytes": 2255,
+        "matchesSource": true,
+        "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+      },
+      {
+        "path": "quote/index.html",
+        "status": 200,
+        "bytes": 6134,
+        "matchesSource": true,
+        "sha256": "3da6da5cd80699d24e7649ab872931cca18685d0560363f69fae815388c7189b"
+      },
+      {
+        "path": "quote/config.js",
+        "status": 200,
+        "bytes": 240,
+        "matchesSource": true,
+        "sha256": "f91ecc2e2d702a887b729e3600d86ce1cec7cfc2df6504639a0f92480a250edd"
+      },
+      {
+        "path": "quote/quote-form.mjs",
+        "status": 200,
+        "bytes": 11927,
+        "matchesSource": true,
+        "sha256": "88439627fbb967a3c2edcf2eba2e6053d06e6199edbb25dfdbd08604f2c0ea19"
+      },
+      {
+        "path": "quote/quote-core.js",
+        "status": 200,
+        "bytes": 6087,
+        "matchesSource": true,
+        "sha256": "7f6f36d837c610abe90c22e5e0da5bf64dd619998411909d5f98becd77025a5a"
+      },
+      {
+        "path": "admin/quotes.html",
+        "status": 200,
+        "bytes": 5094,
+        "matchesSource": true,
+        "sha256": "c3294673b11b5d1fbd1817c41edf9c006036fb5e6a3f2af21417f77f9c40cf7f"
+      },
+      {
+        "path": "admin/quotes.mjs",
+        "status": 200,
+        "bytes": 20844,
+        "matchesSource": true,
+        "sha256": "9d81c4a518cb9dac36f1b9b7ffb9c0c3e5a2f09b86fbe24f94f50b76dde41590"
+      },
+      {
+        "path": "notifications/apps-script/Code.gs",
+        "status": 200,
+        "bytes": 11934,
+        "matchesSource": true,
+        "sha256": "ea3902bf9de1b694302cc9cc88132b8823d7e8c3e8827bec6bf391a6ed1a4971"
+      },
+      {
+        "path": "notifications/apps-script/appsscript.json",
+        "status": 200,
+        "bytes": 395,
+        "matchesSource": true,
+        "sha256": "f485b5997c8494921daae07d9d935c5cc067f3ae2f461aa96b205fb65e25ae01"
+      }
+    ],
+    "allMatched": true
+  },
+  "latestAuthorizationObservation": {
+    "observedAtUTC": "2026-11-16T16:50:24.842917+00:00",
+    "function": "checkNotificationSetup",
+    "result": "Google authorization-required dialog; production preflight has not executed successfully",
+    "mailSent": false,
+    "triggerCreated": false
   }
 }

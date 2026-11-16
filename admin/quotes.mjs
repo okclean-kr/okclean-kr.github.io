@@ -1,0 +1,55 @@
+import{getBackend,saveAdminChange,purgeExpiredQuote}from'../quote/quote-store.mjs';
+const $=id=>document.getElementById(id),core=window.OKCleanQuote;
+let b,catalog,unsub,rows=new Map(),lastVisible=null,initial=true,capped=false;
+const format=at=>at?.toDate?at.toDate().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):'서버 시각 확인 중';
+const date=at=>at?.toDate?new Date(+at.toDate()+9*3600000).toISOString().slice(0,10):'';
+const serviceName=id=>catalog.services.find(s=>s.id===id)?.name||id;
+const admin=user=>user?.uid===core.ADMIN_UID&&user.providerData?.some(p=>p.providerId==='google.com');
+function node(tag,text,className){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(className)el.className=className;return el;}
+function showError(error){$('authStatus').textContent='처리하지 못했습니다: '+(error?.code||error?.message||'연결 확인 필요');}
+function filtered(){return [...rows.values()].filter(r=>r.test===$('showTest').checked&&(!$('from').value||date(r.createdAt)>=$('from').value)&&(!$('to').value||date(r.createdAt)<=$('to').value)&&(!$('filterService').value||r.service===$('filterService').value)&&(!$('filterStatus').value||r.status===$('filterStatus').value)&&(!$('filterSource').value||r.source===$('filterSource').value)).sort((a,b)=>(b.createdAt?.toMillis()||0)-(a.createdAt?.toMillis()||0));}
+function render(){
+ const list=filtered(),test=$('showTest').checked;
+ $('summary').textContent=(test?'시험 접수':'실제 고객 접수')+' '+list.length+'건 · 계약 완료 '+list.filter(x=>x.status==='contracted').length+'건 · 신규 '+list.filter(x=>x.status==='new').length+'건';
+ $('stats').replaceChildren();const groups=new Map();for(const r of list){const key=[date(r.createdAt),r.service,r.source].join('|');const group=groups.get(key)||{day:date(r.createdAt),service:r.service,source:r.source,count:0,contracts:0};group.count++;if(r.status==='contracted')group.contracts++;groups.set(key,group);}
+ for(const g of groups.values()){const tr=node('tr');for(const v of[g.day,serviceName(g.service),g.source,g.count,g.contracts])tr.append(node('td',String(v)));$('stats').append(tr);}
+ const keep=new Map([...$('requests').querySelectorAll('article')].map(el=>[el.dataset.id,el]));const fragment=document.createDocumentFragment();for(const row of list){const old=keep.get(row.id);if(old&&(old.dataset.version===String(row.version)||old.querySelector('details[open]'))){fragment.append(old);}else fragment.append(renderRequest(row));}$('requests').replaceChildren(fragment);
+ if(!list.length)$('requests').append(node('p','이 조건의 접수 자료가 없습니다.','notice'));
+ $('capNotice').textContent=capped?'최신 500건부터 불러왔습니다. 이전 자료를 추가하기 전 합계는 전체 합계가 아닙니다.':'불러온 접수 범위에서 집계합니다. 2026년 11월 16일 이전 신규 접수 이력은 소급 생성하지 않습니다.';
+}
+function renderRequest(row){
+ const article=node('article');article.dataset.id=row.id;article.dataset.version=String(row.version);const head=node('h2',serviceName(row.service)+' · '+core.STATES[row.status]);head.style.fontSize='19px';
+ article.append(head,node('p',core.receipt(row.id)+' · '+format(row.createdAt)+(row.test?' · 시험 접수':''),'muted'));
+ const details=node('details'),summary=node('summary',row.name+' · '+row.region+' — 신청 내용·사진·관리');details.append(summary);
+ details.addEventListener('toggle',()=>{if(!details.open||details.dataset.loaded)return;details.dataset.loaded='1';void fillDetails(details,row).catch(e=>{details.append(node('p','상세 자료를 불러오지 못했습니다. 다시 열어 재시도해 주세요.','error'));delete details.dataset.loaded;});});article.append(details);return article;
+}
+async function fillDetails(details,row){
+ const box=node('div');details.append(box);if(row.notification!=='seen'){const acknowledge=node('button','이 접수 확인 완료');acknowledge.onclick=async()=>{try{await saveAdminChange(b,row.id,row,{notification:'seen',notificationAttempts:Math.min(row.notificationAttempts+1,100),notificationError:''});details.open=false;render();}catch(e){box.append(node('p',e.message||e.code,'error'));}};box.append(acknowledge);}const dl=node('dl');const values=[['연락처',row.phone],['상담 시간',row.contactTime],['희망 날짜',row.desiredAt?format(row.desiredAt):'상담 후 협의'],['사진',row.photoCount+'장'],['동의 안내',row.consentVersion],['유입',row.source],...Object.entries(row.answers).map(([k,v])=>[core.LABELS[k]||k,v])];for(const[k,v]of values)dl.append(node('dt',k),node('dd',String(v)));box.append(dl);
+ const photoButton=node('button','첨부 사진 불러오기');photoButton.hidden=!row.photoCount;
+ photoButton.onclick=async()=>{photoButton.disabled=true;try{const snap=await b.f.getDocs(b.f.collection(b.db,'quote_requests',row.id,'photos'));if(!admin(b.auth.currentUser)||!details.isConnected)return;const photos=node('div',undefined,'photos');for(const doc of snap.docs){const data=doc.data().data;if(typeof data==='string'&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(data)&&data.length<=160000){const img=new Image();img.alt='비공개 현장 사진';img.loading='lazy';img.src=data;photos.append(img);}}box.append(photos);photoButton.remove();}catch(e){photoButton.disabled=false;box.append(node('p','사진을 불러오지 못했습니다. 다시 시도해 주세요.','error'));}};box.append(photoButton);
+ const fields=node('div',undefined,'grid'),status=node('select'),memo=node('textarea'),amount=node('input'),delivery=node('input');
+ for(const[key,label]of Object.entries(core.STATES)){const option=new Option(label,key);option.disabled=!core.transition(row.status,key);status.append(option);}status.value=row.status;memo.maxLength=1000;memo.value=row.memo;amount.type='number';amount.min='0';amount.max='100000000';amount.step='1';amount.value=row.amount??'';delivery.type='checkbox';
+ for(const[label,input]of[['상담 진행 상태',status],['견적 금액 (원, 미입력 가능)',amount],['관리자 메모 (고객에게 자동 전송하지 않음)',memo],['고객에게 견적을 실제 전달했음',delivery]]){const wrap=node('label',label);wrap.append(input);fields.append(wrap);}box.append(fields);
+ const save=node('button','변경 저장','primary'),message=node('p',undefined,'muted');save.onclick=async()=>{save.disabled=true;try{
+  if(!core.transition(row.status,status.value))throw new Error('상담 단계에 맞게 상태를 선택해 주세요.');
+  const value=amount.value===''?null:Number(amount.value);if(value!==null&&(!Number.isInteger(value)||value<0||value>100000000))throw new Error('견적 금액을 확인해 주세요.');
+  if(status.value==='sent'&&(!delivery.checked&&!row.deliveredAt||value===null))throw new Error('견적 금액과 실제 전달 여부를 확인해 주세요.');
+  if(status.value==='contracted'&&!confirm('실제 고객 계약이 성사됐음을 확인했습니까?'))return;
+  const patch={status:status.value,memo:memo.value.trim(),amount:value};if(delivery.checked)patch.deliveredAt=b.f.serverTimestamp();
+  await saveAdminChange(b,row.id,row,patch);details.open=false;render();message.textContent='서버에 저장했습니다. 견적이나 메시지를 자동 발송하지 않습니다.';
+ }catch(e){message.textContent=e.message||e.code;}finally{save.disabled=false;}};box.append(save,message);
+ const history=node('button','견적·상태 변경 이력 보기');history.onclick=async()=>{history.disabled=true;try{const snap=await b.f.getDocs(b.f.query(b.f.collection(b.db,'quote_requests',row.id,'history'),b.f.orderBy('at','desc'),b.f.limit(100)));if(!admin(b.auth.currentUser)||!details.isConnected)return;const list=node('ul');for(const doc of snap.docs){const h=doc.data();list.append(node('li',format(h.at)+' · '+core.STATES[h.status]+' · '+(h.amount??'미입력')+'원 · '+h.note));}if(snap.empty)list.append(node('li','변경 이력이 없습니다.'));box.append(list);history.remove();}catch(e){history.disabled=false;box.append(node('p','이력 조회 실패. 재시도할 수 있습니다.','error'));}};box.append(history);
+}
+async function notify(row){if(row.notification==='seen'||row.test)return;try{if('Notification'in window&&Notification.permission==='granted')new Notification('오케이청소 새 견적 접수',{body:serviceName(row.service)+' · '+row.region,tag:row.id});$('notificationStatus').textContent='미확인 견적 '+core.receipt(row.id)+' · '+serviceName(row.service);}
+ catch(e){try{await saveAdminChange(b,row.id,row,{notification:'failed',notificationAttempts:Math.min(row.notificationAttempts+1,100),notificationError:'browser-notification-failed'});}catch(_){}$('notificationStatus').textContent='알림 표시 실패. 견적 접수는 저장돼 있습니다. 다시 확인 버튼을 이용하세요.';}}
+$('retryNotifications').onclick=async()=>{for(const row of rows.values())if(row.notification!=='seen')await notify(row);};
+$('permission').onclick=async()=>{if(!('Notification'in window)){$('notificationStatus').textContent='이 브라우저는 알림을 지원하지 않습니다. 접수 목록을 이용해 주세요.';return;}const permission=await Notification.requestPermission();$('notificationStatus').textContent=permission==='granted'?'관리자 화면이 열린 동안 새 견적을 알립니다.':'브라우저 알림이 허용되지 않았습니다. 접수 목록 확인은 계속 가능합니다.';};
+
+function clear(){unsub?.();unsub=null;rows.clear();$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
+async function start(){initial=true;rows.clear();const{f,db}=b;const q=f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.limit(500));unsub=f.onSnapshot(q,snap=>{if(!admin(b.auth.currentUser)||snap.metadata.fromCache)return;for(const change of snap.docChanges()){if(change.type==='removed')rows.delete(change.doc.id);else{const row={id:change.doc.id,...change.doc.data()};rows.set(row.id,row);if(!initial&&change.type==='added')void notify(row);}}if(initial)lastVisible=snap.docs.at(-1)||null;capped=capped||snap.size===500;initial=false;render();$('authStatus').textContent='관리자 권한으로 서버 접수 목록을 확인했습니다.';},showError);}
+$('older').onclick=async()=>{if(!lastVisible)return;try{const{f,db}=b,snap=await f.getDocs(f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.startAfter(lastVisible),f.limit(500)));snap.docs.forEach(d=>rows.set(d.id,{id:d.id,...d.data()}));lastVisible=snap.docs.at(-1)||null;capped=snap.size===500;render();}catch(e){showError(e);}};
+$('retention').onclick=()=>{const expired=[...rows.values()].filter(r=>core.retentionDue(r));$('retentionStatus').textContent='불러온 자료 중 180일 지난 새 견적 '+expired.length+'건';$('expired').replaceChildren();for(const row of expired){const button=node('button',core.receipt(row.id)+' 만료 자료 정리');button.onclick=async()=>{if(!confirm('이 새 견적과 사진·이력을 영구 삭제합니까? 계약 자료의 별도 보관 필요 여부를 먼저 확인하세요.'))return;try{await purgeExpiredQuote(b,row);rows.delete(row.id);button.remove();render();}catch(e){showError(e);}};$('expired').append(button);}};
+for(const id of['from','to','filterService','filterStatus','filterSource','showTest'])$(id).onchange=render;
+try{catalog=await fetch('../quote/catalog.json').then(r=>r.json());catalog.services.forEach(s=>$('filterService').append(new Option(s.name,s.id)));Object.entries(core.STATES).forEach(([k,v])=>$('filterStatus').append(new Option(v,k)));core.SOURCES.forEach(s=>$('filterSource').append(new Option(s,s)));b=await getBackend(catalog.firebase);const provider=new b.h.GoogleAuthProvider();provider.setCustomParameters({prompt:'select_account'});$('login').onclick=()=>b.h.signInWithPopup(b.auth,provider).catch(showError);$('logout').onclick=()=>b.h.signOut(b.auth);
+ b.h.onAuthStateChanged(b.auth,user=>{clear();const allowed=admin(user);$('logout').hidden=!user;$('panel').hidden=!allowed;$('authStatus').textContent=allowed?'서버 목록을 확인하고 있습니다.':user?'허가된 Google 관리자 계정으로 로그인해 주세요.':'로그인이 필요합니다.';if(allowed)void start();});
+}catch(error){showError(error);}

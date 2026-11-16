@@ -81,6 +81,7 @@ function drawForm(){
   calc();
 }
 function estimate(){
+  if(window.OKCleanQuote) return window.OKCleanQuote.estimate(svc(),cur);
   const s = svc();
   if(isQuote(s)) return null;
   const tiered = !!(s.tiers || []).length;
@@ -132,6 +133,7 @@ function weekendNote(){
 }
 function calc(){
   const s = svc(), r = estimate();
+  if($("qDetailed")) $("qDetailed").href = "quote/?svc="+encodeURIComponent(s.id);
   if(r){
     const p = priceText(r.lo, r.hi);
     $("qK").textContent = r.t ? `예상 금액 · 작업 인원 ${r.t.crew}명` : "예상 금액";

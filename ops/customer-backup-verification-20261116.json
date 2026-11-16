@@ -85,5 +85,15 @@
       "allStatus200": true,
       "allMatch": true
     }
+  },
+  "automaticRecoveryKeyFollowup": {
+    "status": "local_verified_pending_deployment",
+    "keyEntropyBits": 256,
+    "keyShownInPageOrLogs": false,
+    "separateRecoveryFile": true,
+    "backupFileChecksumBoundToRecoveryFile": true,
+    "newUnitAndUIAssertions": 6,
+    "userArchivePasswordRequiredForAutomaticMode": false,
+    "productionBackupDownloaded": false
   }
 }

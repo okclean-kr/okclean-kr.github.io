@@ -1,5 +1,15 @@
 // This module has no network, authentication, database writes, or browser storage.
 export const MAX_BACKUP_BYTES=20*1024*1024,MAX_FILE_BYTES=30*1024*1024,MAX_RECORDS=5000;
+export function generateRecoveryKey(api=globalThis.crypto){return [...api.getRandomValues(new Uint8Array(32))].map(x=>x.toString(16).padStart(2,'0')).join('');}
+export function recoveryKeyFile(key,backupFile,sha256){
+ const data={format:'okclean-backup-recovery-key',version:1,backupFile,sha256,key};
+ const text=JSON.stringify(data);parseRecoveryKeyFile(text);return text;
+}
+export function parseRecoveryKeyFile(text){
+ let data;try{if(typeof text!=='string'||text.length>4096)throw new Error();data=JSON.parse(text);}catch(e){throw new Error('복구키 파일 형식을 확인해 주세요.');}
+ if(data?.format!=='okclean-backup-recovery-key'||data.version!==1||typeof data.key!=='string'||!/^[a-f0-9]{64}$/.test(data.key)||typeof data.sha256!=='string'||!/^[a-f0-9]{64}$/.test(data.sha256)||typeof data.backupFile!=='string'||!/^OKClean_customers_[0-9]{14}_KST\.okcbackup$/.test(data.backupFile))throw new Error('복구키 파일 형식을 확인해 주세요.');
+ return data;
+}
 const FORMAT='okclean-customer-backup',ITERATIONS=600000;
 const encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
 const aad=encoder.encode(FORMAT+':1');

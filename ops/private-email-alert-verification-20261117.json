@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "source_merged_and_deployed_google_authorization_pending",
+  "status": "authorized_test_mail_received_scheduled_verification_pending",
   "backupBranch": "backup/private-email-alert-before-20261117-ad1fd16",
   "backupCommit": "ad1fd168992b51a506f310dec51a566706bf92a2",
   "scope": "Private standalone Apps Script that polls minimal quote metadata and sends generic email to its own execution account",
@@ -16,15 +16,14 @@
   "customerAndAutomationRuntimeChanged": false,
   "newUnitPassed": 24,
   "privateProjectCodeSaved": true,
-  "newOAuthGrantApproved": false,
-  "productionReadPreflightPassed": false,
-  "setupTestMailAccepted": false,
-  "setupTestMailReceived": false,
-  "triggerCreated": false,
+  "newOAuthGrantApproved": true,
+  "productionReadPreflightPassed": true,
+  "setupTestMailAccepted": true,
+  "setupTestMailReceived": true,
+  "triggerCreated": true,
   "scheduledRunVerified": false,
   "remaining": [
-    "User must personally review the Google unverified-app security warning and complete Google authorization",
-    "After Google authorization, verify production read-only preflight, setup test mail delivery and one scheduled run before activating normal delivery"
+    "Verify at least one actual time-driven poll execution and inspect its result; activation alone is not scheduled-run proof"
   ],
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/51",
   "testedSourceCommit": "563c31333564ae54c004094ee7c199fbeab1eed5",
@@ -56,8 +55,8 @@
   "userApprovalDateKST": "2026-11-17",
   "previousSaveReviewRejectedBeforeUserApproval": true,
   "googleUnverifiedAppWarning": true,
-  "googleManualAuthorizationRequired": true,
-  "googleAuthorizationCompleted": false,
+  "googleManualAuthorizationRequired": false,
+  "googleAuthorizationCompleted": true,
   "unsafeGoogleContinuationRejectedByAutomaticReview": true,
   "googleUnverifiedReviewExpanded": true,
   "restIntegrationFollowup": {
@@ -167,10 +166,32 @@
     "allMatched": true
   },
   "latestAuthorizationObservation": {
-    "observedAtUTC": "2026-11-16T16:50:24.842917+00:00",
+    "observedAtKST": "2026-11-17T01:58:57+09:00",
     "function": "checkNotificationSetup",
-    "result": "Google authorization-required dialog; production preflight has not executed successfully",
-    "mailSent": false,
-    "triggerCreated": false
+    "result": "read-only-preflight-passed",
+    "mailQuotaAvailable": true,
+    "enabledAtPreflight": false,
+    "completedBy": "User performed Google authorization; successful private-script production preflight observed afterward"
+  },
+  "triggerCount": 1,
+  "currentEnabled": true,
+  "liveActivation": {
+    "backupBranch": "backup/mail-activation-before-20261117-0ad1e1e",
+    "preflightCompletedAtKST": "2026-11-17T01:58:57+09:00",
+    "testMailAcceptedAtKST": "2026-11-17T02:01:46+09:00",
+    "testMailReceivedMessageTimeKST": "2026-11-17 02:01",
+    "testMailReceiptVerified": true,
+    "receiptVerificationScope": "Only the exact setup-test subject row in the already signed-in script-owner inbox; connected Gmail plugin was a different account",
+    "testMailCount": 1,
+    "activationCompletedAtKST": "2026-11-17T02:03:58+09:00",
+    "triggerFunction": "pollQuoteNotifications",
+    "triggerCount": 1,
+    "triggerType": "time-driven",
+    "requestedIntervalMinutes": 5,
+    "scheduledRunVerified": false,
+    "firebaseDataMutation": false,
+    "recipient": "Private script execution account; no recipient address published",
+    "productionCustomerQuoteCreated": false,
+    "actualCustomerEmailDeliveryNotYetObserved": true
   }
 }

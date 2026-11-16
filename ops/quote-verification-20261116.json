@@ -130,7 +130,8 @@
     46,
     47,
     48,
-    49
+    49,
+    50
   ],
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
@@ -269,5 +270,19 @@
     "recoveryKeyFileDownloaded": true,
     "downloadedPairLocallyVerified": true,
     "privateFilePersistenceConfirmed": true
+  },
+  "inputAndConnectionFollowup": {
+    "evidence": "ops/intake-reconnect-verification-20261116.json",
+    "pullRequest": 50,
+    "mergeCommit": "51d7179bc24251135c0819caa288ec2539bb502e",
+    "status": "merged_deployed_and_live_verified",
+    "automatedPassed": 220,
+    "skipped": 0,
+    "firebaseRulesChanged": false,
+    "firebasePlanChanged": false,
+    "productionDataMutation": false,
+    "newLiveQuoteSaved": false,
+    "physicalPhoneTest": false,
+    "externalNotificationConfigured": false
   }
 }

@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-16",
-  "status": "local_verified_pending_pr",
+  "status": "merged_deployed_and_live_verified",
   "backupBranch": "backup/intake-reconnect-before-20261116-93c557c",
   "backupCommit": "93c557c7faf60b0eb88908792e27dbccdb15dc34",
   "scope": "Mobile keyboard step progression and read-only administrator list reconnection/session guards",
@@ -13,7 +13,11 @@
     "caseSyncPythonPassed": 23,
     "standardTotalPassed": 220,
     "totalSkipped": 0,
-    "newRegressionCases": 10
+    "newRegressionCases": 10,
+    "prRun": 43891011474,
+    "mainRun": 43891280716,
+    "pagesRun": 43891279742,
+    "conclusion": "success"
   },
   "verified": [
     "Implicit form submit advances steps one and two without network writes",
@@ -37,6 +41,55 @@
     "Browser viewport and keyboard QA are not physical-phone hardware testing"
   ],
   "liveVerification": {
-    "status": "pending_deployment"
+    "status": "verified",
+    "adminURL": "https://okclean-kr.github.io/admin/quotes.html",
+    "keyboardTestURL": "https://okclean-kr.github.io/quote/?quote_test=1",
+    "existingGoogleAdminAndServerList": true,
+    "connectionStatusDisplayed": true,
+    "invalidZeroCountBlockedAndFocused": true,
+    "validCountEnterAdvancesToContactStep": true,
+    "newStepHeadingFocused": true,
+    "newLiveQuoteSaved": false,
+    "productionFailureInjected": false,
+    "failureAndRaceCoverage": "Isolated DOM tests; production failure injection not performed",
+    "mobileViewport": {
+      "iframeWidth": 390,
+      "viewportWidth": 388,
+      "documentWidth": 373,
+      "horizontalOverflow": false,
+      "contactStepVisible": true,
+      "previewSubmitDisabled": true
+    },
+    "publicHTTPByteComparison": {
+      "paths": [
+        "index.html",
+        "quote/index.html",
+        "quote/quote-form.mjs",
+        "admin/quotes.html",
+        "admin/quotes.mjs",
+        "member-sync.js",
+        "quote/config.js",
+        "ops/firestore.rules.current.txt"
+      ],
+      "allStatus200": true,
+      "allMatch": true
+    }
+  },
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/50",
+  "mergeCommit": "51d7179bc24251135c0819caa288ec2539bb502e",
+  "verifiedAtKST": "2026-11-17T00:01:50+09:00",
+  "preservedByteComparison": {
+    "baseCommit": "93c557c7faf60b0eb88908792e27dbccdb15dc34",
+    "paths": [
+      "index.html",
+      "app.js",
+      "member-sync.js",
+      "quote/config.js",
+      "quote/catalog.json",
+      "ops/firestore.rules.current.txt",
+      ".github/workflows/okclean-threads.yml",
+      ".github/workflows/sync-blog-cases.yml"
+    ],
+    "allMatch": true
   }
 }

@@ -27,7 +27,7 @@
     "After Google authorization, verify production read-only preflight, setup test mail delivery and one scheduled run before activating normal delivery"
   ],
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/51",
-  "testedSourceCommit": "fcdf3cbcedcaf6b20e4a02777e55bf174eafa5cb",
+  "testedSourceCommit": "563c31333564ae54c004094ee7c199fbeab1eed5",
   "privateProjectCodeReadbackMatches": true,
   "manifestDraftVisible": true,
   "manifestSavedConfirmed": true,
@@ -40,10 +40,12 @@
     "memberRulesPassed": 12,
     "backupRulesPassed": 6,
     "caseSyncPythonPassed": 23,
-    "standardTotalPassed": 244,
+    "standardTotalPassed": 250,
     "totalSkipped": 0,
-    "prRun": 43896418690,
-    "conclusion": "success"
+    "prRun": 43906011131,
+    "conclusion": "success",
+    "mailRESTIntegrationPassed": 6,
+    "originalImplementationPRRun": 43896418690
   },
   "userApprovedManifestAndAuthorizationProcedure": true,
   "userApprovalDateKST": "2026-11-17",
@@ -54,7 +56,7 @@
   "unsafeGoogleContinuationRejectedByAutomaticReview": true,
   "googleUnverifiedReviewExpanded": true,
   "restIntegrationFollowup": {
-    "status": "local_passed_pending_ci",
+    "status": "ci_passed",
     "passed": 6,
     "productionAccess": false,
     "productionDataMutation": false,
@@ -68,6 +70,8 @@
       "Returned fractional-second cursor preserved",
       "Unauthenticated REST list query denied"
     ],
-    "doesNotVerifyGoogleOAuthIAMOrEmailDelivery": true
+    "doesNotVerifyGoogleOAuthIAMOrEmailDelivery": true,
+    "prRun": 43906011131,
+    "testedSourceCommit": "563c31333564ae54c004094ee7c199fbeab1eed5"
   }
 }

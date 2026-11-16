@@ -1,0 +1,42 @@
+{
+  "dateKST": "2026-11-16",
+  "status": "local_verified_pending_pr",
+  "backupBranch": "backup/intake-reconnect-before-20261116-93c557c",
+  "backupCommit": "93c557c7faf60b0eb88908792e27dbccdb15dc34",
+  "scope": "Mobile keyboard step progression and read-only administrator list reconnection/session guards",
+  "checks": {
+    "nodePassed": 134,
+    "nodeSkipped": 0,
+    "quoteRulesPassed": 45,
+    "memberRulesPassed": 12,
+    "backupRulesPassed": 6,
+    "caseSyncPythonPassed": 23,
+    "standardTotalPassed": 220,
+    "totalSkipped": 0,
+    "newRegressionCases": 10
+  },
+  "verified": [
+    "Implicit form submit advances steps one and two without network writes",
+    "Invalid required numeric field receives focus and cannot advance",
+    "Step heading receives focus and previous answers retained",
+    "Invalid phone receives focus without storage",
+    "Preview keyboard step progression remains analytics/write-free",
+    "Snapshot error retains displayed rows and exposes reconnect action",
+    "Cache-only snapshot is not described as current server data",
+    "Obsolete snapshot callbacks/errors ignored after reconnection",
+    "Concurrent older-page reads blocked, including live snapshot during pending read",
+    "Delayed page read ignored after logout or new login session"
+  ],
+  "firebaseRulesChanged": false,
+  "firebasePlanChanged": false,
+  "productionDataMutation": false,
+  "externalNotificationConfigured": false,
+  "physicalPhoneTest": false,
+  "remainingLimitations": [
+    "Admin page must remain open for existing foreground notifications; no external SMS/mail/background delivery route found",
+    "Browser viewport and keyboard QA are not physical-phone hardware testing"
+  ],
+  "liveVerification": {
+    "status": "pending_deployment"
+  }
+}

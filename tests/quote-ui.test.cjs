@@ -21,3 +21,25 @@ test('시험 접수 매개변수만으로 관리자 권한을 얻을 수 없음'
 test('관리자 시험 접수는 서버 test 표식으로 전달',async()=>{let options,events=[];const ui=await setup(false,{getBackend:async()=>({auth:{currentUser:{uid:'H1MfdqGkFRZzU8qkqwXTsiKv3CO2',providerData:[{providerId:'google.com'}]}}}),newRequestId:()=> 'T'.repeat(20),submitQuote:async(c,id,input,photos,o)=>{options=o;}},'https://test.invalid/quote/?svc=aircon&quote_test=1');ui.w.OKCleanAnalytics.track=name=>events.push(name);fillForm(ui);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(options.test,true);assert.equal(ui.$('complete').hidden,false);assert.match(ui.$('complete').textContent,/시험 견적 접수/);assert.deepEqual(events,[]);ui.dom.window.close();});
 
 test('서비스가 미리 선택된 유입도 작성 시작은 한 번 집계',async()=>{const ui=await setup();const events=[];ui.w.OKCleanAnalytics.track=name=>events.push(name);ui.$('next').click();ui.$('previous').click();ui.$('next').click();assert.equal(events.filter(x=>x==='quote_start').length,1);ui.dom.window.close();});
+
+test('휴대폰 키보드 제출은 현재 단계를 진행하고 마지막 단계에서만 서버 저장',async()=>{
+ let calls=0;const ui=await setup(true,{newRequestId:()=> 'Q'.repeat(20),submitQuote:async()=>{calls++;}}),submit=()=>ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));
+ submit();assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.$('formError').textContent,'');assert.equal(calls,0);
+ for(const[k,v]of Object.entries({type:'벽걸이',count:'1',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ submit();assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false);assert.equal(ui.$('formError').textContent,'');assert.equal(calls,0);
+ ui.$('region').value='춘천';ui.$('name').value='시험';ui.$('phone').value='010-0000-0000';ui.$('consent').checked=true;submit();await tick();assert.equal(calls,1);assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+});
+test('단계별 필수 항목 오류는 첫 입력으로 초점 이동·서버 저장 차단',async()=>{
+ let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}});ui.$('next').click();for(const[k,v]of Object.entries({type:'벽걸이',count:'0',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.w.document.activeElement.id,'answer-count');assert.equal(calls,0);assert.equal(ui.w.document.activeElement.inputMode,'numeric');ui.dom.window.close();
+});
+test('다음·이전 단계 제목으로 초점 이동·작성한 서비스 답변 유지',async()=>{
+ const ui=await setup();fillForm(ui);assert.equal(ui.w.document.activeElement.tagName,'LEGEND');assert.equal(ui.w.document.activeElement.closest('fieldset').dataset.step,'3');ui.$('previous').click();assert.equal(ui.w.document.activeElement.id,'questionTitle');assert.equal(ui.w.document.querySelector('[name=count]').value,'1');ui.dom.window.close();
+});
+test('잘못된 휴대폰 번호 오류는 해당 입력으로 초점 이동',async()=>{
+ const ui=await setup();fillForm(ui);ui.$('phone').value='123';ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));assert.equal(ui.w.document.activeElement.id,'phone');assert.match(ui.$('formError').textContent,/휴대폰 번호/);ui.dom.window.close();
+});
+test('키보드로 미리보기 단계를 진행해도 운영 저장과 통계는 실행하지 않음',async()=>{
+ let calls=0,events=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}},'https://test.invalid/quote/?svc=aircon&quote_preview=1');ui.w.OKCleanAnalytics.track=()=>events++;
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);ui.dom.window.close();assert.equal(calls,0);assert.equal(events,0);
+});

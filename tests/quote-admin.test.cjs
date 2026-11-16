@@ -5,12 +5,12 @@ function row(id,patch={}){return{id,name:'격리 알림 시험',phone:'010-0000-
 async function setup(){
  const dom=new JSDOM(fs.readFileSync('admin/quotes.html','utf8'),{url:'https://test.invalid/admin/quotes.html',runScripts:'outside-only'}),w=dom.window;
  w.fetch=async()=>({json:async()=>catalog});w.eval(fs.readFileSync('quote/quote-core.js','utf8'));
- const state={records:new Map(),writes:[],notifications:[],notificationFails:false,permission:'granted',beforeSave:async()=>{}};
+ const state={records:new Map(),writes:[],notifications:[],notificationFails:false,permission:'granted',beforeSave:async()=>{},listeners:[],olderReads:0,beforeOlder:async()=>({docs:[],size:0})};
  w.Notification=class{static get permission(){return state.permission;}static requestPermission(){return state.requestPermission?state.requestPermission():Promise.resolve(state.permission);}constructor(title,options){state.notifications.push({title,options});if(state.notificationFails)throw new Error('Notification API unavailable');}};
- const b={auth:{currentUser:{uid:w.OKCleanQuote.ADMIN_UID,providerData:[{providerId:'google.com'}]}},db:{},f:{collection:()=>({}),query:()=>({}),orderBy:()=>({}),limit:()=>({}),onSnapshot:(q,options,callback)=>{assert.equal(options.includeMetadataChanges,true);state.listen=callback;return()=>{state.listen=null;};}},h:{GoogleAuthProvider:class{setCustomParameters(){}},onAuthStateChanged:(auth,callback)=>{state.authChanged=callback;callback(auth.currentUser);},signInWithPopup:async()=>{},signOut:async()=>{b.auth.currentUser=null;state.authChanged(null);}}};
+ const b={auth:{currentUser:{uid:w.OKCleanQuote.ADMIN_UID,providerData:[{providerId:'google.com'}]}},db:{},f:{collection:()=>({}),query:()=>({}),orderBy:()=>({}),limit:()=>({}),startAfter:()=>({}),getDocsFromServer:async()=>{state.olderReads++;return state.beforeOlder();},onSnapshot:(q,options,callback,error)=>{assert.equal(options.includeMetadataChanges,true);state.listen=callback;state.listenError=error;state.listeners.push({callback,error});return()=>{state.listen=null;};}},h:{GoogleAuthProvider:class{setCustomParameters(){}},onAuthStateChanged:(auth,callback)=>{state.authChanged=callback;callback(auth.currentUser);},signInWithPopup:async()=>{},signOut:async()=>{b.auth.currentUser=null;state.authChanged(null);}}};
  state.emit=(changes)=>{for(const r of changes)state.records.set(r.id,r);const docs=[...state.records.values()].map(r=>({id:r.id,data:()=>r}));state.listen?.({metadata:{fromCache:false},docs,size:docs.length,docChanges:()=>changes.map(r=>({type:state.started?'modified':'added',doc:{id:r.id,data:()=>r}}))});state.started=true;};
  state.add=(r)=>{state.records.set(r.id,r);state.listen?.({metadata:{fromCache:false},docs:[...state.records.values()].map(x=>({id:x.id,data:()=>x})),size:state.records.size,docChanges:()=>[{type:'added',doc:{id:r.id,data:()=>r}}]});};
- state.logout=()=>b.h.signOut(b.auth);
+ state.logout=()=>b.h.signOut(b.auth);state.login=()=>{b.auth.currentUser={uid:w.OKCleanQuote.ADMIN_UID,providerData:[{providerId:'google.com'}]};state.authChanged(b.auth.currentUser);};
  w.__store={getBackend:async()=>b,saveAdminChange:async(backend,id,previous,patch)=>{state.writes.push({id,previous,patch});await state.beforeSave();const current=state.records.get(id);assert.equal(current.version,previous.version);state.emit([{...current,...patch,version:current.version+1}]);},purgeExpiredQuote:async()=>{},submitQuote:async()=>{},newRequestId:()=> 'T'.repeat(20)};
  const source=fs.readFileSync('admin/quotes.mjs','utf8').replace("import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}from'../quote/quote-store.mjs';",'const{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}=window.__store;').replace("import{compressPhoto}from'../quote/photos.mjs';",'const compressPhoto=async()=>({});');
  await w.eval('(async()=>{'+source+'})()');
@@ -55,4 +55,30 @@ test('캐시와 동일한 첫 서버 스냅샷에 변경분이 없어도 미확�
  const ui=await setup(),record=row('A'.repeat(20)),docs=[{id:record.id,data:()=>record}];
  ui.state.listen({metadata:{fromCache:true},docs,size:1,docChanges:()=>[{type:'added',doc:docs[0]}]});assert.equal(ui.$('requests').querySelectorAll('article').length,0);
  ui.state.listen({metadata:{fromCache:false},docs,size:1,docChanges:()=>[]});assert.equal(ui.$('requests').querySelectorAll('article').length,1);assert.match(ui.$('notificationStatus').textContent,/미확인 1건/);assert.equal(ui.state.notifications.length,0);ui.dom.window.close();
+});
+
+test('실시간 연결 오류 시 기존 목록 유지·수동 재연결 뒤 서버 목록으로 교체',async()=>{
+ const ui=await setup();ui.state.emit([row('A'.repeat(20))]);ui.state.listenError({code:'unavailable'});
+ assert.match(ui.$('connectionStatus').textContent,/실시간 연결을 확인하지 못/);assert.equal(ui.$('retryConnection').hidden,false);assert.equal(ui.$('requests').querySelectorAll('article').length,1);
+ ui.$('retryConnection').click();assert.equal(ui.state.listeners.length,2);assert.equal(ui.$('requests').querySelectorAll('article').length,1);
+ ui.state.records.clear();ui.state.emit([row('B'.repeat(20))]);assert.equal(ui.$('requests').querySelector('article').dataset.id,'B'.repeat(20));assert.equal(ui.$('retryConnection').hidden,true);assert.match(ui.$('connectionStatus').textContent,/연결돼/);assert.equal(ui.state.writes.length,0);ui.dom.window.close();
+});
+test('서버 응답 전 캐시를 최신 접수로 표시하지 않고 재연결 상태 안내',async()=>{
+ const ui=await setup();const r=row('A'.repeat(20)),docs=[{id:r.id,data:()=>r}];ui.state.listen({metadata:{fromCache:true},docs,size:1,docChanges:()=>[]});
+ assert.match(ui.$('connectionStatus').textContent,/새 접수 여부를 아직 확인하지 못/);assert.equal(ui.$('requests').children.length,0);assert.equal(ui.$('older').disabled,true);assert.equal(ui.$('retryConnection').hidden,false);ui.dom.window.close();
+});
+test('재연결 이전 구독의 지연 응답과 오류는 현재 목록을 변경하지 않음',async()=>{
+ const ui=await setup();ui.state.emit([row('A'.repeat(20))]);const old=ui.state.listeners[0];old.error({code:'unavailable'});ui.$('retryConnection').click();ui.state.emit([]);
+ const r=row('B'.repeat(20));old.callback({metadata:{fromCache:false},docs:[],size:0,docChanges:()=>[{type:'added',doc:{id:r.id,data:()=>r}}]});old.error({code:'permission-denied'});
+ assert.equal(ui.$('requests').querySelectorAll('article').length,1);assert.equal(ui.$('requests').querySelector('article').dataset.id,'A'.repeat(20));assert.match(ui.$('connectionStatus').textContent,/연결돼/);assert.equal(ui.state.notifications.length,0);ui.dom.window.close();
+});
+test('이전 자료 조회 연속 클릭은 한 번만 요청·로그아웃 후 지연 응답 폐기',async()=>{
+ const ui=await setup();ui.state.emit([row('A'.repeat(20))]);let finish;ui.state.beforeOlder=()=>new Promise(resolve=>finish=resolve);
+ const pending=ui.$('older').onclick();ui.state.emit([]);assert.equal(ui.$('older').disabled,true);await ui.$('older').onclick();assert.equal(ui.state.olderReads,1);await ui.state.logout();const r=row('B'.repeat(20));finish({docs:[{id:r.id,data:()=>r}],size:1});await pending;
+ assert.equal(ui.$('requests').children.length,0);assert.equal(ui.$('stats').children.length,0);assert.equal(ui.$('panel').hidden,true);assert.equal(ui.$('connectionStatus').textContent,'');ui.dom.window.close();
+});
+test('이전 자료 조회 오류 후 버튼 복구·다시 로그인한 세션에 옛 응답 폐기',async()=>{
+ const ui=await setup();ui.state.emit([row('A'.repeat(20))]);ui.state.beforeOlder=async()=>{throw{code:'unavailable'};};await ui.$('older').onclick();assert.equal(ui.$('older').disabled,false);assert.equal(ui.$('requests').querySelectorAll('article').length,1);
+ let finish;ui.state.beforeOlder=()=>new Promise(resolve=>finish=resolve);const pending=ui.$('older').onclick();await ui.state.logout();ui.state.records.clear();ui.state.login();ui.state.emit([row('C'.repeat(20))]);const r=row('B'.repeat(20));finish({docs:[{id:r.id,data:()=>r}],size:1});await pending;
+ assert.equal(ui.$('requests').querySelectorAll('article').length,1);assert.equal(ui.$('requests').querySelector('article').dataset.id,'C'.repeat(20));ui.dom.window.close();
 });

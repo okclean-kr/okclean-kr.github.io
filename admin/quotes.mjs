@@ -2,7 +2,7 @@ import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}fro
 import{compressPhoto}from'../quote/photos.mjs';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let b,catalog,unsub,rows=new Map(),lastVisible=null,initial=true,capped=false,testRequestId=null;
-let notificationMessage='',notificationSession=0;
+let notificationMessage='',notificationSession=0,listSession=0,olderRequest=null;
 const notificationInFlight=new Set(),notificationUnsaved=new Set();
 const format=at=>at?.toDate?at.toDate().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):'서버 시각 확인 중';
 const date=at=>at?.toDate?new Date(+at.toDate()+9*3600000).toISOString().slice(0,10):'';
@@ -93,25 +93,32 @@ $('permission').onclick=async()=>{
  catch(e){if(session===notificationSession&&admin(b?.auth.currentUser))notificationStatus('브라우저 알림 허용 요청을 완료하지 못했습니다. 미확인 접수는 목록에서 확인해 주세요.');}
 };
 
-function clear(){unsub?.();unsub=null;rows.clear();lastVisible=null;capped=false;initial=true;notificationSession++;notificationMessage='';notificationInFlight.clear();notificationUnsaved.clear();$('retryNotifications').disabled=false;$('notificationStatus').textContent='';$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
+function connectionStatus(message,retry=false){$('connectionStatus').textContent=message;$('retryConnection').hidden=!retry;$('retryConnection').disabled=!retry;}
+function currentList(session,epoch){return admin(b?.auth.currentUser)&&session===notificationSession&&epoch===listSession;}
+function clear(){listSession++;olderRequest=null;unsub?.();unsub=null;rows.clear();lastVisible=null;capped=false;initial=true;notificationSession++;notificationMessage='';notificationInFlight.clear();notificationUnsaved.clear();$('retryNotifications').disabled=false;$('notificationStatus').textContent='';connectionStatus('');$('older').disabled=false;$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
 async function start(){
- initial=true;rows.clear();const{f,db}=b,session=notificationSession;
+ if(!admin(b?.auth.currentUser))return;
+ const epoch=++listSession;olderRequest=null;unsub?.();unsub=null;initial=true;
+ connectionStatus('서버 접수 목록을 연결하고 있습니다.');$('older').disabled=true;
+ const{f,db}=b,session=notificationSession;
  const q=f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.limit(500));
  unsub=f.onSnapshot(q,{includeMetadataChanges:true},snap=>{
-  if(!admin(b.auth.currentUser)||session!==notificationSession||snap.metadata.fromCache)return;
+  if(!currentList(session,epoch))return;
+  if(snap.metadata.fromCache){connectionStatus('서버 응답을 기다리고 있습니다. 표시된 자료는 마지막 조회 기준이며 새 접수 여부를 아직 확인하지 못했습니다.',true);return;}
   if(initial){
    // The cache event may already contain identical documents. Read the full
    // first server snapshot even when its docChanges() contains no additions.
-   for(const doc of snap.docs)rows.set(doc.id,{id:doc.id,...doc.data()});
+   rows.clear();capped=false;for(const doc of snap.docs)rows.set(doc.id,{id:doc.id,...doc.data()});
    lastVisible=snap.docs.at(-1)||null;
   }else for(const change of snap.docChanges()){
    if(change.type==='removed')rows.delete(change.doc.id);
    else{const row={id:change.doc.id,...change.doc.data()};rows.set(row.id,row);if(change.type==='added')void notify(row);}
   }
-  capped=capped||snap.size===500;initial=false;render();$('authStatus').textContent='관리자 권한으로 서버 접수 목록을 확인했습니다.';
- },showError);
+  capped=capped||snap.size===500;initial=false;render();$('older').disabled=!!olderRequest;connectionStatus('서버 접수 목록이 연결돼 있습니다.');$('authStatus').textContent='관리자 권한으로 서버 접수 목록을 확인했습니다.';
+ },error=>{if(!currentList(session,epoch))return;connectionStatus('실시간 연결을 확인하지 못했습니다. 마지막으로 불러온 자료는 유지됩니다. 새 접수 확인을 위해 다시 연결해 주세요.',true);showError(error);});
 }
-$('older').onclick=async()=>{if(!lastVisible)return;try{const{f,db}=b,snap=await f.getDocs(f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.startAfter(lastVisible),f.limit(500)));snap.docs.forEach(d=>rows.set(d.id,{id:d.id,...d.data()}));lastVisible=snap.docs.at(-1)||null;capped=snap.size===500;render();}catch(e){showError(e);}};
+$('retryConnection').onclick=()=>{if(admin(b?.auth.currentUser)&&!$('retryConnection').disabled)void start().catch(showError);};
+$('older').onclick=async()=>{if(!admin(b?.auth.currentUser)||olderRequest||$('older').disabled||!lastVisible)return;const session=notificationSession,epoch=listSession,cursor=lastVisible,request={};olderRequest=request;$('older').disabled=true;try{const{f,db}=b,snap=await f.getDocsFromServer(f.query(f.collection(db,'quote_requests'),f.orderBy('createdAt','desc'),f.startAfter(cursor),f.limit(500)));if(!currentList(session,epoch))return;snap.docs.forEach(d=>rows.set(d.id,{id:d.id,...d.data()}));lastVisible=snap.docs.at(-1)||null;capped=snap.size===500;render();}catch(e){if(currentList(session,epoch))showError(e);}finally{if(currentList(session,epoch)&&olderRequest===request){olderRequest=null;$('older').disabled=false;}}};
 $('testSubmit').onclick=async()=>{
  if(!admin(b?.auth.currentUser))return;
  const files=[...$('testPhotos').files];if(!testRequestId&&(!files.length||files.length>5)){$('testResult').textContent='시험 사진을 1~5장 선택해 주세요.';return;}

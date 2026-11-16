@@ -318,8 +318,9 @@ test('Firestore Emulator retention authorization and strict server boundary', {
   const { initializeTestEnvironment, assertSucceeds, assertFails } = require('@firebase/rules-unit-testing');
   const sdk = require('firebase/firestore');
   sdk.setLogLevel('silent');
-  const rulesPath = path.join(__dirname, '../ops/firestore.rules.retention-20261112.txt');
+  const rulesPath = path.join(__dirname, '../ops/firestore.rules.current.txt');
   const rules = fs.readFileSync(rulesPath, 'utf8');
+  assert.equal(rules, fs.readFileSync(path.join(__dirname, '../ops/firestore.rules.quotes-20261116.txt'), 'utf8'), 'Retention and quote checks must validate the same rule snapshot.');
   const env = await initializeTestEnvironment({ projectId, firestore: { host: hostname, port: Number(port), rules } });
   const publicDb = env.unauthenticatedContext().firestore();
   const adminDb = env.authenticatedContext(ADMIN, { firebase: { sign_in_provider: 'google.com' } }).firestore();
@@ -399,9 +400,10 @@ test('Firestore Emulator retention authorization and strict server boundary', {
   } finally {
     await env.cleanup();
     const report = { projectId, productionAccess: false, emulatorHost: host,
+      rulesPath: 'ops/firestore.rules.current.txt', runMode: 'local-firestore-emulator',
       candidateSha256: crypto.createHash('sha256').update(rules).digest('hex'),
       passed: results.filter(r => r.passed).length, failed: results.filter(r => !r.passed).length,
       boundaryMethod: 'same production predicate, emulator-only rule match with exact request.time-relative arguments', results };
-    fs.writeFileSync(path.join(__dirname, '../ops/firestore-retention-validation-20261112.json'), JSON.stringify(report, null, 2) + '\n');
+    fs.writeFileSync(path.join(__dirname, '../ops/firestore-retention-validation-20261116.json'), JSON.stringify(report, null, 2) + '\n');
   }
 });

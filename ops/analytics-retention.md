@@ -77,10 +77,16 @@ window.OKCleanAnalyticsMaintenance.cancel();
 
 반환 필드는 `status`, `mode`, `collection`, `retentionDays`, `cutoff`, `checkedAt`, `matched`, `scanned`, `deleted`, `batches`, `remaining`, `capped`, `uncertain`, `error`다. 진행 콜백은 `checking`과 `deleting`도 전달한다. `remaining: null`은 미확인 상태다. `deleted`는 서버 응답으로 확인한 배치 건수이며, 동시 실행된 다른 관리자 탭과의 중복 삭제 시도를 전역에서 고유하게 계산한 수치는 아니다.
 
-## 규칙 보존과 검증
+## 2026-11-16 현재 규칙 재검증
+
+현재 운영 규칙 사본 `ops/firestore.rules.current.txt`(SHA256 `d9acc443682123c97ad5e19f57ab17017abda23b450aba17eadb13103d9bb919`)으로 보관기간의 세부 검사 22개를 다시 통과했다. 결과는 `ops/firestore-retention-validation-20261116.json`에 별도로 저장하고 11월 12일 기록은 수정하지 않았다. 시험 경로는 loopback의 `demo-okclean-retention-audit`로 고정되며 실제 Firebase 연결·자료 조회·삭제는 수행하지 않는다.
+
+`npm run test:retention:rules`는 Firestore Emulator를 시작하고 `OKCLEAN_RETENTION_EMULATOR=1 npm test`를 실행한다. 일반 `npm test`에서 환경 조건에 따라 제외되는 보관기간 검사를 이 명령에서는 실행한다. Node 보고 기준 104개가 통과하고 제외는 0개다(보관기간 상위 검사 1개와 하위 검사 22개 포함). GitHub Actions에서도 일반 `npm test` 대신 이 명령을 사용하므로 보관기간 검사가 누락되지 않는다. 이후 기존 견적·회원 규칙 검사와 작업 사례 검사를 이어서 실행한다.
+
+## 11월 12일 적용 당시 규칙 보존과 검증
 
 - 변경 전 전체 규칙 SHA-256: `bb32ebf0395169c6e6a8d649c1a9f1466f8f9c7249ca3c8d8298ffa06d0e97f4`
-- 현재 전체 규칙 SHA-256: `7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db`
+- 11월 12일 적용 전체 규칙 SHA-256: `7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db`
 - `site_events` 블록을 제외한 기존 규칙 SHA-256: `a9d8df5e23b412abf946c26f3cb8952c8baa9867cf5fda202b213f49cc456818` — 변경 전후 바이트 동일
 - 개인정보처리방침 1~6항 SHA-256: `5f1a69020801c873d35dad48ecae34ce8a54c9fdd8d2288b8bacdb2058210ef7` — 변경 전후 동일
 
@@ -100,4 +106,4 @@ window.OKCleanAnalyticsMaintenance.cancel();
 node --test tests/analytics-maintenance.test.cjs tests/analytics.test.cjs
 ```
 
-실제 에뮬레이터 검증은 `OKCLEAN_RETENTION_EMULATOR=1`, `FIRESTORE_EMULATOR_HOST=127.0.0.1:<port>`를 설정하고 `@firebase/rules-unit-testing`과 `firebase/firestore`가 설치된 환경에서 같은 테스트를 실행한다. 코드의 프로젝트는 `demo-okclean-retention-audit`로 고정되어 있고 loopback 주소만 허용한다. `audit/retention-validation/run.sh`는 이번 작업의 로컬 검증 실행본이다.
+실제 에뮬레이터 검증은 `OKCLEAN_RETENTION_EMULATOR=1`, `FIRESTORE_EMULATOR_HOST=127.0.0.1:<port>`를 설정하고 `@firebase/rules-unit-testing`과 `firebase/firestore`가 설치된 환경에서 같은 테스트를 실행한다. 코드의 프로젝트는 `demo-okclean-retention-audit`로 고정되어 있고 loopback 주소만 허용한다. 현재 CI와 같은 전체 검증은 `npm run test:retention:rules`로 실행한다. 과거 `audit/retention-validation/run.sh`는 저장소의 재실행 진입점이 아니다.

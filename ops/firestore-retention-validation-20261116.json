@@ -1,0 +1,101 @@
+{
+  "projectId": "demo-okclean-retention-audit",
+  "productionAccess": false,
+  "emulatorHost": "127.0.0.1:8080",
+  "candidateSha256": "d9acc443682123c97ad5e19f57ab17017abda23b450aba17eadb13103d9bb919",
+  "passed": 22,
+  "failed": 0,
+  "boundaryMethod": "same production predicate, emulator-only rule match with exact request.time-relative arguments",
+  "results": [
+    {
+      "name": "Google admin can delete a genuinely older-than-90-days event",
+      "passed": true
+    },
+    {
+      "name": "public cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "other Google UID cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "same UID password cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "missing Google provider cannot delete an expired event",
+      "passed": true
+    },
+    {
+      "name": "admin cannot delete fresh event",
+      "passed": true
+    },
+    {
+      "name": "admin cannot delete less than 90 days event",
+      "passed": true
+    },
+    {
+      "name": "admin cannot delete future event",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp string is not deletable",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp number is not deletable",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp null is not deletable",
+      "passed": true
+    },
+    {
+      "name": "non-timestamp map is not deletable",
+      "passed": true
+    },
+    {
+      "name": "missing timestamp is not deletable",
+      "passed": true
+    },
+    {
+      "name": "expired diagnostic records follow the same retention policy",
+      "passed": true
+    },
+    {
+      "name": "admin cannot change at or another event field before deletion",
+      "passed": true
+    },
+    {
+      "name": "a mixed fresh/expired batch is wholly rejected",
+      "passed": true
+    },
+    {
+      "name": "server query used by maintenance is authorized for admin only",
+      "passed": true
+    },
+    {
+      "name": "product_clicks deletion stays denied even for admin and old data",
+      "passed": true
+    },
+    {
+      "name": "subcollections and unrelated collection do not inherit retention rights",
+      "passed": true
+    },
+    {
+      "name": "server-time predicate at 90 days equal has expected strict boundary",
+      "passed": true
+    },
+    {
+      "name": "server-time predicate at 90 days older has expected strict boundary",
+      "passed": true
+    },
+    {
+      "name": "server-time predicate at 90 days newer has expected strict boundary",
+      "passed": true
+    }
+  ],
+  "rulesPath": "ops/firestore.rules.current.txt",
+  "runMode": "local-firestore-emulator"
+}

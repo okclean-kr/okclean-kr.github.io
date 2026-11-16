@@ -15,7 +15,7 @@
 | 서비스 지역 안내 | 완료 | 기존 지역 안내와 모바일 선택 사용. 지역 선택만으로 출장 가능 여부를 확정하지 않고 일정·거리·작업 규모 및 추가비를 상담에서 확인하도록 안내. |
 | 상담 전환 통계 | 완료 | 견적 시작·단계·계산·저장 성공·카카오톡·전화·관리자 계약 처리 연결 및 날짜·서비스·유입 출처별 집계. 시험 접수 분리. 페이지 조회·클릭·신청·계약 의미를 구분. |
 | 보안·모바일 테스트 | 완료 / 범위 명시 | 250개 자동 검사 통과, 제외 0. 고객 간 접근 차단과 관리자 권한 검사. PC 및 실제 브라우저 390px 모바일 화면 검증. 물리 휴대전화 시험과 신규 운영 회원가입·쿠폰 발급은 수행하지 않았다. |
-| 실제 운영 배포 | 완료 | PR #41~#51 반영. 최신 소스 PR #51 병합 SHA `131f28586df074a32d7959c606f6ac7dddeb915d`. 운영 URL의 11개 파일이 HTTP 200이며 소스와 바이트 일치. |
+| 실제 운영 배포 | 완료 | PR #41~#52 반영. 연결 검증·관리자 안내 PR #52 병합 SHA `4875084d93bf5be29c758828091dba85230e9cce`. 이번 배포 운영 URL 8개가 HTTP 200이며 소스와 바이트 일치. |
 
 ## 주소와 근거
 
@@ -26,9 +26,10 @@
 - 알림 소스 PR: https://github.com/okclean-kr/okclean-kr.github.io/pull/51
 - 실제 연결 검증·관리자 안내 PR: https://github.com/okclean-kr/okclean-kr.github.io/pull/52
 - 안내 변경 및 검증 PR 검사: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43915000109
-- 최신 PR 검사: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43906386405
-- 운영 브랜치 검사: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43911265160
-- 소스 배포: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43911264196
+- 알림 소스 PR 검사: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43906386405
+- 연결 검증 최종 PR 검사: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43915536450
+- 운영 브랜치 검사: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43915742967
+- 소스 배포: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43915742088
 
 검사 250개는 Node·DOM 158개, 견적 규칙 45개, 회원 규칙 12개, 백업 규칙 6개, 메일 REST 격리 검사 6개, 작업 사례 Python 23개의 합이다. 메일 REST 검사는 loopback Emulator에서만 실행했으며 Google OAuth/IAM 또는 실제 메일 수신 검사를 대신하지 않는다. 검사 수는 고객·계약 건수가 아니다.
 
@@ -45,6 +46,7 @@
 - 변경 전 홈페이지 Git 백업: `backup/quote-before-20261116-70495bb` / `70495bb770959b45bd4f6f42e956ccb9fc0a2f7e`.
 - 변경 전 소스 ZIP: `OKClean_before_quote_20261116_70495bb.zip`. 공개 소스만 포함하며 비공개 파일로 저장·전달했다.
 - 메일 소스 반영 직전: `backup/mail-source-release-before-20261117-ad1fd16` / `ad1fd168992b51a506f310dec51a566706bf92a2`.
+- 실제 알림 연결·관리자 안내 반영 직전: `backup/mail-activation-before-20261117-0ad1e1e` / `0ad1e1ef0e84a3449a90f9ef7093c20f8ed50c9c`.
 - 고객 자료 암호화 파일: `OKClean_customers_20261116232103_KST.okcbackup`. 복구키는 별도 비공개 파일로 보관한다. 공개 저장소에는 둘 다 올리지 않는다.
 - 고객 백업은 알려진 회원·견적 스키마 17문서의 해당 시점 내보내기다. 변경 전 데이터베이스 스냅샷이나 Firebase 전체 DB·Auth 백업이 아니며, 운영 복원은 수행하지 않았다.
 - 소스 문제는 해당 변경 커밋만 `git revert`로 복구하고 Pages 성공을 확인한다. 뒤에 추가된 자동화 자료를 과거 브랜치로 강제 덮어쓰지 않는다.

@@ -202,7 +202,69 @@
     "administratorDOMSkipped": 0,
     "verificationChangeCommit": "f412744446d5a0e631edec9ec0d86aeccfa7ab93",
     "verificationPRRun": 43915000109,
-    "verificationPRConclusion": "success"
+    "verificationPRConclusion": "success",
+    "verificationFinalHead": "fcffa3e3e93b6751c86281a03acef317ff074b1f",
+    "verificationFinalPRRun": 43915536450,
+    "verificationFinalPRConclusion": "success",
+    "mergeCommit": "4875084d93bf5be29c758828091dba85230e9cce",
+    "mainRun": 43915742967,
+    "pagesRun": 43915742088,
+    "mainAndPagesConclusion": "success",
+    "publicHTTPVerification": {
+      "checkedAtUTC": "2026-11-16T17:13:23.361476+00:00",
+      "sourceCommit": "4875084d93bf5be29c758828091dba85230e9cce",
+      "allMatched": true,
+      "files": [
+        {
+          "path": "index.html",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "ec79770aaf2209f4a8f4c96a5c60aa38692dbff19bfe4f690523584eda6c92bb"
+        },
+        {
+          "path": "quote/config.js",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "f91ecc2e2d702a887b729e3600d86ce1cec7cfc2df6504639a0f92480a250edd"
+        },
+        {
+          "path": "quote/quote-form.mjs",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "88439627fbb967a3c2edcf2eba2e6053d06e6199edbb25dfdbd08604f2c0ea19"
+        },
+        {
+          "path": "admin/quotes.html",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "45381f57aba5e87766ce096fe6e8468fc59ac5efb3d9844484dae0ac32152b52"
+        },
+        {
+          "path": "admin/quotes.mjs",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "9d81c4a518cb9dac36f1b9b7ffb9c0c3e5a2f09b86fbe24f94f50b76dde41590"
+        },
+        {
+          "path": "member-sync.js",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+        },
+        {
+          "path": "ops/private-email-alert-verification-20261117.json",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "55ceb516e701f5b715e18895af790bb6fa0b40d23c7f61e48e9b3caa33c00399"
+        },
+        {
+          "path": "ops/quote-release-20261117.md",
+          "status": 200,
+          "matchesSource": true,
+          "sha256": "ef00878e5cdf31b307a1cc8e2aae6ceaadda2c4def9186a1ba398ae644effc4e"
+        }
+      ]
+    }
   },
   "liveLimitations": [
     "The setup-test email was received, and a real time-driven production poll completed with no-new-quotes; an actual new customer quote email has not yet occurred.",

@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "source_merged_and_deployed_google_authorization_pending",
+  "status": "live_authorized_test_mail_received_and_scheduled_run_verified",
   "backupBranch": "backup/private-email-alert-before-20261117-ad1fd16",
   "backupCommit": "ad1fd168992b51a506f310dec51a566706bf92a2",
   "scope": "Private standalone Apps Script that polls minimal quote metadata and sends generic email to its own execution account",
@@ -16,16 +16,13 @@
   "customerAndAutomationRuntimeChanged": false,
   "newUnitPassed": 24,
   "privateProjectCodeSaved": true,
-  "newOAuthGrantApproved": false,
-  "productionReadPreflightPassed": false,
-  "setupTestMailAccepted": false,
-  "setupTestMailReceived": false,
-  "triggerCreated": false,
-  "scheduledRunVerified": false,
-  "remaining": [
-    "User must personally review the Google unverified-app security warning and complete Google authorization",
-    "After Google authorization, verify production read-only preflight, setup test mail delivery and one scheduled run before activating normal delivery"
-  ],
+  "newOAuthGrantApproved": true,
+  "productionReadPreflightPassed": true,
+  "setupTestMailAccepted": true,
+  "setupTestMailReceived": true,
+  "triggerCreated": true,
+  "scheduledRunVerified": true,
+  "remaining": [],
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/51",
   "testedSourceCommit": "563c31333564ae54c004094ee7c199fbeab1eed5",
   "privateProjectCodeReadbackMatches": true,
@@ -56,8 +53,8 @@
   "userApprovalDateKST": "2026-11-17",
   "previousSaveReviewRejectedBeforeUserApproval": true,
   "googleUnverifiedAppWarning": true,
-  "googleManualAuthorizationRequired": true,
-  "googleAuthorizationCompleted": false,
+  "googleManualAuthorizationRequired": false,
+  "googleAuthorizationCompleted": true,
   "unsafeGoogleContinuationRejectedByAutomaticReview": true,
   "googleUnverifiedReviewExpanded": true,
   "restIntegrationFollowup": {
@@ -167,10 +164,49 @@
     "allMatched": true
   },
   "latestAuthorizationObservation": {
-    "observedAtUTC": "2026-11-16T16:50:24.842917+00:00",
+    "observedAtKST": "2026-11-17T01:58:57+09:00",
     "function": "checkNotificationSetup",
-    "result": "Google authorization-required dialog; production preflight has not executed successfully",
-    "mailSent": false,
-    "triggerCreated": false
-  }
+    "result": "read-only-preflight-passed",
+    "mailQuotaAvailable": true,
+    "enabledAtPreflight": false,
+    "completedBy": "User performed Google authorization; successful private-script production preflight observed afterward"
+  },
+  "triggerCount": 1,
+  "currentEnabled": true,
+  "liveActivation": {
+    "backupBranch": "backup/mail-activation-before-20261117-0ad1e1e",
+    "preflightCompletedAtKST": "2026-11-17T01:58:57+09:00",
+    "testMailAcceptedAtKST": "2026-11-17T02:01:46+09:00",
+    "testMailReceivedMessageTimeKST": "2026-11-17 02:01",
+    "testMailReceiptVerified": true,
+    "receiptVerificationScope": "Only the exact setup-test subject row in the already signed-in script-owner inbox; connected Gmail plugin was a different account",
+    "testMailCount": 1,
+    "activationCompletedAtKST": "2026-11-17T02:03:58+09:00",
+    "triggerFunction": "pollQuoteNotifications",
+    "triggerCount": 1,
+    "triggerType": "time-driven",
+    "requestedIntervalMinutes": 5,
+    "scheduledRunVerified": true,
+    "firebaseDataMutation": false,
+    "recipient": "Private script execution account; no recipient address published",
+    "productionCustomerQuoteCreated": false,
+    "actualCustomerEmailDeliveryNotYetObserved": true,
+    "scheduledRunStartedAtKST": "2026-11-17T02:08:06+09:00",
+    "scheduledRunDurationSeconds": 1.294,
+    "scheduledRunCompletion": "completed",
+    "scheduledRunResult": "no-new-quotes",
+    "scheduledRunLogAtKST": "2026-11-17T02:08:07+09:00",
+    "manuallyInvokedPoll": false,
+    "verificationPullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/52",
+    "administratorDOMPassed": 14,
+    "administratorDOMSkipped": 0,
+    "verificationChangeCommit": "f412744446d5a0e631edec9ec0d86aeccfa7ab93",
+    "verificationPRRun": 43915000109,
+    "verificationPRConclusion": "success"
+  },
+  "liveLimitations": [
+    "The setup-test email was received, and a real time-driven production poll completed with no-new-quotes; an actual new customer quote email has not yet occurred.",
+    "A five-minute interval is requested, not a guarantee of exact or immediate delivery.",
+    "Production mail delivery failures and quota exhaustion were not deliberately injected; recovery cases passed isolated tests."
+  ]
 }

@@ -40,3 +40,7 @@ Google 공식 문서의 일반 소비자 계정 MailApp 할당은 하루 수신�
 - https://firebase.google.com/docs/firestore/reference/rest/v1/projects.databases.documents/runQuery
 
 현재 실제 권한 승인·시험 메일 도착·트리거 실행 여부는 `ops/private-email-alert-verification-20261117.json`의 검증 상태를 따른다. 로컬 검사 통과를 운영 연결 성공으로 표현하지 않는다.
+
+## REST 연동 격리 검사
+
+`tests/mail-notifications-rest.test.mjs`는 loopback Firestore Emulator의 `demo-okclean-mail-query`에서만 실행한다. 실제 REST projection, 같은 시각 103건의 100+3건 커서 조회, 원문 불변, 활성화 기준·컬렉션 분리, 소수 초 보존, 비인증 목록 차단을 검증한다. 테스트 프로젝트의 문서 경로만 변환하고 배포 쿼리의 projection·필터·정렬·커서 값은 그대로 사용한다. 6개 검사가 통과했다. Google OAuth/IAM 권한·메일 수신함 도착·실제 예약 회차를 대신하는 검사는 아니다.

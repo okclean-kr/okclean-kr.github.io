@@ -2,7 +2,7 @@
   "dateKST": "2026-11-16",
   "status": "live_verified",
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/41",
-  "releaseCommit": "7a93fb9b8f3fdc72297f25241bb9e6329a32f6db",
+  "releaseCommit": "1977d902db7820e9f00bc13142364f9c4a8a4997",
   "checks": {
     "prRun": 43816178718,
     "mainRun": 43816343990,
@@ -14,7 +14,10 @@
     "pythonPassed": 23,
     "priceComparisons": 296,
     "livePreflightPRRun": 43821414803,
-    "livePreflightPagesRun": 43821601395
+    "livePreflightPagesRun": 43821601395,
+    "finalPRRun": 43823450009,
+    "finalMainRun": 43823649104,
+    "finalPagesRun": 43823648587
   },
   "backup": {
     "branch": "backup/quote-before-20261116-70495bb",
@@ -83,7 +86,14 @@
     "liveAdminHistoryRead": true,
     "liveTestDataExcludedFromCustomerAndContractCounts": true,
     "formTestRequestId": "4z2HxyMqLWjDSJkKLjoh",
-    "testQuoteCount": 2
+    "testQuoteCount": 2,
+    "finalPublicOnlineAvailable": true,
+    "finalNormalModeSubmitEnabled": true,
+    "finalPublishedScriptsMatchSource": true,
+    "liveAdminFiltersAndReload": true,
+    "analyticsPreferenceRestoredAfterExcludingQATraffic": true,
+    "finalHomeEstimateTwoWallAircons": "20만원~",
+    "finalHomeQuoteCTA": "quote/"
   },
   "blockers": [],
   "notificationScope": "Only while authorized admin page is open; no external mail/SMS/background push configured",
@@ -109,12 +119,13 @@
     "enabled": true,
     "verified": true,
     "scope": "customer quote form and existing admin hub; no paid plan changes",
-    "releaseVerificationPending": true
+    "releaseVerificationPending": false
   },
   "pullRequests": [
     41,
     42,
-    43
+    43,
+    44
   ],
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",

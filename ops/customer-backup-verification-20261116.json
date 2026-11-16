@@ -1,0 +1,55 @@
+{
+  "dateKST": "2026-11-16",
+  "status": "local_verified_pending_deployment",
+  "scope": "Read-only encrypted member/quote export through existing Google administrator permissions; not full Firestore DB or Auth backup",
+  "backupBranch": "backup/customer-export-before-20261116-245dbf7",
+  "backupCommit": "245dbf7e0aa1f577d0293fc509064b4a7209d071",
+  "checks": {
+    "nodePassed": 118,
+    "nodeSkipped": 0,
+    "quoteRulesPassed": 45,
+    "memberRulesPassed": 12,
+    "backupRulesPassed": 6,
+    "caseSyncPythonPassed": 23,
+    "standardTotalPassed": 204,
+    "totalSkipped": 0,
+    "newBackupUnitAndUI": 14,
+    "syntheticRestoreDocuments": 13
+  },
+  "cryptography": {
+    "algorithm": "AES-GCM",
+    "keyBits": 256,
+    "tagBits": 128,
+    "ivBytes": 12,
+    "saltBytes": 16,
+    "kdf": "PBKDF2-SHA-256",
+    "iterations": 600000,
+    "passwordPersisted": false,
+    "source": "https://www.w3.org/TR/webcrypto-1/"
+  },
+  "verified": [
+    "Typed timestamp and nested value round trip",
+    "Different salt and IV per encryption",
+    "Wrong password/tamper/parameter rejection",
+    "No download before self-decryption and checksum verification",
+    "No reads on page load",
+    "Wrong UID/actual provider rejected before read",
+    "Public customer access remains denied by current rules",
+    "Server pagination includes parent-linked photos/history/receipts/limits",
+    "Parent changes, photo mismatch, cancellation stop export",
+    "Encrypted data rebuilt in local synthetic database with identical paths/values",
+    "No stale download after logout"
+  ],
+  "firebaseRulesChanged": false,
+  "firebasePlanChanged": false,
+  "productionDataMutation": false,
+  "productionCustomerBackupDownloaded": false,
+  "actualPasswordRequiredFromUser": true,
+  "remainingLimitations": [
+    "Known member/quote schema scope only; stats, products, auth accounts, orphan/unregistered documents excluded",
+    "Not an atomic point-in-time database snapshot",
+    "Maximum 5000 documents and 20MiB plaintext",
+    "Production restoration is not implemented or performed",
+    "Actual operating encrypted file download awaits a user-owned archive password"
+  ]
+}

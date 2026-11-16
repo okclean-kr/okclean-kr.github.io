@@ -1,10 +1,10 @@
 name: Quote reception checks
 on:
   pull_request:
-    paths: ['quote/**', 'admin/quotes.*', 'admin/index.html', 'admin/backup.*', 'admin/customer-backup-*', 'admin/analytics.html', 'app.js', 'member-sync.js', 'analytics.js', 'analytics-maintenance.js', 'analytics-config.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'ops/firestore.rules.current.txt', 'tests/quote*', 'tests/member*', 'tests/analytics*', 'tests/backup*', 'package*.json', '.github/workflows/quote-checks.yml']
+    paths: ['notifications/**', 'tests/mail-notifications.test.cjs', 'quote/**', 'admin/quotes.*', 'admin/index.html', 'admin/backup.*', 'admin/customer-backup-*', 'admin/analytics.html', 'app.js', 'member-sync.js', 'analytics.js', 'analytics-maintenance.js', 'analytics-config.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'ops/firestore.rules.current.txt', 'tests/quote*', 'tests/member*', 'tests/analytics*', 'tests/backup*', 'package*.json', '.github/workflows/quote-checks.yml']
   push:
     branches: [main]
-    paths: ['quote/**', 'admin/quotes.*', 'admin/index.html', 'admin/backup.*', 'admin/customer-backup-*', 'admin/analytics.html', 'app.js', 'member-sync.js', 'analytics.js', 'analytics-maintenance.js', 'analytics-config.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'ops/firestore.rules.current.txt', 'tests/quote*', 'tests/member*', 'tests/analytics*', 'tests/backup*', 'package*.json', '.github/workflows/quote-checks.yml']
+    paths: ['notifications/**', 'tests/mail-notifications.test.cjs', 'quote/**', 'admin/quotes.*', 'admin/index.html', 'admin/backup.*', 'admin/customer-backup-*', 'admin/analytics.html', 'app.js', 'member-sync.js', 'analytics.js', 'analytics-maintenance.js', 'analytics-config.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'ops/firestore.rules.current.txt', 'tests/quote*', 'tests/member*', 'tests/analytics*', 'tests/backup*', 'package*.json', '.github/workflows/quote-checks.yml']
 permissions:
   contents: read
 jobs:

@@ -1,10 +1,10 @@
 name: Quote reception checks
 on:
   pull_request:
-    paths: ['quote/**', 'admin/quotes.*', 'app.js', 'analytics.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'tests/quote*', 'package*.json', '.github/workflows/quote-checks.yml']
+    paths: ['quote/**', 'admin/quotes.*', 'app.js', 'member-sync.js', 'analytics.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'tests/quote*', 'tests/member*', 'package*.json', '.github/workflows/quote-checks.yml']
   push:
     branches: [main]
-    paths: ['quote/**', 'admin/quotes.*', 'app.js', 'analytics.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'tests/quote*', 'package*.json', '.github/workflows/quote-checks.yml']
+    paths: ['quote/**', 'admin/quotes.*', 'app.js', 'member-sync.js', 'analytics.js', 'index.html', 'ops/firestore.rules.quotes-20261116.txt', 'tests/quote*', 'tests/member*', 'package*.json', '.github/workflows/quote-checks.yml']
 permissions:
   contents: read
 jobs:

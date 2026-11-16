@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-16",
-  "status": "local_verified_pending_deployment",
+  "status": "deployed_verified_waiting_user_archive_password",
   "scope": "Read-only encrypted member/quote export through existing Google administrator permissions; not full Firestore DB or Auth backup",
   "backupBranch": "backup/customer-export-before-20261116-245dbf7",
   "backupCommit": "245dbf7e0aa1f577d0293fc509064b4a7209d071",
@@ -14,7 +14,11 @@
     "standardTotalPassed": 204,
     "totalSkipped": 0,
     "newBackupUnitAndUI": 14,
-    "syntheticRestoreDocuments": 13
+    "syntheticRestoreDocuments": 13,
+    "prRun": 43851857884,
+    "mainRun": 43852035990,
+    "pagesRun": 43852035004,
+    "conclusion": "success"
   },
   "cryptography": {
     "algorithm": "AES-GCM",
@@ -51,5 +55,35 @@
     "Maximum 5000 documents and 20MiB plaintext",
     "Production restoration is not implemented or performed",
     "Actual operating encrypted file download awaits a user-owned archive password"
-  ]
+  ],
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/48",
+  "mergeCommit": "9f4f82efa133dedb33d94cce731409b89cb3be26",
+  "liveVerification": {
+    "url": "https://okclean-kr.github.io/admin/backup.html",
+    "existingGoogleAdminTokenVerified": true,
+    "syntheticEncryptedFileUploadedAndVerified": true,
+    "syntheticFileIsNotCustomerData": true,
+    "syntheticFileCounts": {
+      "members": 1,
+      "quotes": 0,
+      "photos": 0,
+      "history": 0,
+      "documents": 1
+    },
+    "passwordFieldsAndFileResetAfterVerification": true,
+    "actualOperatingCustomerDataRead": false,
+    "actualOperatingCustomerFileDownloaded": false,
+    "httpSourceByteComparison": {
+      "paths": [
+        "admin/backup.html",
+        "admin/backup.mjs",
+        "admin/customer-backup-core.mjs",
+        "admin/customer-backup-store.mjs",
+        "admin/index.html",
+        "admin/quotes.html"
+      ],
+      "allStatus200": true,
+      "allMatch": true
+    }
+  }
 }

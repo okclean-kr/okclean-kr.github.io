@@ -127,7 +127,8 @@
     43,
     44,
     45,
-    46
+    46,
+    47
   ],
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
@@ -217,5 +218,41 @@
     "skipped": 1,
     "firebaseRulesChanged": false,
     "liveCustomerDataMutation": false
+  },
+  "retentionCoverageFollowup": {
+    "status": "verified_without_skipped_checks",
+    "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/47",
+    "mergeCommit": "c230f83a132993127ac213ca54c901d46f3b3cf7",
+    "backupBranch": "backup/retention-ci-before-20261116-bca015e",
+    "checks": {
+      "nodePassed": 104,
+      "nodeSkipped": 0,
+      "nodeCountIncludesRetentionParentAnd22Subtests": true,
+      "quoteRulesPassed": 45,
+      "memberRulesPassed": 12,
+      "caseSyncPythonPassed": 23,
+      "standardTotalPassed": 184,
+      "totalSkipped": 0
+    },
+    "prRun": 43836418589,
+    "mainRun": 43836600876,
+    "pagesRun": 43836600054,
+    "conclusion": "success",
+    "runtimeCodeAndFirebaseRulesUnchanged": true,
+    "productionDataAccess": false,
+    "productionDataMutation": false,
+    "publicHTTPByteComparison": {
+      "paths": [
+        "index.html",
+        "quote/index.html",
+        "admin/quotes.html",
+        "quote/config.js",
+        "member-sync.js",
+        "ops/firestore.rules.current.txt"
+      ],
+      "allStatus200": true,
+      "allMatch": true
+    },
+    "historicalRetentionEvidenceUnchanged": true
   }
 }

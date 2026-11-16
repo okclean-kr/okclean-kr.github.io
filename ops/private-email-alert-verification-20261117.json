@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "private_project_code_saved_manifest_awaiting_specific_user_approval",
+  "status": "manifest_saved_google_unverified_app_manual_review_required",
   "backupBranch": "backup/private-email-alert-before-20261117-ad1fd16",
   "backupCommit": "ad1fd168992b51a506f310dec51a566706bf92a2",
   "scope": "Private standalone Apps Script that polls minimal quote metadata and sends generic email to its own execution account",
@@ -23,17 +23,16 @@
   "triggerCreated": false,
   "scheduledRunVerified": false,
   "remaining": [
-    "Specific user approval to persist the new OAuth scopes manifest; automatic review rejected the save as a new access/permission declaration",
-    "Google authorization for the private project; datastore scope can allow IAM-authorized read/write although code only queries projected metadata",
-    "Verify production read-only preflight, setup test mail delivery and one scheduled run before activating normal delivery"
+    "User must personally review the Google unverified-app security warning and complete Google authorization",
+    "After Google authorization, verify production read-only preflight, setup test mail delivery and one scheduled run before activating normal delivery"
   ],
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/51",
   "testedSourceCommit": "fcdf3cbcedcaf6b20e4a02777e55bf174eafa5cb",
   "privateProjectCodeReadbackMatches": true,
   "manifestDraftVisible": true,
-  "manifestSavedConfirmed": false,
-  "permissionSaveBlockedByAutomaticReview": true,
-  "specificUserApprovalRequired": true,
+  "manifestSavedConfirmed": true,
+  "permissionSaveBlockedByAutomaticReview": false,
+  "specificUserApprovalRequired": false,
   "checks": {
     "nodePassed": 158,
     "nodeSkipped": 0,
@@ -45,5 +44,11 @@
     "totalSkipped": 0,
     "prRun": 43896418690,
     "conclusion": "success"
-  }
+  },
+  "userApprovedManifestAndAuthorizationProcedure": true,
+  "userApprovalDateKST": "2026-11-17",
+  "previousSaveReviewRejectedBeforeUserApproval": true,
+  "googleUnverifiedAppWarning": true,
+  "googleManualAuthorizationRequired": true,
+  "googleAuthorizationCompleted": false
 }

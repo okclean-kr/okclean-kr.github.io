@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-16",
-  "status": "deployed_verified_waiting_user_archive_password",
+  "status": "production_backup_downloaded_verified_and_privately_saved",
   "scope": "Read-only encrypted member/quote export through existing Google administrator permissions; not full Firestore DB or Auth backup",
   "backupBranch": "backup/customer-export-before-20261116-245dbf7",
   "backupCommit": "245dbf7e0aa1f577d0293fc509064b4a7209d071",
@@ -47,14 +47,13 @@
   "firebaseRulesChanged": false,
   "firebasePlanChanged": false,
   "productionDataMutation": false,
-  "productionCustomerBackupDownloaded": false,
-  "actualPasswordRequiredFromUser": true,
+  "productionCustomerBackupDownloaded": true,
+  "actualPasswordRequiredFromUser": false,
   "remainingLimitations": [
     "Known member/quote schema scope only; stats, products, auth accounts, orphan/unregistered documents excluded",
     "Not an atomic point-in-time database snapshot",
     "Maximum 5000 documents and 20MiB plaintext",
-    "Production restoration is not implemented or performed",
-    "Actual operating encrypted file download awaits a user-owned archive password"
+    "Production restoration is not implemented or performed"
   ],
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/48",
   "mergeCommit": "9f4f82efa133dedb33d94cce731409b89cb3be26",
@@ -71,8 +70,8 @@
       "documents": 1
     },
     "passwordFieldsAndFileResetAfterVerification": true,
-    "actualOperatingCustomerDataRead": false,
-    "actualOperatingCustomerFileDownloaded": false,
+    "actualOperatingCustomerDataRead": true,
+    "actualOperatingCustomerFileDownloaded": true,
     "httpSourceByteComparison": {
       "paths": [
         "admin/backup.html",
@@ -84,16 +83,47 @@
       ],
       "allStatus200": true,
       "allMatch": true
-    }
+    },
+    "actualRecoveryKeyFileDownloaded": true,
+    "downloadedPairLocallyDecryptedAndChecksumVerified": true,
+    "bothFilesPrivatelyPersisted": true,
+    "productionDatabaseRestorePerformed": false
   },
   "automaticRecoveryKeyFollowup": {
-    "status": "local_verified_pending_deployment",
+    "status": "merged_deployed_production_backup_downloaded_verified_and_privately_saved",
     "keyEntropyBits": 256,
     "keyShownInPageOrLogs": false,
     "separateRecoveryFile": true,
     "backupFileChecksumBoundToRecoveryFile": true,
     "newUnitAndUIAssertions": 6,
     "userArchivePasswordRequiredForAutomaticMode": false,
-    "productionBackupDownloaded": false
+    "productionBackupDownloaded": true,
+    "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/49",
+    "mergeCommit": "8b160424ab531b30021cb85a080ef025d9711ac8",
+    "backupBranch": "backup/auto-recovery-key-before-20261116-5de359c",
+    "backupCommit": "5de359c7d7536a6d095a90c9d4729c0f1866379c",
+    "recoveryKeyFileDownloaded": true,
+    "downloadedPairLocallyDecryptedAndChecksumVerified": true,
+    "privateFilePersistenceConfirmed": true,
+    "verifiedAtKST": "2026-11-16T23:27:26+09:00",
+    "checks": {
+      "nodePassed": 124,
+      "nodeSkipped": 0,
+      "quoteRulesPassed": 45,
+      "memberRulesPassed": 12,
+      "backupRulesPassed": 6,
+      "caseSyncPythonPassed": 23,
+      "standardTotalPassed": 210,
+      "totalSkipped": 0,
+      "prRun": 43884234118,
+      "mainRun": 43884560727,
+      "pagesRun": 43884558558,
+      "conclusion": "success"
+    },
+    "firebaseRulesChanged": false,
+    "firebasePlanChanged": false,
+    "productionDataMutation": false,
+    "existingCustomerAndAutomationRuntimeByteIdenticalToPreviousMain": true,
+    "scope": "Known member/quote schema only; not full Firebase DB/Auth backup; no production restoration performed"
   }
 }

@@ -129,13 +129,14 @@
     45,
     46,
     47,
-    48
+    48,
+    49
   ],
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
     "Mobile viewport tested in a real browser iframe; no physical phone test",
     "Existing member-sync application and benefits unchanged; new paired-creation rule and isolated regression passed; no new live customer signup/coupon issued",
-    "Encrypted member/quote export now deployed and synthetic file verified; actual download awaits user-owned archive password; full Firebase DB/Auth backup remains outside scope"
+    "Encrypted member/quote files and separate recovery key downloaded, locally decrypted/checksum verified and privately saved; full Firebase DB/Auth backup remains outside scope"
   ],
   "membershipRegression": {
     "dateKST": "2026-11-16",
@@ -258,12 +259,15 @@
   },
   "customerBackupFollowup": {
     "evidence": "ops/customer-backup-verification-20261116.json",
-    "pullRequest": 48,
-    "mergeCommit": "9f4f82efa133dedb33d94cce731409b89cb3be26",
-    "status": "deployed_verified_waiting_user_archive_password",
-    "automatedPassed": 204,
+    "pullRequest": 49,
+    "mergeCommit": "8b160424ab531b30021cb85a080ef025d9711ac8",
+    "status": "production_backup_downloaded_verified_and_privately_saved",
+    "automatedPassed": 210,
     "skipped": 0,
-    "productionCustomerBackupDownloaded": false,
-    "scope": "Known member/quote schema only; user-owned encryption password required; not full Firestore/Auth backup"
+    "productionCustomerBackupDownloaded": true,
+    "scope": "Known member/quote schema only; automatic separate recovery key; not full Firestore/Auth backup",
+    "recoveryKeyFileDownloaded": true,
+    "downloadedPairLocallyVerified": true,
+    "privateFilePersistenceConfirmed": true
   }
 }

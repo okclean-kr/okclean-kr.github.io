@@ -111,8 +111,8 @@
     "mode": "Firestore native",
     "plan": "Spark",
     "region": "asia-northeast3",
-    "rulesPublishedAtKST": "2026-11-16 15:53",
-    "rulesSHA256": "4642e57b3c1b82026950c2560390dd7e3c5bdbf7455a00375c1c7dfe00e532df",
+    "rulesPublishedAtKST": "2026-11-16 16:51",
+    "rulesSHA256": "d9acc443682123c97ad5e19f57ab17017abda23b450aba17eadb13103d9bb919",
     "backupSHA256": "7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db"
   },
   "activation": {
@@ -130,7 +130,52 @@
   "remainingLimitations": [
     "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
     "Mobile viewport tested in a real browser iframe; no physical phone test",
-    "Existing member/coupon code and rules unchanged; no new live customer signup/coupon issued for this test",
+    "Existing member-sync application and benefits unchanged; new paired-creation rule and isolated regression passed; no new live customer signup/coupon issued",
     "Firebase customer-data export is not included in git-source and rules backup"
-  ]
+  ],
+  "membershipRegression": {
+    "dateKST": "2026-11-16",
+    "status": "isolated_tests_passed_and_rules_published",
+    "finding": "Own UID receipt could previously be created without a corresponding member document; normal UI already used an atomic pair.",
+    "fix": "Receipt creation requires getAfter member ownerUid/code match and joined == request.time.",
+    "previousRulesSHA256": "4642e57b3c1b82026950c2560390dd7e3c5bdbf7455a00375c1c7dfe00e532df",
+    "backupPath": "ops/firestore.rules.before-member-coupling-20261116.txt",
+    "publishedRulesSHA256": "d9acc443682123c97ad5e19f57ab17017abda23b450aba17eadb13103d9bb919",
+    "rulesPublishedAtKST": "2026-11-16 16:51",
+    "publishedEditorExactMatch": true,
+    "tests": {
+      "unitAndUI": 72,
+      "skipped": 1,
+      "quoteRulesEmulator": 43,
+      "memberRulesEmulator": 12,
+      "caseSyncPython": 23,
+      "totalPassed": 150
+    },
+    "originalMemberFunctionUsedWithEmulatorSDK": true,
+    "productionMemberSyncSourceUnchanged": true,
+    "memberUIAssertions": [
+      "no coupon before save acknowledgment",
+      "single submit on double click",
+      "failed save retains input without coupon",
+      "retry succeeds",
+      "existing receipt keeps original code and avoids signup recount",
+      "free service choice and 10000 KRW terms preserved"
+    ],
+    "rulesAssertions": [
+      "atomic new member and receipt",
+      "duplicate leaves used coupon/points/service intact",
+      "concurrent create limited to same UID pair",
+      "invalid phone and code atomic rejection",
+      "receipt-only rejected",
+      "member-only rejected",
+      "mismatched pair rejected",
+      "other customer reads and lists rejected",
+      "customer update/delete denied",
+      "Google admin reads/updates permitted",
+      "anonymous admin UID denied"
+    ],
+    "liveSignupAndCouponIssue": false,
+    "liveMemberDataMutation": false,
+    "scope": "No production signup or coupon issued; synthetic data only in local emulator. Published rules copied through Firebase Console UI and compared in full."
+  }
 }

@@ -3,8 +3,8 @@
   "private":true,
   "version":"1.0.0",
   "scripts":{
-    "test":"node --test tests/analytics.test.cjs tests/analytics-maintenance.test.cjs tests/quote-core.test.cjs tests/quote-ui.test.cjs",
-    "test:quotes:rules":"firebase emulators:exec --only firestore --project demo-okclean-quotes --config firebase.quote.json 'node tests/quote-rules.test.mjs'"
+    "test":"node --test tests/analytics.test.cjs tests/analytics-maintenance.test.cjs tests/quote-core.test.cjs tests/quote-ui.test.cjs tests/member-ui.test.cjs",
+    "test:quotes:rules":"firebase emulators:exec --only firestore --project demo-okclean-quotes --config firebase.quote.json 'node tests/quote-rules.test.mjs && node tests/member-rules.test.mjs'"
   },
   "devDependencies":{
     "@firebase/rules-unit-testing":"6.0.0",

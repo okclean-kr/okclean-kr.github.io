@@ -2,9 +2,10 @@ import{compressPhoto}from'./photos.mjs';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let catalog,step=1,photos=[],busy=false,photoBusy=false,requestId,frozen=null;
 const answersByService=new Map(),params=new URLSearchParams(location.search);
-const preview=params.get('quote_preview')==='1';
-const enabled=()=>!preview&&window.OKCLEAN_QUOTES?.enabled===true&&window.OKCLEAN_QUOTES?.verified===true;
-const track=name=>{if(enabled())void window.OKCleanAnalytics?.track(name,{service:service(),placement:'quote',target:'quote'});};
+const preview=params.get('quote_preview')==='1',testMode=params.get('quote_test')==='1';
+let adminTestAllowed=false;
+const enabled=()=>!preview&&(testMode?adminTestAllowed:window.OKCLEAN_QUOTES?.enabled===true&&window.OKCLEAN_QUOTES?.verified===true);
+const track=name=>{if(enabled()&&!testMode)void window.OKCleanAnalytics?.track(name,{service:service(),placement:'quote',target:'quote'});};
 const service=()=>document.querySelector('[name=service]:checked')?.value||'';
 const choices={purpose:['입주청소','이사청소'],unit:['평','㎡'],space:['아파트','빌라','오피스텔','단독주택','그 외'],condition:['보통','오염 심함','곰팡이·악취','확인 필요'],frequency:['일회성','정기'],stain:['없음','얼룩','냄새','얼룩·냄새 모두','확인 필요']};
 function addSelect(parent,key,options,value){const label=document.createElement('label');label.textContent=core.LABELS[key];label.htmlFor='answer-'+key;const select=document.createElement('select');select.id='answer-'+key;select.name=key;select.required=true;select.append(new Option('선택해 주세요',''),...options.map(x=>new Option(x,x)));select.value=value||'';parent.append(label,select);}
@@ -42,8 +43,8 @@ $('quoteForm').onsubmit=async e=>{
  if(!navigator.onLine){$('formError').textContent='인터넷 연결을 확인한 뒤 다시 접수해 주세요. 입력 내용은 이 화면에 유지됩니다.';return;}
  lock(true);$('formError').textContent='서버에 안전하게 저장하고 있습니다. 창을 닫지 말아 주세요.';frozen=input;
  try{
-  const mod=await import('./quote-store.mjs');requestId||=mod.newRequestId();await mod.submitQuote(catalog,requestId,input,photos);
-  $('quoteForm').hidden=true;$('complete').hidden=false;$('receipt').textContent=core.receipt(requestId);$('result').replaceChildren();resultRow('서비스',catalog.services.find(s=>s.id===input.service).name);for(const[k,v]of Object.entries(input.answers))resultRow(core.LABELS[k],v);resultRow('지역',input.region);resultRow('희망 날짜',input.date||'상담 후 협의');resultRow('상담 시간',input.contactTime);resultRow('현장 사진',photos.length+'장');
+  const mod=await import('./quote-store.mjs');requestId||=mod.newRequestId();await mod.submitQuote(catalog,requestId,input,photos,{test:testMode});
+  $('quoteForm').hidden=true;$('complete').hidden=false;if(testMode)$('complete').querySelector('h2').textContent='시험 견적 접수가 완료됐습니다.';$('receipt').textContent=core.receipt(requestId);$('result').replaceChildren();resultRow('서비스',catalog.services.find(s=>s.id===input.service).name);for(const[k,v]of Object.entries(input.answers))resultRow(core.LABELS[k],v);resultRow('지역',input.region);resultRow('희망 날짜',input.date||'상담 후 협의');resultRow('상담 시간',input.contactTime);resultRow('현장 사진',photos.length+'장');
   document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(el.dataset.stepLabel==='4')el.setAttribute('aria-current','step');});track('quote_submit_success');photos=[];$('name').value='';$('phone').value='';$('photoPreview').replaceChildren();$('complete').scrollIntoView({block:'start'});
  }catch(error){
   $('formError').textContent='접수 완료를 확인하지 못했습니다. 입력과 사진은 이 화면에 유지됩니다. 같은 접수번호로 다시 확인·시도해 주세요.'+(error.code==='permission-denied'?' 서버 권한을 확인 중입니다. 카카오톡 또는 전화로 상담하실 수 있습니다.':'');
@@ -57,7 +58,8 @@ try{const response=await fetch('catalog.json',{cache:'no-cache'});if(!response.o
  for(const s of catalog.services){const label=document.createElement('label'),input=document.createElement('input');input.type='radio';input.name='service';input.value=s.id;input.checked=s.id===params.get('svc');input.onchange=()=>track('quote_start');label.append(input,document.createTextNode(s.name));$('services').append(label);}
  $('region').append(new Option('선택해 주세요',''),...catalog.regions.map(x=>new Option(x,x)));if(catalog.regions.includes(params.get('region')))$('region').value=params.get('region');
  $('contactTime').append(...catalog.contactTimes.map(x=>new Option(x,x)));$('date').min=new Date(Date.now()+9*3600000).toISOString().slice(0,10);
- $('availability').textContent=preview?'미리보기 화면입니다. 접수 저장과 통계 수집은 하지 않습니다. 실제 신청은 홈페이지의 상세 견적에서 진행해 주세요.':enabled()?'온라인 접수 가능 · 저장 성공을 확인한 뒤 접수번호를 안내합니다.':'온라인 접수 연결을 점검 중입니다. 작업 내용을 미리 정리하거나 아래 카카오톡·전화로 바로 상담해 주세요.';
+ if(testMode){const mod=await import('./quote-store.mjs');const backend=await mod.getBackend(catalog.firebase);const user=backend.auth.currentUser;adminTestAllowed=user?.uid===core.ADMIN_UID&&user.providerData?.some(p=>p.providerId==='google.com');}
+ $('availability').textContent=preview?'미리보기 화면입니다. 접수 저장과 통계 수집은 하지 않습니다. 실제 신청은 홈페이지의 상세 견적에서 진행해 주세요.':testMode?(adminTestAllowed?'관리자 시험 접수 모드입니다. 시험 표식으로 저장되며 실제 고객 집계에서 제외됩니다.':'관리자 시험 접수에는 기존 Google 관리자 로그인이 필요합니다.'):enabled()?'온라인 접수 가능 · 저장 성공을 확인한 뒤 접수번호를 안내합니다.':'온라인 접수 연결을 점검 중입니다. 작업 내용을 미리 정리하거나 아래 카카오톡·전화로 바로 상담해 주세요.';
  $('submit').disabled=!enabled();
 }catch(error){$('formError').textContent='서비스 정보를 불러오지 못했습니다. 아래 상담 버튼을 이용해 주세요.';$('next').disabled=true;}
 window.addEventListener('beforeunload',e=>{if(busy){e.preventDefault();e.returnValue='';}});

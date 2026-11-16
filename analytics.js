@@ -63,7 +63,7 @@
   }
 
   function debugEnabled() { return storageRead(DEBUG_KEY, false) === true; }
-  function liveEnabled() { const s = settings(); const preview = env.location && new URLSearchParams(env.location.search).get('quote_preview') === '1'; return s.enabled && s.verified && !preview; }
+  function liveEnabled() { const s = settings(); const preview = env.location && (new URLSearchParams(env.location.search).get('quote_preview') === '1' || new URLSearchParams(env.location.search).get('quote_test') === '1'); return s.enabled && s.verified && !preview; }
 
   function optedOut() {
     try {

@@ -8,3 +8,4 @@ test-results/
 # Customer exports must stay outside the public repository.
 *.okcbackup
 private-backups/
+*.okckey

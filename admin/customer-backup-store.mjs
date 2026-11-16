@@ -1,4 +1,4 @@
-import{encodeValue,backupCounts,digest,MAX_BACKUP_BYTES,MAX_RECORDS}from'./customer-backup-core.mjs';
+import{encodeValue,backupCounts,digest,MAX_BACKUP_BYTES,MAX_RECORDS}from'./customer-backup-core.mjs?v=20261116-key2';
 const ADMIN='H1MfdqGkFRZzU8qkqwXTsiKv3CO2';
 export async function assertBackupAdmin(b){
  const user=b.auth.currentUser;

@@ -1,0 +1,5 @@
+{
+  "firestore": {
+    "rules": "ops/firestore.rules.quotes-20261116.txt"
+  }
+}

@@ -9,7 +9,7 @@
 })(typeof window !== 'undefined' ? window : globalThis, function (env) {
   'use strict';
 
-  const EVENTS = Object.freeze(['page_view', 'case_open', 'shop_open', 'quote_start', 'quote_result', 'contact_prepare', 'kakao_open', 'phone_open', 'sms_open', 'signup_complete', 'diagnostic']);
+  const EVENTS = Object.freeze(['page_view', 'case_open', 'shop_open', 'quote_start', 'quote_result', 'contact_prepare', 'kakao_open', 'phone_open', 'sms_open', 'signup_complete', 'diagnostic', 'quote_step_complete', 'quote_calculate', 'quote_submit_success', 'phone_click']);
   const SOURCES = Object.freeze(['youtube', 'shorts', 'instagram', 'reels', 'threads', 'blog', 'naver', 'google', 'profile', 'share', 'direct', 'other']);
   const CHANNEL_SOURCES = Object.freeze(['youtube', 'instagram', 'threads', 'blog']);
   const PAGES = Object.freeze(['home', 'service', 'area', 'shop', 'other']);
@@ -63,7 +63,7 @@
   }
 
   function debugEnabled() { return storageRead(DEBUG_KEY, false) === true; }
-  function liveEnabled() { const s = settings(); return s.enabled && s.verified; }
+  function liveEnabled() { const s = settings(); const preview = env.location && new URLSearchParams(env.location.search).get('quote_preview') === '1'; return s.enabled && s.verified && !preview; }
 
   function optedOut() {
     try {
@@ -150,6 +150,7 @@
   function resolvePage(pathname) {
     if (pathname === '/' || pathname === '/index.html') return 'home';
     if (/^\/services\/[a-z-]+\.html$/.test(pathname || '')) return 'service';
+    if (pathname === '/quote/' || pathname === '/quote/index.html') return 'service';
     if (/^\/area\/[^/]+\.html$/.test(pathname || '')) return 'area';
     if (pathname === '/shop/' || pathname === '/shop/index.html') return 'shop';
     return 'other';
@@ -257,7 +258,7 @@
   }
 
   function selectedService() {
-    const select = env.document && env.document.getElementById('qSvc');
+    const select = env.document && (env.document.getElementById('qSvc') || (env.document.querySelector && env.document.querySelector('[name=service]:checked')));
     return allowed(select && select.value, SERVICES, serviceFromPath(env.location && env.location.pathname));
   }
 
@@ -283,7 +284,7 @@
     const details = { service: selectedService(), placement: 'quote', target: 'quote' };
     if (!quoteStarted) { quoteStarted = true; void track('quote_start', details); }
     env.clearTimeout(quoteTimer);
-    quoteTimer = env.setTimeout(() => { void track('quote_result', { service: selectedService(), placement: 'quote', target: 'quote' }); }, 800);
+    quoteTimer = env.setTimeout(() => { void track('quote_result', { service: selectedService(), placement: 'quote', target: 'quote' }); if (env.OKCLEAN_QUOTES?.verified === true) void track('quote_calculate', { service: selectedService(), placement: 'quote', target: 'quote' }); }, 800);
   }
 
   function onClick(event) {
@@ -304,7 +305,7 @@
     if (element.id === 'qSms') { void track('sms_open', { ...details, target: 'quote' }); return; }
     if (element.closest('#qTier, #qVar') || element.id === 'qMinus' || element.id === 'qPlus') quoteInteraction();
     const href = element.getAttribute('href') || '';
-    if (/^tel:/i.test(href)) { void track('phone_open', details); return; }
+    if (/^tel:/i.test(href)) { void track('phone_open', details); if (env.OKCLEAN_QUOTES?.verified === true) void track('phone_click', details); return; }
     if (/^sms:/i.test(href)) { void track('sms_open', details); return; }
     try {
       const target = new URL(href, env.location.origin);

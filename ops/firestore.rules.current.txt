@@ -233,7 +233,8 @@ service cloud.firestore {
         && d.schema == 1
         && d.event in [
           'page_view','case_open','shop_open','quote_start','quote_result','contact_prepare',
-          'kakao_open','phone_open','sms_open','signup_complete','diagnostic'
+          'kakao_open','phone_open','sms_open','signup_complete','diagnostic',
+          'quote_step_complete','quote_calculate','quote_submit_success','phone_click'
         ]
         && d.source in [
           'youtube','shorts','instagram','reels','threads','blog',
@@ -266,6 +267,158 @@ service cloud.firestore {
         && validSiteEvent(request.resource.data);
       allow update: if false;
       allow delete: if isAdmin() && expiredSiteEventAt(resource.data.at);
+    }
+
+    // New quote schema v1: private request, JPEG photos, receipt, rate limit, audit.
+    // Existing membership, product and site_event rules above are preserved.
+    function qString(v, max) { return v is string && v.size() <= max; }
+    function qService(v) { return v in ["move-in", "regular", "special-home", "office", "clinic", "post-build", "window", "aircon", "washer", "mattress", "carpet", "disinfect"]; }
+    function qSource(v) { return v in ["youtube", "shorts", "instagram", "reels", "threads", "blog", "naver", "google", "profile", "share", "direct", "other"]; }
+    function qAnswers(a,s) {
+      let keys = {"move-in": ["purpose", "size", "unit", "tier", "rooms", "baths", "space", "condition"], "regular": ["size", "unit", "rooms", "baths", "space", "frequency", "condition"], "aircon": ["type", "count", "condition"], "washer": ["type", "count", "condition"], "mattress": ["type", "count", "size", "material", "condition", "stain"], "carpet": ["type", "size", "material", "condition", "stain"], "office": ["industry", "size", "unit", "scope", "frequency", "time", "condition"], "clinic": ["industry", "size", "unit", "scope", "frequency", "time", "condition"], "post-build": ["size", "unit", "scope", "condition"], "window": ["size", "scope", "height", "condition"], "special-home": ["size", "unit", "scope", "condition"], "disinfect": ["size", "unit", "scope", "condition"]}[s];
+      let values = a.values();
+      return a is map && a.size() == keys.size() && a.keys().hasOnly(keys)
+        && qString(values[0],200) && qString(values[1],200) && qString(values[2],200)
+        && (a.size() < 4 || qString(values[3],200))
+        && (a.size() < 5 || qString(values[4],200))
+        && (a.size() < 6 || qString(values[5],200))
+        && (a.size() < 7 || qString(values[6],200))
+        && (a.size() < 8 || qString(values[7],200))
+        && (!('count' in a) || a.count.matches('^([1-9]|[1-9][0-9]|100)$'))
+        && (!('unit' in a) || a.unit in ['평','㎡']);
+    }
+    function qState(v) { return v in ['new','consulting','sent','contracted','cancelled','held']; }
+    function qTransition(a,b) {
+      return a == b
+        || (a == 'new' && b in ['consulting','held','cancelled'])
+        || (a == 'consulting' && b in ['sent','held','cancelled'])
+        || (a == 'sent' && b in ['consulting','contracted','held','cancelled'])
+        || (a == 'held' && b in ['consulting','cancelled']);
+    }
+    function validQuote(d) {
+      return d.keys().hasAll(["schema", "ownerUid", "service", "answers", "name", "phone", "region", "contactTime", "consentVersion", "createdAt", "updatedAt", "desiredAt", "source", "status", "memo", "amount", "deliveredAt", "contractAt", "photoCount", "test", "notification", "notificationAttempts", "notificationError", "version"]) && d.keys().hasOnly(["schema", "ownerUid", "service", "answers", "name", "phone", "region", "contactTime", "consentVersion", "createdAt", "updatedAt", "desiredAt", "source", "status", "memo", "amount", "deliveredAt", "contractAt", "photoCount", "test", "notification", "notificationAttempts", "notificationError", "version"])
+        && d.schema == 1 && qString(d.ownerUid,128) && d.ownerUid.size() > 0
+        && qService(d['service']) && qAnswers(d.answers,d['service'])
+        && qString(d.name,30) && d.name.size() > 0
+        && d.phone is string && d.phone.matches('^01[016789]-?[0-9]{3,4}-?[0-9]{4}$')
+        && d.region in ["춘천", "원주", "강릉", "동해", "태백", "속초", "삼척", "홍천", "횡성", "영월", "평창", "정선", "철원", "화천", "양구", "인제", "고성", "양양", "수도권", "그 외 지역"] && d.contactTime in ["언제나 가능", "오전 09~12시", "오후 12~18시", "저녁 18~20시"]
+        && d.consentVersion == '2026-11-16'
+        && d.createdAt is timestamp && d.updatedAt is timestamp
+        && (d.desiredAt == null || d.desiredAt is timestamp)
+        && qSource(d.source) && qState(d.status) && qString(d.memo,1000)
+        && (d.amount == null || (d.amount is int && d.amount >= 0 && d.amount <= 100000000))
+        && (d.deliveredAt == null || d.deliveredAt is timestamp)
+        && (d.contractAt == null || d.contractAt is timestamp)
+        && d.photoCount is int && d.photoCount >= 0 && d.photoCount <= 5
+        && d.test is bool && d.notification in ['pending','seen','failed']
+        && d.notificationAttempts is int && d.notificationAttempts >= 0 && d.notificationAttempts <= 100
+        && qString(d.notificationError,100) && d.version is int && d.version >= 0;
+    }
+    function qPhotosPresent(id,n) {
+      return (n < 1 || existsAfter(/databases/$(database)/documents/quote_requests/$(id)/photos/0))
+        && (n < 2 || existsAfter(/databases/$(database)/documents/quote_requests/$(id)/photos/1))
+        && (n < 3 || existsAfter(/databases/$(database)/documents/quote_requests/$(id)/photos/2))
+        && (n < 4 || existsAfter(/databases/$(database)/documents/quote_requests/$(id)/photos/3))
+        && (n < 5 || existsAfter(/databases/$(database)/documents/quote_requests/$(id)/photos/4));
+    }
+    function qExpired(id) {
+      return get(/databases/$(database)/documents/quote_requests/$(id)).data.createdAt
+        < request.time - duration.value(180,'d');
+    }
+    match /quote_requests/{id} {
+      allow read: if isAdmin();
+      allow create: if signedIn() && id.matches('^[A-Za-z0-9]{20}$')
+        && validQuote(request.resource.data)
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && (request.resource.data.desiredAt == null ||
+          (request.resource.data.desiredAt > request.time - duration.value(1,'d') && request.resource.data.desiredAt < request.time + duration.value(366,'d')))
+        && request.resource.data.status == 'new' && request.resource.data.memo == ''
+        && request.resource.data.amount == null && request.resource.data.deliveredAt == null && request.resource.data.contractAt == null
+        && request.resource.data.notification == 'pending' && request.resource.data.notificationAttempts == 0
+        && request.resource.data.notificationError == '' && request.resource.data.version == 0
+        && (request.resource.data.test == false || isAdmin())
+        && getAfter(/databases/$(database)/documents/quote_receipts/$(request.auth.uid + '_' + id)).data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/quote_limits/$(request.auth.uid)).data.requestId == id
+        && getAfter(/databases/$(database)/documents/quote_limits/$(request.auth.uid)).data.at == request.time
+        && qPhotosPresent(id,request.resource.data.photoCount);
+      allow update: if isAdmin() && validQuote(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','memo','amount','deliveredAt','contractAt','notification','notificationAttempts','notificationError','updatedAt','version'])
+        && qTransition(resource.data.status,request.resource.data.status)
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.version == resource.data.version + 1
+        && (request.resource.data.deliveredAt == resource.data.deliveredAt || request.resource.data.deliveredAt == request.time)
+        && (request.resource.data.status != 'sent' || (request.resource.data.amount != null && request.resource.data.deliveredAt != null))
+        && ((resource.data.status != 'contracted' && request.resource.data.status == 'contracted' && request.resource.data.contractAt == request.time)
+          || (request.resource.data.status != 'contracted' && request.resource.data.contractAt == resource.data.contractAt)
+          || (resource.data.status == 'contracted' && request.resource.data.contractAt == resource.data.contractAt));
+      allow delete: if isAdmin() && resource.data.createdAt < request.time - duration.value(180,'d');
+      match /photos/{photoId} {
+        allow read: if isAdmin() && exists(/databases/$(database)/documents/quote_requests/$(id));
+        allow create: if signedIn() && photoId in ['0','1','2','3','4']
+          && request.resource.data.keys().hasOnly(['ownerUid','data','createdAt'])
+          && request.resource.data.keys().hasAll(['ownerUid','data','createdAt'])
+          && request.resource.data.ownerUid == request.auth.uid
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.data is string && request.resource.data.data.size() <= 160000
+          && request.resource.data.data.matches('^data:image/jpeg;base64,/9j/[A-Za-z0-9+/=]+$')
+          && getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.ownerUid == request.auth.uid
+          && getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.createdAt == request.time
+          && int(photoId) < getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.photoCount;
+        allow update: if false;
+        allow delete: if isAdmin() && qExpired(id);
+      }
+      match /history/{historyId} {
+        allow read: if isAdmin() && exists(/databases/$(database)/documents/quote_requests/$(id));
+        allow create: if isAdmin()
+          && request.resource.data.keys().hasAll(['at','actor','status','amount','note','kind','version','event'])
+          && request.resource.data.keys().hasOnly(['at','actor','status','amount','note','kind','version','event'])
+          && request.resource.data.at == request.time && request.resource.data.actor == request.auth.uid
+          && qState(request.resource.data.status) && qString(request.resource.data.note,1000)
+          && request.resource.data.kind in ['notification','management']
+          && request.resource.data.event in ['quote_updated','contract_completed']
+          && (request.resource.data.event != 'contract_completed' ||
+            (get(/databases/$(database)/documents/quote_requests/$(id)).data.status != 'contracted'
+              && request.resource.data.status == 'contracted'))
+          && getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.updatedAt == request.time
+          && getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.status == request.resource.data.status
+          && getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.version == request.resource.data.version
+          && getAfter(/databases/$(database)/documents/quote_requests/$(id)).data.amount == request.resource.data.amount;
+        allow update: if false;
+        allow delete: if isAdmin() && qExpired(id);
+      }
+    }
+    match /quote_receipts/{receiptId} {
+      allow get: if signedIn() && (receiptId.matches('^' + request.auth.uid + '_[A-Za-z0-9]{20}$') || isAdmin());
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll(['ownerUid','requestId','createdAt','service','test'])
+        && request.resource.data.keys().hasOnly(['ownerUid','requestId','createdAt','service','test'])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.requestId.matches('^[A-Za-z0-9]{20}$')
+        && receiptId == request.auth.uid + '_' + request.resource.data.requestId
+        && request.resource.data.createdAt == request.time && qService(request.resource.data['service'])
+        && request.resource.data.test is bool && (request.resource.data.test == false || isAdmin())
+        && getAfter(/databases/$(database)/documents/quote_requests/$(request.resource.data.requestId)).data.ownerUid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/quote_requests/$(request.resource.data.requestId)).data['service'] == request.resource.data['service']
+        && getAfter(/databases/$(database)/documents/quote_requests/$(request.resource.data.requestId)).data.test == request.resource.data.test
+        && getAfter(/databases/$(database)/documents/quote_requests/$(request.resource.data.requestId)).data.createdAt == request.time;
+      allow update: if false;
+      allow delete: if isAdmin() && qExpired(resource.data.requestId);
+    }
+    match /quote_limits/{uid} {
+      function validLimit(d) {
+        return d.keys().hasAll(['ownerUid','requestId','at']) && d.keys().hasOnly(['ownerUid','requestId','at'])
+          && d.ownerUid == uid && d.requestId.matches('^[A-Za-z0-9]{20}$') && d.at == request.time
+          && getAfter(/databases/$(database)/documents/quote_requests/$(d.requestId)).data.ownerUid == uid
+          && getAfter(/databases/$(database)/documents/quote_requests/$(d.requestId)).data.createdAt == request.time;
+      }
+      allow get: if isAdmin();
+      allow list: if false;
+      allow delete: if isAdmin() && resource.data.at < request.time - duration.value(180,'d');
+      allow create: if owner(uid) && validLimit(request.resource.data);
+      allow update: if owner(uid) && validLimit(request.resource.data) && resource.data.at < request.time - duration.value(5,'m');
     }
 
     // 나머지는 전부 차단

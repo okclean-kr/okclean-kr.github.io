@@ -35,7 +35,7 @@ async function fillDetails(details,row){
   if(!core.transition(row.status,status.value))throw new Error('상담 단계에 맞게 상태를 선택해 주세요.');
   const value=amount.value===''?null:Number(amount.value);if(value!==null&&(!Number.isInteger(value)||value<0||value>100000000))throw new Error('견적 금액을 확인해 주세요.');
   if(status.value==='sent'&&(!delivery.checked&&!row.deliveredAt||value===null))throw new Error('견적 금액과 실제 전달 여부를 확인해 주세요.');
-  if(status.value==='contracted'&&!confirm('실제 고객 계약이 성사됐음을 확인했습니까?'))return;
+  if(status.value==='contracted'&&!confirm(row.test?'시험 접수의 계약 완료 상태를 확인합니까? 실제 계약 집계에서 제외됩니다.':'실제 고객 계약이 성사됐음을 확인했습니까?'))return;
   const patch={status:status.value,memo:memo.value.trim(),amount:value};if(delivery.checked)patch.deliveredAt=b.f.serverTimestamp();
   await saveAdminChange(b,row.id,row,patch);details.open=false;render();message.textContent='서버에 저장했습니다. 견적이나 메시지를 자동 발송하지 않습니다.';
  }catch(e){message.textContent=e.message||e.code;}finally{save.disabled=false;}};box.append(save,message);

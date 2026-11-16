@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-16",
-  "status": "frontend_deployed_backend_not_activated",
+  "status": "live_verified",
   "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/41",
   "releaseCommit": "7a93fb9b8f3fdc72297f25241bb9e6329a32f6db",
   "checks": {
@@ -8,11 +8,13 @@
     "mainRun": 43816343990,
     "pagesRun": 43816343931,
     "conclusion": "success",
-    "unitPassed": 63,
+    "unitPassed": 67,
     "unitSkipped": 1,
     "emulatorPassed": 43,
     "pythonPassed": 23,
-    "priceComparisons": 296
+    "priceComparisons": 296,
+    "livePreflightPRRun": 43821414803,
+    "livePreflightPagesRun": 43821601395
   },
   "backup": {
     "branch": "backup/quote-before-20261116-70495bb",
@@ -47,17 +49,43 @@
       "submitDisabledBeforeBackendVerification": true
     },
     "mobileDeviceTest": false,
-    "liveFirebaseRuleDeployment": false,
-    "liveQuoteSaveAndReceiptRead": false,
-    "liveAdminPhotoRead": false,
-    "liveAdminStatusUpdate": false,
-    "liveSignupAndCouponIssue": false
+    "liveFirebaseRuleDeployment": true,
+    "liveQuoteSaveAndReceiptRead": true,
+    "liveAdminPhotoRead": true,
+    "liveAdminStatusUpdate": true,
+    "liveSignupAndCouponIssue": false,
+    "mobileBrowserViewport": {
+      "iframeWidth": 390,
+      "viewportWidth": 388,
+      "documentWidth": 373,
+      "horizontalOverflow": false,
+      "serviceAndQuestionAndContactScreens": true,
+      "previewSubmissionDisabled": true
+    },
+    "liveAccessDenials": {
+      "anotherCustomerRequest": true,
+      "requestList": true,
+      "photos": true,
+      "anotherCustomerReceipt": true,
+      "defaultAdminSessionPreserved": true
+    },
+    "duplicateRetrySameRequestId": true,
+    "adminTestRequestId": "4iw5UeEbIYivVBfuGxn2",
+    "testContractState": true,
+    "realCustomerCountsAfterTest": {
+      "quotes": 0,
+      "contracts": 0
+    },
+    "liveCustomerFormTestMode": true,
+    "liveFivePhotoBatchAndAdminRead": true,
+    "liveStorageFailurePreservedInputAndPhotos": true,
+    "liveSameRequestRetryRecovered": true,
+    "liveAdminHistoryRead": true,
+    "liveTestDataExcludedFromCustomerAndContractCounts": true,
+    "formTestRequestId": "4z2HxyMqLWjDSJkKLjoh",
+    "testQuoteCount": 2
   },
-  "blockers": [
-    "Firebase CLI is unauthenticated",
-    "Google Console requires reauthentication",
-    "Current Firestore edition/plan/latest rules not independently confirmed"
-  ],
+  "blockers": [],
   "notificationScope": "Only while authorized admin page is open; no external mail/SMS/background push configured",
   "untouched": [
     "existing member sync",
@@ -65,5 +93,33 @@
     "existing blog workflow",
     "existing Threads workflow and queues",
     "existing customer records"
+  ],
+  "backend": {
+    "project": "okclean-admin",
+    "database": "(default)",
+    "edition": "Standard",
+    "mode": "Firestore native",
+    "plan": "Spark",
+    "region": "asia-northeast3",
+    "rulesPublishedAtKST": "2026-11-16 15:53",
+    "rulesSHA256": "4642e57b3c1b82026950c2560390dd7e3c5bdbf7455a00375c1c7dfe00e532df",
+    "backupSHA256": "7d99f3b744dc3a96cadf9a1faa1d732bd6cbfd6be227c89ba2dd70ca0f9049db"
+  },
+  "activation": {
+    "enabled": true,
+    "verified": true,
+    "scope": "customer quote form and existing admin hub; no paid plan changes",
+    "releaseVerificationPending": true
+  },
+  "pullRequests": [
+    41,
+    42,
+    43
+  ],
+  "remainingLimitations": [
+    "Browser notifications require admin page to be open; external push, SMS and mail are not configured",
+    "Mobile viewport tested in a real browser iframe; no physical phone test",
+    "Existing member/coupon code and rules unchanged; no new live customer signup/coupon issued for this test",
+    "Firebase customer-data export is not included in git-source and rules backup"
   ]
 }

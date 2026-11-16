@@ -5,7 +5,7 @@
 ## 적용 상태
 
 - **서버 규칙 게시 확인:** 2026-11-12 15:26 KST, Firebase Console의 새 현재 버전을 확인했다. 게시 직전 규칙이 기존 수집 규칙 보관본과 같고, 게시한 전체 내용이 아래 후보 해시와 같음을 확인했다.
-- **현재 규칙:** `ops/firestore.rules.current.txt`와 `ops/firestore.rules.retention-20261112.txt`는 동일하다.
+- **현재 규칙:** 2026-11-16 견적 접수 규칙을 추가했으며 `ops/firestore.rules.current.txt`는 해당 운영 후보와 동일하다. 11월 12일 원본은 `ops/firestore.rules.retention-20261112.txt`와 `ops/firestore.rules.before-quotes-20261116.txt`에 보존했다. 기존 `site_events` 90일 보관 조건은 유지한다.
 - **관리자 페이지 배포:** [PR #39](https://github.com/okclean-kr/okclean-kr.github.io/pull/39) 병합 후 [Pages 실행 43169230456](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/43169230456)의 성공과 운영 화면을 확인했다.
 - **운영 자동 확인:** 2026-11-12 15:36 KST, 기존 Google 관리자의 페이지 접속 후 서버 조회가 완료됐다. 해당 조회 기준보다 오래된 기록이 없어 삭제하지 않았다는 결과를 확인했다.
 - **읽기 전용 재확인:** 2026-11-12 15:38 KST, `보관기간 확인`은 기준 시각 2026-08-14 15:38 KST보다 오래된 기록이 없다고 표시했다. 이 버튼은 삭제하지 않는다.

@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "local_checks_and_pc_preview_passed_pending_deployment",
+  "status": "deployed_and_operationally_verified",
   "baseCommit": "c7e2c73a3bd359f1057b3abb60cd2dfab09dbd2c",
   "backupBranch": "backup/ime-input-before-20261117-c7e2c73",
   "version": "20261117-ime1",
@@ -39,7 +39,7 @@
     "actualSafariTested": false
   },
   "productionQuoteOrCustomerDataWritesPerformed": false,
-  "deploymentVerified": false,
+  "deploymentVerified": true,
   "sources": [
     "https://developer.chrome.com/docs/modern-web-guidance/guides/forms/ime-safe-enter-submit",
     "https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event"
@@ -48,5 +48,95 @@
   "limits": [
     "Composition regression cases are synthetic; physical iPhone/Android and hardware Korean IME are not verified.",
     "No production receipt, photo or email was created by this follow-up."
-  ]
+  ],
+  "checkedAtUTC": "2026-11-17T06:34:46.316710+00:00",
+  "pullRequest": 58,
+  "headCommit": "4798747e55bf05db065247ae8332cda5c9d464e4",
+  "mergeCommit": "a3c98a83c55e5aef268d40db428c48f7036efc57",
+  "githubChecks": {
+    "prRunId": 44031354119,
+    "prJobId": 133863809078,
+    "prConclusion": "success",
+    "mainRunId": 44031593651,
+    "mainConclusion": "success",
+    "pagesRunId": 44031593101,
+    "pagesConclusion": "success"
+  },
+  "operationalBrowserChecks": {
+    "pcChromeNormalEnterAdvancedToContact": true,
+    "liveSourceIn390pxIframe": true,
+    "iframeDocumentClientWidth": 375,
+    "iframeDocumentScrollWidth": 375,
+    "noHorizontalOverflow": true,
+    "hangulWorkAnswersPreservedAfterBack": true,
+    "contactInputsRetainedAfterBackAndNext": true,
+    "previewSubmitDisabled": true,
+    "normalProductionPageShowsIntakeAvailable": true,
+    "physicalPhoneTested": false,
+    "physicalKoreanImeTested": false,
+    "actualSafariTested": false
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6328,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13344,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5224,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    }
+  ],
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-ime-mobile-20261117.jpg",
+    "bytes": 34621,
+    "sha256": "fde2d19e2296df66e8f519d693e856bfb3b918b855f116348622ee9e5e84a349",
+    "scope": "Actual production quote preview displayed in a 390px local QA iframe; synthetic work inputs only, no customer contact details, no server submission."
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "a3c98a83c55e5aef268d40db428c48f7036efc57",
+    "persistentBranch": "backup/verified-ime-20261117-a3c98a8",
+    "filesVerified": 189,
+    "bytesVerified": 5743778,
+    "archiveBytes": 4610343,
+    "archiveSha256": "90cbe7b04c9e934ffce8a46d36568997a6ba8b09404bee96af7db33738eac281",
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "protectedExistingFilesUnchanged": true
 }

@@ -14,6 +14,12 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 한글 입력 개선 후 최신 정상 소스
+
+PR #58 입력 이벤트 개선을 포함한 정상 소스는 `backup/verified-ime-20261117-a3c98a8` / `a3c98a83c55e5aef268d40db428c48f7036efc57`에 추가 보존했다. 새 임시 tar에서 189개 파일·5,743,778바이트를 격리 복원해 검증했다. tar SHA-256은 `90cbe7b04c9e934ffce8a46d36568997a6ba8b09404bee96af7db33738eac281`이며 임시 파일을 독립 영구 백업으로 표현하지 않는다. 이전 스냅샷과 14일 artifact 보관도 유지한다.
+
+이 변경만 복구할 때는 변경 전 `backup/ime-input-before-20261117-c7e2c73`에서 `quote/index.html`과 `quote/quote-form.mjs`를 함께 가져온다. 기존 가격·회원·쿠폰·권한·메일 및 게시 workflow는 이 PR에서 바뀌지 않았다. CI 269개·main·Pages 성공과 운영 PC/390px 입력·일반 Enter·이전/다음 값 보존을 확인했다. 물리 IME와 실제 Safari는 미검증이며 상세 기록은 `quote-ime-validation-20261117.json`에 있다.
+
 ## 복구할 때
 
 1. 우선 현재 main에서 새 복구 브랜치를 만든다. 문제가 된 변경만 revert하거나 해당 장애 파일을 위 스냅샷에서 가져온다.

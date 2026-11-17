@@ -97,3 +97,34 @@ test('사진 6장은 거부·기존 5장은 유지하고 작업 오류 이동·�
  ui.$('date').value='2020-01-01';ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.$('photoPreview').querySelectorAll('img').length,5);
  ui.$('date').value='';ui.$('next').click();ui.$('photoPreview').querySelectorAll('button')[2].click();assert.equal(ui.$('photoPreview').querySelectorAll('img').length,4);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');assert.equal(calls,0);ui.dom.window.close();
 });
+
+
+test('한글 조합 확정 중 발생한 submit은 작업 단계를 넘기지 않음',async()=>{
+ const ui=await setup(true,{},'https://test.invalid/quote/?svc=office');ui.$('next').click();
+ for(const[k,v]of Object.entries({industry:'카페',size:'20',unit:'평',scope:'바닥·유리',frequency:'일회성',time:'영업 전 08시',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ const input=ui.w.document.querySelector('[name=industry]');input.dispatchEvent(new ui.w.CompositionEvent('compositionstart',{bubbles:true}));
+ input.dispatchEvent(new ui.w.KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true,cancelable:true}));
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));
+ assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(input.value,'카페');
+ input.dispatchEvent(new ui.w.CompositionEvent('compositionend',{bubbles:true}));await tick();
+ input.dispatchEvent(new ui.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+ assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false);ui.dom.window.close();
+});
+
+test('compositionend 직후 isComposing false·229 Enter도 확정만 하고 다음 Enter로 진행',async()=>{
+ const ui=await setup();ui.$('next').click();for(const[k,v]of Object.entries({type:'벽걸이',count:'2',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ const input=ui.w.document.querySelector('[name=count]');input.dispatchEvent(new ui.w.CompositionEvent('compositionstart',{bubbles:true}));input.dispatchEvent(new ui.w.CompositionEvent('compositionend',{bubbles:true}));
+ const event=new ui.w.KeyboardEvent('keydown',{key:'Enter',keyCode:229,isComposing:false,bubbles:true,cancelable:true});input.dispatchEvent(event);
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));
+ assert.equal(event.defaultPrevented,false);assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(input.value,'2');
+ await tick();input.dispatchEvent(new ui.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false);ui.dom.window.close();
+});
+
+test('연락처 한글 조합 확정 submit은 저장하지 않고 확정 후 명시적 접수는 한 번 저장',async()=>{
+ let calls=0,sent;const ui=await setup(true,{newRequestId:()=> 'I'.repeat(20),submitQuote:async(c,id,input)=>{calls++;sent=input;}});fillForm(ui);
+ ui.$('name').value='시험 호칭';ui.$('name').dispatchEvent(new ui.w.CompositionEvent('compositionstart',{bubbles:true}));
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();
+ assert.equal(calls,0);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('name').value,'시험 호칭');assert.equal(ui.$('phone').value,'010-0000-0000');
+ ui.$('name').dispatchEvent(new ui.w.CompositionEvent('compositionend',{bubbles:true}));await tick();
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,1);assert.equal(sent.name,'시험 호칭');assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+});

@@ -1,0 +1,52 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "local_checks_and_pc_preview_passed_pending_deployment",
+  "baseCommit": "c7e2c73a3bd359f1057b3abb60cd2dfab09dbd2c",
+  "backupBranch": "backup/ime-input-before-20261117-c7e2c73",
+  "version": "20261117-ime1",
+  "problem": "Custom Enter navigation did not recognize keyCode 229 after compositionend, and submit had no composition-session guard.",
+  "reproducedBeforeFix": {
+    "existingUiPass": 22,
+    "newRegressionFailures": 3,
+    "method": "Isolated JSDOM composition and keyboard events; not hardware IME or actual Safari."
+  },
+  "changes": [
+    "Preserve IME-confirming Enter without advancing for active composition, isComposing or keyCode 229.",
+    "Suppress composition-session submit and same-key-event implicit submit, then allow normal next Enter or explicit submit.",
+    "Update only the form module cache version; prices, core validation and backend storage unchanged."
+  ],
+  "automatedChecks": {
+    "node": 176,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 269,
+    "failed": 0,
+    "skipped": 0,
+    "uiSubset": 25
+  },
+  "localBrowserChecks": {
+    "chrome": true,
+    "hangulValuesRetained": true,
+    "normalEnterAdvancedToContact": true,
+    "previousStepAnswersRetained": true,
+    "physicalImeTested": false,
+    "actualSafariTested": false
+  },
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "deploymentVerified": false,
+  "sources": [
+    "https://developer.chrome.com/docs/modern-web-guidance/guides/forms/ime-safe-enter-submit",
+    "https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event"
+  ],
+  "rollback": "Restore quote/index.html and quote/quote-form.mjs together from the backup branch, preserving later unrelated automation changes and all customer data.",
+  "limits": [
+    "Composition regression cases are synthetic; physical iPhone/Android and hardware Korean IME are not verified.",
+    "No production receipt, photo or email was created by this follow-up."
+  ]
+}

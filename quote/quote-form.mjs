@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let catalog,step=1,photos=[],busy=false,photoBusy=false,requestId,frozen=null,started=false,estimateTimer,lastEstimate='';
 const answersByService=new Map(),params=new URLSearchParams(location.search);
 const preview=params.get('quote_preview')==='1',testMode=params.get('quote_test')==='1';
-let adminTestAllowed=false;
+let adminTestAllowed=false,composing=false,imeEnter=false,imeTimer;
 const enabled=()=>!preview&&(testMode?adminTestAllowed:window.OKCLEAN_QUOTES?.enabled===true&&window.OKCLEAN_QUOTES?.verified===true);
 const track=name=>{if(enabled()&&!testMode)void window.OKCleanAnalytics?.track(name,{service:service(),placement:'quote',target:'quote'});};
 function startQuote(){if(!started){started=true;track('quote_start');}}
@@ -44,15 +44,24 @@ function advance(){if(busy||photoBusy||step>=3)return;if(step===1&&!service()){$
 $('next').onclick=advance;
 $('previous').onclick=()=>{if(step===2)answersByService.set(service(),readAnswers());showStep(step-1);};
 $('questions').addEventListener('input',updateEstimate);$('questions').addEventListener('change',updateEstimate);
+$('quoteForm').addEventListener('compositionstart',()=>{composing=true;});
+$('quoteForm').addEventListener('compositionend',()=>{composing=false;});
+// Keep IME confirmation intact, but reject a submit triggered by that same key event.
+$('quoteForm').addEventListener('keydown',e=>{
+ if(e.key==='Enter'&&(composing||e.isComposing||e.keyCode===229)){
+  imeEnter=true;clearTimeout(imeTimer);imeTimer=setTimeout(()=>{imeEnter=false;},0);
+ }
+},true);
+
 // Implicit form submission may be blocked when the final submit button is disabled.
 $('questions').addEventListener('keydown',e=>{
- if(step!==2||e.key!=='Enter'||e.isComposing||e.defaultPrevented||!e.target.matches('input[type="text"],input[type="number"]'))return;
+ if(step!==2||e.key!=='Enter'||composing||e.isComposing||e.keyCode===229||e.defaultPrevented||!e.target.matches('input[type="text"],input[type="number"]'))return;
  e.preventDefault();advance();
 });
 $('region').onchange=()=>{$('regionNotice').textContent=$('region').value==='춘천'?'춘천을 중심으로 작업합니다. 현장 조건과 일정에 따라 최종 가능 여부를 안내합니다.':'강원 지역 및 수도권은 거리·일정·작업 규모에 따라 출장 여부와 추가 비용을 먼저 확인합니다. 지역 선택만으로 방문이 확정되지는 않습니다.';};
 $('photos').onchange=async()=>{if(photoBusy||busy)return;photoBusy=true;$('next').disabled=true;$('submit').disabled=true;try{const files=[...$('photos').files];if(files.length+photos.length>5)throw new Error('사진은 최대 5장까지 첨부할 수 있습니다.');const added=[];for(const file of files)added.push(await compressPhoto(file));photos.push(...added);photoPreview();$('formError').textContent='';}catch(e){$('formError').textContent=e.message;}finally{$('photos').value='';photoBusy=false;$('next').disabled=false;$('submit').disabled=!enabled();}};
 $('quoteForm').onsubmit=async e=>{
- e.preventDefault();if(busy||photoBusy)return;if(step<3){advance();return;}if(!enabled())return;
+ e.preventDefault();if(composing||imeEnter||busy||photoBusy)return;if(step<3){advance();return;}if(!enabled())return;
  const input=frozen||read(),errors=core.validate(input,catalog);if(errors.length){showValidationErrors(errors);return;}
  if(!navigator.onLine){$('formError').textContent='인터넷 연결을 확인한 뒤 다시 접수해 주세요. 입력 내용은 이 화면에 유지됩니다.';return;}
  lock(true);$('formError').textContent='서버에 안전하게 저장하고 있습니다. 창을 닫지 말아 주세요.';frozen=input;

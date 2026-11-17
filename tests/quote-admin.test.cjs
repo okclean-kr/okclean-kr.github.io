@@ -112,3 +112,20 @@ test('최신 내용 재열기 확인 중 로그아웃하면 이전 접수 자료
  const refresh=[...ui.$('requests').querySelectorAll('button')].find(x=>x.textContent==='최신 내용으로 다시 열기');assert.ok(refresh);
  ui.w.confirm=()=>{void ui.state.logout();return true;};refresh.click();await tick();assert.equal(ui.$('requests').children.length,0);assert.equal(ui.$('panel').hidden,true);ui.dom.window.close();
 });
+
+test('관리 변경 저장 성공은 서버 응답 전 표시하지 않고 목록 재생성 뒤에도 안내 유지',async()=>{
+ const ui=await setup(),id='H'.repeat(20);ui.state.emit([row(id,{notification:'seen'})]);const details=ui.$('requests').querySelector('details');details.open=true;details.dispatchEvent(new ui.w.Event('toggle'));await tick();
+ details.querySelector('select').value='consulting';details.querySelector('textarea').value='상담 준비';details.querySelector('input[type=number]').value='180000';
+ let finish;ui.state.beforeSave=()=>new Promise(resolve=>finish=resolve);const save=[...details.querySelectorAll('button')].find(x=>x.textContent==='변경 저장'),pending=save.onclick();await tick();assert.equal(save.disabled,true);assert.doesNotMatch(ui.$('saveStatus')?.textContent||'',/서버에 저장/);assert.equal(ui.state.records.get(id).version,0);
+ finish();await pending;assert.equal(ui.state.records.get(id).memo,'상담 준비');assert.equal(ui.state.records.get(id).status,'consulting');assert.equal(ui.state.records.get(id).amount,180000);assert.equal(details.isConnected,false);assert.match(ui.$('saveStatus')?.textContent||'',/서버에 저장/);assert.ok(ui.$('saveStatus').textContent.includes('OKQ-'+id));assert.equal(ui.$('saveStatus').getAttribute('role'),'status');assert.equal(ui.$('saveStatus').hidden,false);assert.equal(ui.w.document.activeElement,ui.$('saveStatus'));
+ ui.state.emit([row('I'.repeat(20),{notification:'seen'})]);assert.match(ui.$('saveStatus').textContent,/서버에 저장/);ui.dom.window.close();
+});
+test('관리 변경 저장 오류는 초안과 재시도를 보존하고 성공 후에만 지속 안내 표시',async()=>{
+ const ui=await setup(),id='J'.repeat(20);ui.state.emit([row(id,{notification:'seen'})]);const details=ui.$('requests').querySelector('details');details.open=true;details.dispatchEvent(new ui.w.Event('toggle'));await tick();details.querySelector('textarea').value='연결 복구 후 저장할 메모';details.querySelector('input[type=number]').value='190000';
+ const save=[...details.querySelectorAll('button')].find(x=>x.textContent==='변경 저장');ui.state.beforeSave=async()=>{throw new Error('offline');};await save.onclick();assert.equal(details.isConnected,true);assert.equal(details.querySelector('textarea').value,'연결 복구 후 저장할 메모');assert.equal(details.querySelector('input[type=number]').value,'190000');assert.equal(ui.state.records.get(id).version,0);assert.equal(save.disabled,false);assert.match(details.textContent,/offline/);assert.doesNotMatch(ui.$('saveStatus')?.textContent||'',/서버에 저장/);
+ ui.state.beforeSave=async()=>{};await save.onclick();assert.equal(ui.state.records.get(id).memo,'연결 복구 후 저장할 메모');assert.equal(ui.state.records.get(id).amount,190000);assert.match(ui.$('saveStatus')?.textContent||'',/서버에 저장/);ui.dom.window.close();
+});
+test('관리 저장 지연 응답은 로그아웃 후 다시 로그인한 화면에 옛 성공 안내를 표시하지 않음',async()=>{
+ const ui=await setup(),id='K'.repeat(20);ui.state.emit([row(id,{notification:'seen'})]);const details=ui.$('requests').querySelector('details');details.open=true;details.dispatchEvent(new ui.w.Event('toggle'));await tick();details.querySelector('textarea').value='이전 세션 저장 요청';
+ let finish;ui.state.beforeSave=()=>new Promise(resolve=>finish=resolve);const pending=[...details.querySelectorAll('button')].find(x=>x.textContent==='변경 저장').onclick();await tick();await ui.state.logout();assert.equal(ui.$('panel').hidden,true);ui.state.login();ui.state.emit([row('L'.repeat(20),{notification:'seen'})]);finish();await pending;assert.equal(ui.$('panel').hidden,false);assert.equal(ui.$('saveStatus')?.textContent||'','');assert.equal(ui.$('saveStatus').hidden,true);assert.equal(details.isConnected,false);ui.dom.window.close();
+});

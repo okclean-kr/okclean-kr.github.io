@@ -1,0 +1,510 @@
+{
+  "dateKST": "2026-11-18",
+  "checkedAtKST": "2026-11-18T07:57:39.637519+09:00",
+  "sourceCommit": "c77171e06ea5bfe16c33a13c10ec83bde748f6d7",
+  "status": "static_internal_references_and_all_served_targets_match",
+  "staticChecks": {
+    "htmlPages": 27,
+    "internalReferences": 662,
+    "uniqueLocalTargets": 68,
+    "missing": [],
+    "unresolvedStaticAnchors": []
+  },
+  "httpChecks": {
+    "checkedAtKST": "2026-11-18T07:57:39.637519+09:00",
+    "targets": 68,
+    "passed": 68,
+    "failures": [],
+    "files": [
+      {
+        "path": "admin/analytics.html",
+        "httpStatus": 200,
+        "bytes": 26507,
+        "matchesSource": true,
+        "sha256": "be0c188c83d654bd84e7ed648b543bd091b853db7572049546efa299dfa47163"
+      },
+      {
+        "path": "admin/backup.html",
+        "httpStatus": 200,
+        "bytes": 4715,
+        "matchesSource": true,
+        "sha256": "c601c56d2d1fd3c4f1336a164618f67820957eaff5aec29dadf69ef2e99c9488"
+      },
+      {
+        "path": "admin/backup.mjs",
+        "httpStatus": 200,
+        "bytes": 7628,
+        "matchesSource": true,
+        "sha256": "5f9e54c95ea788b1485b1e9ba23e8a1f58b575a8abb0c66253c5a4f7ab00cbb3"
+      },
+      {
+        "path": "admin/delete.html",
+        "httpStatus": 200,
+        "bytes": 7944,
+        "matchesSource": true,
+        "sha256": "f7c2445d718cff5b0f6deb997c92fcfb604e1c65c2db127968739c8718a21971"
+      },
+      {
+        "path": "admin/index.html",
+        "httpStatus": 200,
+        "bytes": 1056,
+        "matchesSource": true,
+        "sha256": "dade7fd46efb561c01f739cf6f85cfefc71ec908516624a160ca301427d8f1c5"
+      },
+      {
+        "path": "admin/mobile-check.html",
+        "httpStatus": 200,
+        "bytes": 7767,
+        "matchesSource": true,
+        "sha256": "750d17929b7f570dd3aa12a7402bb89163a5fec7fb931ebaa13fd05563d72e28"
+      },
+      {
+        "path": "admin/products.html",
+        "httpStatus": 200,
+        "bytes": 10877,
+        "matchesSource": true,
+        "sha256": "9c8bd9a7faccf9389716300a4839e180cea1fbb92c78090429f72e5dddf0179a"
+      },
+      {
+        "path": "admin/quotes.html",
+        "httpStatus": 200,
+        "bytes": 5297,
+        "matchesSource": true,
+        "sha256": "7add8f93681c7c0a49d437dacdeb2357ddbcdc83d84a128bf0c711df000ac590"
+      },
+      {
+        "path": "admin/quotes.mjs",
+        "httpStatus": 200,
+        "bytes": 22723,
+        "matchesSource": true,
+        "sha256": "4776611ae1170d03af5cdaceea3fe0547264d6104f409ac3d8fa236331b43479"
+      },
+      {
+        "path": "analytics-config.js",
+        "httpStatus": 200,
+        "bytes": 248,
+        "matchesSource": true,
+        "sha256": "116948fd8e399efaf126adbd847ab71af597123e86917bcabb405bdf4e2559ca"
+      },
+      {
+        "path": "analytics-maintenance.js",
+        "httpStatus": 200,
+        "bytes": 10880,
+        "matchesSource": true,
+        "sha256": "12a1d08e9fd554862480582689e6155efda1cc721411ee116c78fd08f9b84863"
+      },
+      {
+        "path": "analytics.js",
+        "httpStatus": 200,
+        "bytes": 23367,
+        "matchesSource": true,
+        "sha256": "4984bebf4f752aa54510e9fcc57f8eca5a338bb023712e9384bda0bd1e603531"
+      },
+      {
+        "path": "app.js",
+        "httpStatus": 200,
+        "bytes": 23676,
+        "matchesSource": true,
+        "sha256": "9d69af82dba3ad5b333f7533e5d66a0e0ffc72689f09259807b5b10bf8da5873"
+      },
+      {
+        "path": "apple-touch-icon.png",
+        "httpStatus": 200,
+        "bytes": 59074,
+        "matchesSource": true,
+        "sha256": "1bbdedfd19ed123e60ba34a29c481556528750be353a818fe56b48a2036f9717"
+      },
+      {
+        "path": "area/강원도.html",
+        "httpStatus": 200,
+        "bytes": 16761,
+        "matchesSource": true,
+        "sha256": "e2a471223f5ab9e0b1315568195e0b5b41a14dc3d7188935aafe0ccb3e4c78b5"
+      },
+      {
+        "path": "area/수도권.html",
+        "httpStatus": 200,
+        "bytes": 12501,
+        "matchesSource": true,
+        "sha256": "d6ce58d1da81c392b434ee6cfb9c5b58acbfec562282e9aabfb4a0b5d9851e7a"
+      },
+      {
+        "path": "area/춘천.html",
+        "httpStatus": 200,
+        "bytes": 14817,
+        "matchesSource": true,
+        "sha256": "ed2dac9f847a1794596ad49b6a4a7e53b194f2bdf90448bdd04a944621fb6435"
+      },
+      {
+        "path": "brand-96.webp",
+        "httpStatus": 200,
+        "bytes": 6452,
+        "matchesSource": true,
+        "sha256": "bcc1c7d31a1ec1816794d421b1bd3535b454c33e0ed28fc52497fee0bcd080b6"
+      },
+      {
+        "path": "case-images/372e7f3227182d322fa2.jpg",
+        "httpStatus": 200,
+        "bytes": 30710,
+        "matchesSource": true,
+        "sha256": "d394ac8b1f2403a0e5bc0d96a6b921fe6ca7ae4bd76f125035ecb2fd129312a9"
+      },
+      {
+        "path": "case-images/62a884a8efdc0e467436.jpg",
+        "httpStatus": 200,
+        "bytes": 62984,
+        "matchesSource": true,
+        "sha256": "5fece93e2cee3c753e2f561cdf6a14403067f6609ed72aa2d2f2b268ffd7e681"
+      },
+      {
+        "path": "case-images/6fc4562a35ec75ae094a.jpg",
+        "httpStatus": 200,
+        "bytes": 31635,
+        "matchesSource": true,
+        "sha256": "232875a150617927d618b74922686808b617b2d74fdad4df7b82368c7ec831a2"
+      },
+      {
+        "path": "case-images/74878f51eaa5233ed38f.jpg",
+        "httpStatus": 200,
+        "bytes": 46613,
+        "matchesSource": true,
+        "sha256": "7e606e19521ae95d327179b26ab5546fb3678139bd04d31efc0f661f1efea770"
+      },
+      {
+        "path": "case-images/76f7b5e574a6c71f104a.jpg",
+        "httpStatus": 200,
+        "bytes": 41290,
+        "matchesSource": true,
+        "sha256": "f804fcc87c03f2da09475c1ac7cef8ac9124a394c90a531fa0a68c9878b3b570"
+      },
+      {
+        "path": "case-images/7b482c0f67c4ca664f89.png",
+        "httpStatus": 200,
+        "bytes": 219196,
+        "matchesSource": true,
+        "sha256": "0b5435b6e4c4dfb2e989402a20aa534ece745077087e53253ce5f7d58f446227"
+      },
+      {
+        "path": "case-images/7d1c475b6643a93de024.jpg",
+        "httpStatus": 200,
+        "bytes": 37931,
+        "matchesSource": true,
+        "sha256": "845293329877213d609ccac3e228ee73f4f5902feeef64cc9d2aa224ace5dc97"
+      },
+      {
+        "path": "case-images/88a7fe47abed06fe3b81.jpg",
+        "httpStatus": 200,
+        "bytes": 48240,
+        "matchesSource": true,
+        "sha256": "0a9ffa0aeb8de03786dc558538970bbb50543822b3bc8bde64c634790b6760f5"
+      },
+      {
+        "path": "case-images/88bff7d4b92109f62cc9.png",
+        "httpStatus": 200,
+        "bytes": 207612,
+        "matchesSource": true,
+        "sha256": "d34e8077d0c5e353df195db5e053a27fcda8c7add80aef553d6e9379f35d03ae"
+      },
+      {
+        "path": "case-images/a567d9bf00f5a9f0f1f8.jpg",
+        "httpStatus": 200,
+        "bytes": 41319,
+        "matchesSource": true,
+        "sha256": "3c01dda1fe32bddf132fe67f3b36976e3393635126a3840b2fc8d8c096869d79"
+      },
+      {
+        "path": "case-images/aa73c0d7383a7e4d5776.png",
+        "httpStatus": 200,
+        "bytes": 234187,
+        "matchesSource": true,
+        "sha256": "f29cccc106f525f39f877f3f1a53107433bddbb960c5c1ff9f7f59effb846673"
+      },
+      {
+        "path": "case-images/ace093bd182d32c9964f.jpg",
+        "httpStatus": 200,
+        "bytes": 36455,
+        "matchesSource": true,
+        "sha256": "1c2c02aa2030f805c75e7740b842634d06d06116250ed20fc6846d7d20a15182"
+      },
+      {
+        "path": "case-images/ad5baefd5e5f4bf40875.jpg",
+        "httpStatus": 200,
+        "bytes": 19847,
+        "matchesSource": true,
+        "sha256": "394f9b5beb10e3b891fed605df22def5e0a4b89245bcf1425f1380f146cbe611"
+      },
+      {
+        "path": "case-images/b53eda9e8dca9dfda664.jpg",
+        "httpStatus": 200,
+        "bytes": 40859,
+        "matchesSource": true,
+        "sha256": "6bfa9038c829b1a34b0f12e80d9ef2d8327c3d042631bd662e09ece4dc357ce7"
+      },
+      {
+        "path": "case-images/cbc93f2c06ec22b70cdf.jpg",
+        "httpStatus": 200,
+        "bytes": 29481,
+        "matchesSource": true,
+        "sha256": "52ba6dfb867563df68b9a8cc2292342d68c68669eabb275d3dbadcb79c2178af"
+      },
+      {
+        "path": "case-images/ccd599b42f5da6bd436f.jpg",
+        "httpStatus": 200,
+        "bytes": 33848,
+        "matchesSource": true,
+        "sha256": "424f85fdfded3bf70fed6596e761e874ee4c6cd0b81947c04a9475085e2f735e"
+      },
+      {
+        "path": "case-images/ceeef6b00074f6964590.jpg",
+        "httpStatus": 200,
+        "bytes": 27303,
+        "matchesSource": true,
+        "sha256": "1d6d3e18d58746425b4e68c50efc01aa8f5f4b9502edec74a0ce60171743cb42"
+      },
+      {
+        "path": "case-images/e644898b9e4ee7752e33.jpg",
+        "httpStatus": 200,
+        "bytes": 28649,
+        "matchesSource": true,
+        "sha256": "36deb04172307feabdfa6790604a2106930212030a33e582c245f020b4d5ec90"
+      },
+      {
+        "path": "case-images/f0dd348b77f2d1e25a81.png",
+        "httpStatus": 200,
+        "bytes": 214700,
+        "matchesSource": true,
+        "sha256": "dfa6a11344c3734de21f446f46f2e1fcc676c7986f757cae5c48e216d4a79e07"
+      },
+      {
+        "path": "case-images/f906cbc2dbaff4c822a4.jpg",
+        "httpStatus": 200,
+        "bytes": 47414,
+        "matchesSource": true,
+        "sha256": "a093c772ef012e661f96fd234fee82b774ed8fe0b045e68b9364baf66f19ccdc"
+      },
+      {
+        "path": "case-images/fcb86c5fe3b059a3e5f7.jpg",
+        "httpStatus": 200,
+        "bytes": 24951,
+        "matchesSource": true,
+        "sha256": "30544e7a25886171329766e79fbd5ed62290bbef1448d215d1b718d26db9f7ee"
+      },
+      {
+        "path": "case-images/washer-filter-process.webp",
+        "httpStatus": 200,
+        "bytes": 33474,
+        "matchesSource": true,
+        "sha256": "423e53d1c0af8e85f2aa2a5e93fa6f690bb8bf10a6d734cfb5575f5521f798b1"
+      },
+      {
+        "path": "case-images/washer-pulsator-process.webp",
+        "httpStatus": 200,
+        "bytes": 36194,
+        "matchesSource": true,
+        "sha256": "77d4db7b7c7c5099022a426ac52d6ab8d87695f718d5c4769a1e3345d91ac201"
+      },
+      {
+        "path": "icon-192.png",
+        "httpStatus": 200,
+        "bytes": 65760,
+        "matchesSource": true,
+        "sha256": "f4b1e03da8868dd7dc9f56765edb201e3604455ae3655d1b98bb5769bfba0981"
+      },
+      {
+        "path": "index.html",
+        "httpStatus": 200,
+        "bytes": 57855,
+        "matchesSource": true,
+        "sha256": "6ef613380af301bb85b05352e132ee8a3d4d7c68e170f4085bf1f8a9cc48aeef"
+      },
+      {
+        "path": "install-app.css",
+        "httpStatus": 200,
+        "bytes": 1632,
+        "matchesSource": true,
+        "sha256": "18cf1cc83165e40881583e1aee844266f5d8df90c530582d738c05db5a787cc9"
+      },
+      {
+        "path": "install-app.js",
+        "httpStatus": 200,
+        "bytes": 7666,
+        "matchesSource": true,
+        "sha256": "53af1d65a1af5bd399a0b2bd384c386f79a483e5a76e450eb1dadcd1db9c4c9e"
+      },
+      {
+        "path": "manifest.webmanifest",
+        "httpStatus": 200,
+        "bytes": 469,
+        "matchesSource": true,
+        "sha256": "c7dd84be4d2479ca7f52da3c6c8a3e0a2e1d24e0bafe4f638757b4293bdb1da8"
+      },
+      {
+        "path": "privacy.html",
+        "httpStatus": 200,
+        "bytes": 13092,
+        "matchesSource": true,
+        "sha256": "27dda7c3c536946637fc59491fa862226e7f17ae4da251331deb28a9c2ace6e7"
+      },
+      {
+        "path": "quote/config.js",
+        "httpStatus": 200,
+        "bytes": 240,
+        "matchesSource": true,
+        "sha256": "f91ecc2e2d702a887b729e3600d86ce1cec7cfc2df6504639a0f92480a250edd"
+      },
+      {
+        "path": "quote/index.html",
+        "httpStatus": 200,
+        "bytes": 6397,
+        "matchesSource": true,
+        "sha256": "da102b50a232631a81ff1dd56acd07951ad300323b4f5ace6e628fd7a3625262"
+      },
+      {
+        "path": "quote/links.js",
+        "httpStatus": 200,
+        "bytes": 1822,
+        "matchesSource": true,
+        "sha256": "dd23c6a7129ad18f6e5da4e002db0bfb8b9bf6fe98108dfd6fa484eecab0206c"
+      },
+      {
+        "path": "quote/quote-core.js",
+        "httpStatus": 200,
+        "bytes": 6211,
+        "matchesSource": true,
+        "sha256": "ad338cf5a93b2868ee11c37373beea2e89c835c5dbdab19e4987e07ab1bd5baa"
+      },
+      {
+        "path": "quote/quote-form.mjs",
+        "httpStatus": 200,
+        "bytes": 13799,
+        "matchesSource": true,
+        "sha256": "4ea6424ae3ce196b668e69faba6c00910adc8bc2ca911e5ae13db746186a6ead"
+      },
+      {
+        "path": "quote/quote.css",
+        "httpStatus": 200,
+        "bytes": 3495,
+        "matchesSource": true,
+        "sha256": "56e3d6ffb1cc447191d2cb16f3c934c6bcb9209a7069de4cf052252af3fb549f"
+      },
+      {
+        "path": "services/aircon.html",
+        "httpStatus": 200,
+        "bytes": 12204,
+        "matchesSource": true,
+        "sha256": "a66692ecf0a804d2cee26fc87a04c7f36a2dad04b343aa311623e64c31f5630f"
+      },
+      {
+        "path": "services/carpet.html",
+        "httpStatus": 200,
+        "bytes": 11039,
+        "matchesSource": true,
+        "sha256": "5f28bfb8f4794d5fee7bba218b3302f58d36ec15c1b88e489f8456f71f89ca6c"
+      },
+      {
+        "path": "services/clinic.html",
+        "httpStatus": 200,
+        "bytes": 9347,
+        "matchesSource": true,
+        "sha256": "cb319386ce9b9bad79914106d8cfafeea677a6cfe0182d951a8285504c30164b"
+      },
+      {
+        "path": "services/disinfect.html",
+        "httpStatus": 200,
+        "bytes": 10579,
+        "matchesSource": true,
+        "sha256": "4109b02df0c5468fd0f6a03b05009863e0826f57a84eb225d18809c1bbc30ec2"
+      },
+      {
+        "path": "services/mattress.html",
+        "httpStatus": 200,
+        "bytes": 9497,
+        "matchesSource": true,
+        "sha256": "2aa8d63fc9f99c786255e290a609c54f37dcbc1a2e60b339f35563654b46ff1e"
+      },
+      {
+        "path": "services/move-in.html",
+        "httpStatus": 200,
+        "bytes": 11847,
+        "matchesSource": true,
+        "sha256": "31cf32eb77eb6e0b441801283f661b9da715946d7d38a93b4c14b7b19d1116ea"
+      },
+      {
+        "path": "services/office.html",
+        "httpStatus": 200,
+        "bytes": 9889,
+        "matchesSource": true,
+        "sha256": "4480229062626b210b8744463988af9a43c4c59711ff901b8ce8805af7fba057"
+      },
+      {
+        "path": "services/post-build.html",
+        "httpStatus": 200,
+        "bytes": 9688,
+        "matchesSource": true,
+        "sha256": "42b411c6d88896f99df23b806d8babadd3f5aaf54b893f30456c8102caa2bdde"
+      },
+      {
+        "path": "services/regular.html",
+        "httpStatus": 200,
+        "bytes": 11834,
+        "matchesSource": true,
+        "sha256": "2eb695be1a5f064652f810c56e225ad8894f9c3e70a1204d6aa9f98e95e0824d"
+      },
+      {
+        "path": "services/special-home.html",
+        "httpStatus": 200,
+        "bytes": 10947,
+        "matchesSource": true,
+        "sha256": "01d6299c2bc0d4629bae9bdfb7857e1fe3ccda22147b87abf466c48974471248"
+      },
+      {
+        "path": "services/washer.html",
+        "httpStatus": 200,
+        "bytes": 10132,
+        "matchesSource": true,
+        "sha256": "3a88503b9e60d5a00cd2995a670c27cb71f4a27e2575c33e92742ea3b7dfaf9f"
+      },
+      {
+        "path": "services/window.html",
+        "httpStatus": 200,
+        "bytes": 8881,
+        "matchesSource": true,
+        "sha256": "c616f404d6eb6be72873e28aeac57299490e14cd08fb525c1eea0f7df633a31e"
+      },
+      {
+        "path": "shop/index.html",
+        "httpStatus": 200,
+        "bytes": 13988,
+        "matchesSource": true,
+        "sha256": "caf24ab348bc568ccbee7a5f97076e7e0d44ceec056571f7aceff3985607cd19"
+      },
+      {
+        "path": "site.js",
+        "httpStatus": 200,
+        "bytes": 5469,
+        "matchesSource": true,
+        "sha256": "7b6fd303a02b5ee26baba2b82d65d79c9c1a761049cfc6e173aff1e33e51e74e"
+      },
+      {
+        "path": "style.css",
+        "httpStatus": 200,
+        "bytes": 33424,
+        "matchesSource": true,
+        "sha256": "eeac5e981069d3ec3e2e17fa24ffcbacc84038327940acc8049f9d537ee6d835"
+      }
+    ]
+  },
+  "scope": "27 public application HTML files, internal link/src targets and static anchors; excludes ops, node_modules and Git metadata.",
+  "runtimeChanged": false,
+  "customerOrContractOrNotificationWritesPerformed": false,
+  "browserScriptsOrAnalyticsExecutedByHttpChecks": false,
+  "existingAutomatedTests": {
+    "lastPassed": 297,
+    "rerunThisReadOnlyAudit": false,
+    "reason": "No application/test source changed."
+  },
+  "limits": [
+    "Checks static route/source availability, not customer authentication or backend writes.",
+    "External blog/social/affiliate destinations were not followed or posted to."
+  ]
+}

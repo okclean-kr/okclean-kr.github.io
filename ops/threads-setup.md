@@ -25,7 +25,7 @@
 ## 수집과 승인
 
 - `python scripts/threads/collect.py`: 기존 공개 사진 원본 경로·SHA-256·dHash를 목록화. 기존 승인과 파일은 보존.
-- `python scripts/threads/collect.py --network`: 소유 RSS에서 원본 사진을 비공개 `.okclean-private/`에 확보. 현재 네트워크로 원본 수집 성공을 검증하지 못했음. 전체 과거 글이나 모든 본문 사진을 수집하는 도구는 아님(피드별 최근 5개 이미지 후보).
+- `python scripts/threads/collect.py --network`: 소유 RSS에서 원본 사진을 비공개 `.okclean-private/`에 확보. 실제 원본 수집 성공은 미검증. GitHub run 44041080715에서 RSS는 두 블로그 각각 50개 글, 이미지 참조 43개·41개로 실제 수신 확인. 전체 과거 글이나 모든 본문 사진을 수집하는 도구는 아님(피드별 최근 5개 이미지 후보).
 - Instagram은 지정한 숫자 ID/사용자명/전용 토큰이 모두 맞을 때만 공식 API를 사용. 현재 최대 50개 목록과 접근 가능한 이미지/영상 원본을 비공개 확보하며, pagination_remaining을 기록. 전체 과거 미디어/캐러셀 완전 수집은 미구현.
 - YouTube의 임의 다운로드는 구현하지 않음. 소유 원본을 `register-owner.py`로 등록하고 원 게시 영상과의 대응 관계를 별도로 확인. 소유 채널 확인만으로 원본 대응 검증을 대신하지 않음.
 - `python scripts/threads/register-owner.py .okclean-private/owner-originals/원본.mp4`: 원본 불변 검사와 영상 메타데이터·샘플 프레임 해시 등록. 원본 보관 위치의 비공개 대응표는 `.okclean-private/`에만 저장.

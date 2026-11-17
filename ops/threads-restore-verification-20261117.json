@@ -1,0 +1,36 @@
+{
+  "backup_branch": "backup/okclean-threads-before-media-20261117-c30a69d",
+  "commit": "c30a69d70b04b3659e7ebc2685adcd24a23c6ce8",
+  "method": "git archive, isolated extract, compare all protected files",
+  "files": [
+    {
+      "path": ".github/workflows/okclean-threads.yml",
+      "sha256": "026f4965e803f96a4bb6017b63104bff81087dc1cedbb0004468d8c0bb384e75",
+      "restored_byte_match": true
+    },
+    {
+      "path": "scripts/okclean-threads-publish.mjs",
+      "sha256": "1f6bded6d5969c0391b6d54e7e13316f0b323eeee234cfa64d4f92c5a48ec6c1",
+      "restored_byte_match": true
+    },
+    {
+      "path": "ops/threads-queue.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "restored_byte_match": true
+    },
+    {
+      "path": "ops/threads-posted.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "restored_byte_match": true
+    },
+    {
+      "path": "ops/threads-setup.md",
+      "sha256": "1d82c72336557bcab202271e032725f66be8fd708fc2ae9abe4abc8ab325a32e",
+      "restored_byte_match": true
+    }
+  ],
+  "queue_current_unchanged": true,
+  "ledger_current_unchanged": true,
+  "private_original_backup": "existing owner-supplied original files retained; SHA verified",
+  "secrets_included": false
+}

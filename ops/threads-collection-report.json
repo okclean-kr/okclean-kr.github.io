@@ -20,5 +20,18 @@
   "owner_original_videos": 2,
   "network_original_collection": "not-verified-local-attempt-exceeded-time-budget",
   "source_identities": "known",
-  "youtube_original_mapping": "not-verified"
+  "youtube_original_mapping": "not-verified",
+  "naver_feed_probe": {
+    "source": "GitHub Actions read-only audit",
+    "run_id": 44041080715,
+    "boss6008": {
+      "posts": 50,
+      "image_references": 43
+    },
+    "cleankoreacoop": {
+      "posts": 50,
+      "image_references": 41
+    },
+    "original_fetch_verified": false
+  }
 }

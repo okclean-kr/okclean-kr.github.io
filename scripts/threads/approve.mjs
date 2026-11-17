@@ -1,0 +1,11 @@
+import {read,atomicWrite,sha256,validateText} from './core.mjs';
+const [id,reviewer]=process.argv.slice(2);
+if(!id||!reviewer)throw new Error('Usage: node scripts/threads/approve.mjs okc-ID reviewer');
+const queue=read('ops/threads-queue.json');
+const item=queue.find(x=>x.id===id);
+if(!item)throw new Error('Unknown post');
+validateText(item.text);
+item.approved=true;item.approved_by=reviewer;item.approved_at=new Date().toISOString();
+item.approved_fingerprint=sha256(JSON.stringify([item.text,item.type,item.asset_id||null]));
+atomicWrite('ops/threads-queue.json',queue);
+console.log('Approved '+id+'; any text/type/asset change invalidates this approval.');

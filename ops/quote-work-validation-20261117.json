@@ -1,0 +1,188 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "live_verified",
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/56",
+  "testedCommit": "7f897671b02e201fc55c2da0c534a2422219e652",
+  "mergeCommit": "325c4c44ecffcde93a7420d5f7ffcf48ba6d8553",
+  "backupBranch": "backup/work-validation-before-20261117-845cc8d",
+  "backupCommit": "845cc8dfdae268486be37c07ade88809079a1c2d",
+  "problem": "Work details and dates could reach contact entry before the existing final validator rejected them, leaving the invalid field hidden on another step.",
+  "change": "Reuse the existing work validation before advancing and show/focus the invalid field even when it belongs to an earlier step; preserve contact fields and selected photos.",
+  "newValidationPolicy": false,
+  "pricingChanged": false,
+  "coreAndModuleCacheVersion": "20261117-workvalidation1",
+  "regressionBeforeFix": {
+    "tested": 20,
+    "passed": 17,
+    "failed": 3,
+    "cases": [
+      "Out-of-window date advances past work step",
+      "Work text format error advances past work step",
+      "Final date error leaves invalid field hidden"
+    ]
+  },
+  "checks": {
+    "nodePassed": 173,
+    "quoteUIPassed": 22,
+    "quoteRulesPassed": 45,
+    "memberRulesPassed": 12,
+    "backupRulesPassed": 6,
+    "mailRESTPassed": 7,
+    "caseSyncPythonPassed": 23,
+    "totalPassed": 266,
+    "failed": 0,
+    "skipped": 0,
+    "normalServicesChecked": 12,
+    "originalPriceCombinations": 296,
+    "prRun": 44020075511,
+    "prJob": 133827197858,
+    "mainRun": 44020261221,
+    "pagesRun": 44020260922,
+    "conclusion": "success"
+  },
+  "isolatedDOMAssertions": {
+    "workErrorsReturnToCorrectStep": true,
+    "contactAndPhotosPreservedAcrossErrorNavigation": true,
+    "sixPhotosRejected": true,
+    "fiveExistingPhotosKeptAfterExtraPhotoRejected": true,
+    "photoRemovalKeepsOtherPhotosAndContact": true,
+    "sameRequestIdRetryAfterStorageFailure": true,
+    "composingEnterNotIntercepted": true
+  },
+  "localBrowser": {
+    "browser": "Chrome",
+    "iframeWidth": 390,
+    "viewportWidth": 375,
+    "documentWidth": 375,
+    "dateErrorFocus": "date",
+    "workTextErrorFocus": "answer-industry",
+    "normalCorrectionAdvancesToContact": true,
+    "koreanTextValuePreserved": true,
+    "actualPhotoCompression": {
+      "fixture": "Copies of an existing public work JPEG; no customer files",
+      "selected": 5,
+      "format": "image/jpeg data URI",
+      "charactersPerPhoto": 21035,
+      "afterOneRemoval": 4,
+      "otherPhotosAndContactValuesPreserved": true,
+      "serverUpload": false
+    },
+    "pcDateErrorAndCorrectionThenEnterAdvances": true
+  },
+  "productionBrowser": {
+    "previewMode": true,
+    "actualCustomerMeasurementBlocked": true,
+    "pcService": "office",
+    "pcWorkErrorFocus": "answer-industry",
+    "pcOtherWorkAnswersPreserved": true,
+    "pcCorrectionAdvancesToContact": true,
+    "mobileService": "aircon",
+    "mobileDateErrorFocus": "date",
+    "mobileDateErrorStaysOnWorkStep": true,
+    "mobileQuantityTwoPreserved": true,
+    "mobileCorrectedDateAdvancesToContact": true,
+    "mobileFocusAfterCorrection": "LEGEND",
+    "mobileFinalSubmitDisabledInPreview": true,
+    "mobileViewportWidth": 375,
+    "mobileDocumentWidth": 375,
+    "newScriptVersionsVisible": true
+  },
+  "preserved": {
+    "firebaseRulesAndAuthentication": true,
+    "customerDataAndReceipts": true,
+    "existingCalculatorPricesAndServices": true,
+    "memberCouponAndFreeService": true,
+    "photoCompressionAndPrivateStorage": true,
+    "adminAndMailAlerts": true,
+    "blogThreadsAndYouTubeAutomation": true
+  },
+  "newQuoteSubmitted": false,
+  "customerDataChanged": false,
+  "physicalPhoneTest": false,
+  "physicalIMECompositionTest": false,
+  "limitations": [
+    "The six-photo guard and final hidden-field error navigation were checked in isolated DOM tests; native browser photo selection used five photos in preview mode.",
+    "The live browser checks used preview mode to avoid new customer records and real customer events.",
+    "No new end-to-end production quote or signup was submitted in this follow-up."
+  ],
+  "recovery": "Revert the scoped change or restore quote/index.html, quote/quote-core.js and quote/quote-form.mjs together from the backup branch. Preserve customer data, receipt IDs and later automation changes.",
+  "liveHTTPVerification": {
+    "sourceCommit": "325c4c44ecffcde93a7420d5f7ffcf48ba6d8553",
+    "checkedAtUTC": "2026-11-17T05:00:31.520885+00:00",
+    "files": [
+      {
+        "path": "index.html",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "3c9ead5f3572173891a9864c3d6eeeaa418dfed5aed0ddacb88fe51a5bf0b1f0"
+      },
+      {
+        "path": "quote/index.html",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "dc18f42b1bef1b2e3fa64eae7eacfd7329aa0ad61e92b99569b7ba7d756b18a5"
+      },
+      {
+        "path": "quote/quote-core.js",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "ad338cf5a93b2868ee11c37373beea2e89c835c5dbdab19e4987e07ab1bd5baa"
+      },
+      {
+        "path": "quote/quote-form.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "5590996aabd8213f0ea48abfdd9120fcec95902840e121b84751f62e2dd822e0"
+      },
+      {
+        "path": "quote/config.js",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "f91ecc2e2d702a887b729e3600d86ce1cec7cfc2df6504639a0f92480a250edd"
+      },
+      {
+        "path": "quote/catalog.json",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "3108940722e0f8d017a6f1a07cf9c3cbbe984247a12d9a574531394bf176e42a"
+      },
+      {
+        "path": "quote/photos.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "84158d0a11987a7401f21bb0db5fa7811d11ca90976ed58d5b9dac81bf204a15"
+      },
+      {
+        "path": "quote/quote-store.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "2ca61a2d2dd2c8dde3b5cdacf3ea8b61f61bb2e28696ce86e1399a09fe10047f"
+      },
+      {
+        "path": "admin/quotes.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "9d81c4a518cb9dac36f1b9b7ffb9c0c3e5a2f09b86fbe24f94f50b76dde41590"
+      },
+      {
+        "path": "member-sync.js",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+      },
+      {
+        "path": "notifications/apps-script/Code.gs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "70348aa3504f0ea4b952fb80b715afca12443875dbf985fc3a753d950f00c06e"
+      }
+    ],
+    "allMatched": true
+  },
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-work-validation-mobile-20261117.jpg",
+    "bytes": 49291,
+    "sha256": "8b3d3a857e59a399b9958167d032879793a097ea79bb818e675668ab77bb2384",
+    "scope": "Public quote form in preview mode with synthetic work quantity/date only; no customer contact data or account identifiers shown."
+  }
+}

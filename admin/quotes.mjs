@@ -16,10 +16,23 @@ function render(){
  $('summary').textContent=(test?'시험 접수':'실제 고객 접수')+' '+list.length+'건 · 계약 완료 '+list.filter(x=>x.status==='contracted').length+'건 · 신규 '+list.filter(x=>x.status==='new').length+'건';
  $('stats').replaceChildren();const groups=new Map();for(const r of list){const key=[date(r.createdAt),r.service,r.source].join('|');const group=groups.get(key)||{day:date(r.createdAt),service:r.service,source:r.source,count:0,contracts:0};group.count++;if(r.status==='contracted')group.contracts++;groups.set(key,group);}
  for(const g of groups.values()){const tr=node('tr');for(const v of[g.day,serviceName(g.service),g.source,g.count,g.contracts])tr.append(node('td',String(v)));$('stats').append(tr);}
- const keep=new Map([...$('requests').querySelectorAll('article')].map(el=>[el.dataset.id,el]));const fragment=document.createDocumentFragment();for(const row of list){const old=keep.get(row.id);if(old&&(old.dataset.version===String(row.version)||old.querySelector('details[open]'))){fragment.append(old);}else fragment.append(renderRequest(row));}$('requests').replaceChildren(fragment);
+ const keep=new Map([...$('requests').querySelectorAll('article')].map(el=>[el.dataset.id,el]));const fragment=document.createDocumentFragment();for(const row of list){const old=keep.get(row.id);if(old&&(old.dataset.version===String(row.version)||old.querySelector('details[open]'))){if(old.dataset.version!==String(row.version))showUpdatedRequest(old);fragment.append(old);}else fragment.append(renderRequest(row));}$('requests').replaceChildren(fragment);
  if(!list.length)$('requests').append(node('p','이 조건의 접수 자료가 없습니다.','notice'));
  $('capNotice').textContent=capped?'최신 500건부터 불러왔습니다. 이전 자료를 추가하기 전 합계는 전체 합계가 아닙니다.':'불러온 접수 범위에서 집계합니다. 2026년 11월 16일 이전 신규 접수 이력은 소급 생성하지 않습니다.';
  renderNotificationStatus();
+}
+function showUpdatedRequest(article){
+ if(article.querySelector('[data-updated]'))return;
+ const notice=node('div',undefined,'notice warning');notice.dataset.updated='1';notice.setAttribute('role','status');
+ notice.append(node('p','이 접수의 서버 자료가 갱신됐습니다. 작성 중인 내용은 유지됩니다. 필요한 내용을 복사한 뒤 최신 내용으로 다시 열어 확인해 주세요.'));
+ const refresh=node('button','최신 내용으로 다시 열기');refresh.type='button';
+ refresh.onclick=()=>{
+  if(!admin(b?.auth.currentUser)||!article.isConnected||!rows.has(article.dataset.id))return;
+  if(!confirm('최신 내용으로 다시 열면 이 화면에서 작성 중인 상태·금액·메모가 초기화됩니다. 계속할까요?'))return;
+  const latest=rows.get(article.dataset.id);if(!admin(b?.auth.currentUser)||!article.isConnected||!latest)return;
+  const replacement=renderRequest(latest);article.replaceWith(replacement);replacement.querySelector('details').open=true;replacement.querySelector('summary').focus();
+ };
+ notice.append(refresh);article.append(notice);
 }
 function renderRequest(row){
  const article=node('article');article.dataset.id=row.id;article.dataset.version=String(row.version);const head=node('h2',serviceName(row.service)+' · '+core.STATES[row.status]);head.style.fontSize='19px';
@@ -35,6 +48,8 @@ async function fillDetails(details,row){
  for(const[key,label]of Object.entries(core.STATES)){const option=new Option(label,key);option.disabled=!core.transition(row.status,key);status.append(option);}status.value=row.status;memo.maxLength=1000;memo.value=row.memo;amount.type='number';amount.min='0';amount.max='100000000';amount.step='1';amount.value=row.amount??'';delivery.type='checkbox';
  for(const[label,input]of[['상담 진행 상태',status],['견적 금액 (원, 미입력 가능)',amount],['관리자 메모 (고객에게 자동 전송하지 않음)',memo],['고객에게 견적을 실제 전달했음',delivery]]){const wrap=node('label',label);wrap.append(input);fields.append(wrap);}box.append(fields);
  const save=node('button','변경 저장','primary'),message=node('p',undefined,'muted');save.onclick=async()=>{save.disabled=true;try{
+  if(!admin(b?.auth.currentUser)||!details.isConnected)return;
+  if(rows.get(row.id)?.version!==row.version)throw new Error('서버 자료가 갱신됐습니다. 작성 내용을 복사한 뒤 최신 내용으로 다시 열어 확인해 주세요.');
   if(!core.transition(row.status,status.value))throw new Error('상담 단계에 맞게 상태를 선택해 주세요.');
   const value=amount.value===''?null:Number(amount.value);if(value!==null&&(!Number.isInteger(value)||value<0||value>100000000))throw new Error('견적 금액을 확인해 주세요.');
   if(status.value==='sent'&&(!delivery.checked&&!row.deliveredAt||value===null))throw new Error('견적 금액과 실제 전달 여부를 확인해 주세요.');

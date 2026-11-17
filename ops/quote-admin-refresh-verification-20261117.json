@@ -1,0 +1,51 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "local_checks_and_isolated_stale_edit_preview_passed_pending_deployment",
+  "baseCommit": "c3fc185da855d30af0b020a2d204e256d9cf898a",
+  "backupBranch": "backup/admin-refresh-before-20261117-c3fc185",
+  "moduleVersion": "20261117-detailrefresh1",
+  "problem": "An open administrator detail retained an old version after incoming snapshots, without an in-place way to reopen the latest data; saves repeatedly reached the server conflict guard.",
+  "changes": [
+    "Show an update notice and explicit refresh action while preserving open form inputs.",
+    "Require confirmation before replacing draft fields with the newest available row.",
+    "Block stale detail saves before a server call; retain existing transactional version checks.",
+    "Recheck administrator access and connected DOM after confirmation to prevent redisplaying old private details after logout."
+  ],
+  "beforeFix": {
+    "existingAdminChecksPassed": 14,
+    "newRegressionFailures": 3
+  },
+  "automatedChecks": {
+    "node": 179,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 272,
+    "failed": 0,
+    "skipped": 0,
+    "administratorSubset": 17
+  },
+  "isolatedBrowserChecks": {
+    "inMemoryTestRecordsOnly": true,
+    "realFirebaseConnected": false,
+    "staleDraftPreserved": true,
+    "staleSaveBlockedWithoutWrite": true,
+    "refreshCancelAndAcceptPending": true
+  },
+  "productionDataWritesPerformed": false,
+  "retentionDeletionPerformed": false,
+  "newQuoteOrEmailCreated": false,
+  "backendRulesOrPermissionsChanged": false,
+  "deploymentVerified": false,
+  "rollback": "Restore admin/quotes.html and admin/quotes.mjs together from the backup branch, preserving all customer documents, Firebase rules and later unrelated automation changes.",
+  "limits": [
+    "Browser conflict scenarios use an isolated in-memory backend and synthetic test:true rows, not concurrent writes against a real customer.",
+    "No customer record, production test receipt, notification state, private mail setting or retention data was modified.",
+    "Physical phones, verified completed before/after originals, consented review text and first organic customer mail remain outside this check."
+  ]
+}

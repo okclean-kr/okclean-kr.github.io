@@ -82,3 +82,33 @@ test('이전 자료 조회 오류 후 버튼 복구·다시 로그인한 세션�
  let finish;ui.state.beforeOlder=()=>new Promise(resolve=>finish=resolve);const pending=ui.$('older').onclick();await ui.state.logout();ui.state.records.clear();ui.state.login();ui.state.emit([row('C'.repeat(20))]);const r=row('B'.repeat(20));finish({docs:[{id:r.id,data:()=>r}],size:1});await pending;
  assert.equal(ui.$('requests').querySelectorAll('article').length,1);assert.equal(ui.$('requests').querySelector('article').dataset.id,'C'.repeat(20));ui.dom.window.close();
 });
+
+
+test('열린 접수가 갱신되면 작성 중인 메모·금액 유지하고 최신 내용 재열기 제공',async()=>{
+ const ui=await setup(),id='E'.repeat(20);ui.state.emit([row(id,{notification:'seen'})]);
+ let details=ui.$('requests').querySelector('details');details.open=true;details.dispatchEvent(new ui.w.Event('toggle'));await tick();
+ details.querySelector('textarea').value='작성 중 메모';details.querySelector('input[type=number]').value='220000';
+ ui.state.emit([row(id,{notification:'seen',status:'consulting',memo:'서버 메모 1',amount:210000,version:1})]);
+ assert.equal(details.querySelector('textarea').value,'작성 중 메모');assert.equal(details.querySelector('input[type=number]').value,'220000');
+ const refresh=[...ui.$('requests').querySelectorAll('button')].find(x=>x.textContent==='최신 내용으로 다시 열기');assert.ok(refresh);
+ ui.w.confirm=()=>false;refresh.click();assert.equal(ui.$('requests').querySelector('details'),details);assert.equal(details.querySelector('textarea').value,'작성 중 메모');assert.equal(ui.state.writes.length,0);
+ ui.state.emit([row(id,{notification:'seen',status:'consulting',memo:'서버 메모 2',amount:230000,version:2})]);
+ ui.w.confirm=()=>true;refresh.click();await tick();details=ui.$('requests').querySelector('details');assert.equal(details.open,true);assert.equal(details.querySelector('textarea').value,'서버 메모 2');assert.equal(details.querySelector('input[type=number]').value,'230000');assert.equal(details.querySelector('select').value,'consulting');
+ details.querySelector('textarea').value='최신 확인 후 메모';await [...details.querySelectorAll('button')].find(x=>x.textContent==='변경 저장').onclick();
+ assert.equal(ui.state.writes.length,1);assert.equal(ui.state.writes[0].previous.version,2);assert.equal(ui.state.records.get(id).memo,'최신 확인 후 메모');assert.equal(ui.state.records.get(id).amount,230000);ui.dom.window.close();
+});
+
+test('오래된 상세 화면은 저장 호출 전 차단하고 작성 내용과 서버 자료 보존',async()=>{
+ const ui=await setup(),id='F'.repeat(20);ui.state.emit([row(id,{notification:'seen'})]);
+ const details=ui.$('requests').querySelector('details');details.open=true;details.dispatchEvent(new ui.w.Event('toggle'));await tick();details.querySelector('textarea').value='보존할 메모';
+ ui.state.emit([row(id,{notification:'seen',status:'consulting',memo:'새 서버 메모',version:1})]);
+ await [...details.querySelectorAll('button')].find(x=>x.textContent==='변경 저장').onclick();
+ assert.equal(ui.state.writes.length,0);assert.equal(ui.state.records.get(id).memo,'새 서버 메모');assert.equal(details.querySelector('textarea').value,'보존할 메모');assert.match(details.textContent,/최신 내용으로 다시 열/);ui.dom.window.close();
+});
+
+test('최신 내용 재열기 확인 중 로그아웃하면 이전 접수 자료를 다시 표시하지 않음',async()=>{
+ const ui=await setup(),id='G'.repeat(20);ui.state.emit([row(id,{notification:'seen'})]);
+ const details=ui.$('requests').querySelector('details');details.open=true;details.dispatchEvent(new ui.w.Event('toggle'));await tick();ui.state.emit([row(id,{notification:'seen',version:1})]);
+ const refresh=[...ui.$('requests').querySelectorAll('button')].find(x=>x.textContent==='최신 내용으로 다시 열기');assert.ok(refresh);
+ ui.w.confirm=()=>{void ui.state.logout();return true;};refresh.click();await tick();assert.equal(ui.$('requests').children.length,0);assert.equal(ui.$('panel').hidden,true);ui.dom.window.close();
+});

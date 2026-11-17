@@ -1,0 +1,1880 @@
+{
+  "brand": "okclean",
+  "assets": [
+    {
+      "id": "okc-asset-33905d70955be6dfc122b6c0",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224214750852",
+      "collected_at": "2026-11-17T07:32:18.800445+00:00",
+      "captured_at": null,
+      "sha256": "33905d70955be6dfc122b6c07f707218ed059b7c6ff049fd91d46b3ff6c7be7f",
+      "visual_hash": "850445150545c1c1",
+      "width": 365,
+      "height": 365,
+      "bytes": 41420,
+      "original_location": "case-images/024f81e77be482d0ef0a.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 생활폐기물 스티커 품목별 가격",
+      "published_at": "2026-03-13 09:06",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-4b446821bcd868420101192d",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224259966530",
+      "collected_at": "2026-11-17T07:32:18.806019+00:00",
+      "captured_at": null,
+      "sha256": "4b446821bcd868420101192dd65552e3a27c356540ab0cff57bce70dd09dd000",
+      "visual_hash": "0f4f2696b6330f27",
+      "width": 365,
+      "height": 365,
+      "bytes": 25623,
+      "original_location": "case-images/0ba5d9bbd421788444b1.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 우두동 돼지야 에어컨 청소 다녀왔습니다",
+      "published_at": "2026-04-21 14:19",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-3c5dddb74108a7df41c96f6d",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224258365184",
+      "collected_at": "2026-11-17T07:32:18.807863+00:00",
+      "captured_at": null,
+      "sha256": "3c5dddb74108a7df41c96f6d47ced583bc2151175e8bb130d61efcf30d38b4e0",
+      "visual_hash": "696121a3a383c78f",
+      "width": 365,
+      "height": 365,
+      "bytes": 19810,
+      "original_location": "case-images/0f97fc540f3700400a13.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 거두리 농공단지 후드 청소 '바디텍메드' 다녀왔습니다",
+      "published_at": "2026-04-20 09:36",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-e2a3d73bcc5c692fb65e42e0",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223680251736",
+      "collected_at": "2026-11-17T07:32:18.809642+00:00",
+      "captured_at": null,
+      "sha256": "e2a3d73bcc5c692fb65e42e0a1dda81eb05e6708c64b36f33feaf848208fa4de",
+      "visual_hash": "d9b9ece0e3f7ffaf",
+      "width": 365,
+      "height": 365,
+      "bytes": 23516,
+      "original_location": "case-images/2879b5a31cac97c87d99.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 청소업체 오케이청소 건영아모리움 관리사무소 냉난방기 청소했습니다",
+      "published_at": "2024-12-02 20:11",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-a17ebe15030b7c072926cd1c",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224341177358",
+      "collected_at": "2026-11-17T07:32:18.811131+00:00",
+      "captured_at": null,
+      "sha256": "a17ebe15030b7c072926cd1c83fb407a55e1fabc597fb9731bbc3a8a102d075f",
+      "visual_hash": "41c6814d4c791ff8",
+      "width": 365,
+      "height": 365,
+      "bytes": 35524,
+      "original_location": "case-images/2a993ea4ff6fec1889c1.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 천정형 에어컨 청소 잘하는 곳",
+      "published_at": "2026-07-09 10:14",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-218ea09e08a10785398502a3",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224446234177",
+      "collected_at": "2026-11-17T07:32:18.816811+00:00",
+      "captured_at": null,
+      "sha256": "218ea09e08a10785398502a3141859cd27b15535f2055381ad74c5b70407a42b",
+      "visual_hash": "9e9a91d1eca7dfdb",
+      "width": 365,
+      "height": 365,
+      "bytes": 241161,
+      "original_location": "case-images/2fdf20e3d6a804647521.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 김장 전 주방 대청소, 고춧가루 얼룩 지우는 법",
+      "published_at": "2026-10-20 13:00",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-d394ac8b1f2403a0e5bc0d96",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224267605007",
+      "collected_at": "2026-11-17T07:32:18.824735+00:00",
+      "captured_at": null,
+      "sha256": "d394ac8b1f2403a0e5bc0d96a6b921fe6ca7ae4bd76f125035ecb2fd129312a9",
+      "visual_hash": "3072727230343030",
+      "width": 365,
+      "height": 365,
+      "bytes": 30710,
+      "original_location": "case-images/372e7f3227182d322fa2.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 원두커피 자판기 소독 청소",
+      "published_at": "2026-04-28 09:24",
+      "service": "disinfect",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-ba0f2c5061de23f328e7c3e3",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224445617389",
+      "collected_at": "2026-11-17T07:32:18.826397+00:00",
+      "captured_at": null,
+      "sha256": "ba0f2c5061de23f328e7c3e352439089d68228cb18361a43fe0086c8daa1c788",
+      "visual_hash": "f8c2c64ea8c9e0f0",
+      "width": 365,
+      "height": 365,
+      "bytes": 178234,
+      "original_location": "case-images/40316f3129824c059bd3.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "오케이청소 필독 공지 | 서비스 안내·FAQ·리뷰 이벤트·시공 사례 한눈에 보기",
+      "published_at": "2026-10-20 07:00",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-6720fae68f72ffdf272087f3",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224309185364",
+      "collected_at": "2026-11-17T07:32:18.831251+00:00",
+      "captured_at": null,
+      "sha256": "6720fae68f72ffdf272087f35f1dc9babee004574adc6cd1862a029ae9354949",
+      "visual_hash": "2d3d2fefaf2f0d2d",
+      "width": 365,
+      "height": 365,
+      "bytes": 20553,
+      "original_location": "case-images/419ca2e893b60c111c13.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 에어컨 청소도 클린코리아에 맡겨보세요",
+      "published_at": "2026-06-08 10:14",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-5e226c09484d76f33f5f6d5b",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224126571576",
+      "collected_at": "2026-11-17T07:32:18.832999+00:00",
+      "captured_at": null,
+      "sha256": "5e226c09484d76f33f5f6d5b2c60becdae1a555eab1dd60cf95a80837872edf2",
+      "visual_hash": "00808606012da524",
+      "width": 365,
+      "height": 365,
+      "bytes": 37934,
+      "original_location": "case-images/4fb7520fc57622735382.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "학교 어린이집 정기 대청소 클린코리아 협동조합에 맡겨주세요",
+      "published_at": "2025-12-29 15:41",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-683fd0fc55901fa3e0387966",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224444898530",
+      "collected_at": "2026-11-17T07:32:18.834781+00:00",
+      "captured_at": null,
+      "sha256": "683fd0fc55901fa3e038796677c129f3104f82bfe2af990115a6c450367dde6f",
+      "visual_hash": "03614d55732b010d",
+      "width": 365,
+      "height": 365,
+      "bytes": 77004,
+      "original_location": "case-images/60013771e984a28deba1.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "에어컨 보관 전 청소, 겨울 내내 곰팡이 막는 법",
+      "published_at": "2026-10-17 19:51",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-9658280f284f6dbebe42c7d7",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224276206473",
+      "collected_at": "2026-11-17T07:32:18.838372+00:00",
+      "captured_at": null,
+      "sha256": "9658280f284f6dbebe42c7d7ccf37227943ae66952dc0dd4e8d46af6f8c91126",
+      "visual_hash": "4242dec79b93b331",
+      "width": 365,
+      "height": 365,
+      "bytes": 38178,
+      "original_location": "case-images/60e76b32eb40cd76f11a.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천미술관 에어컨 청소와 바닥 왁스코팅하고 왔어요~^^",
+      "published_at": "2026-05-06 10:19",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-5fece93e2cee3c753e2f561c",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223582670876",
+      "collected_at": "2026-11-17T07:32:18.840236+00:00",
+      "captured_at": null,
+      "sha256": "5fece93e2cee3c753e2f561cdf6a14403067f6609ed72aa2d2f2b268ffd7e681",
+      "visual_hash": "6dbf9a37d35c3567",
+      "width": 365,
+      "height": 365,
+      "bytes": 62984,
+      "original_location": "case-images/62a884a8efdc0e467436.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "쓰레기집 #장애인 부부 편",
+      "published_at": "2024-09-13 10:59",
+      "service": "special-home",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-232875a150617927d618b749",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224213462950",
+      "collected_at": "2026-11-17T07:32:18.842187+00:00",
+      "captured_at": null,
+      "sha256": "232875a150617927d618b74922686808b617b2d74fdad4df7b82368c7ec831a2",
+      "visual_hash": "b8b53525e0e6e261",
+      "width": 365,
+      "height": 365,
+      "bytes": 31635,
+      "original_location": "case-images/6fc4562a35ec75ae094a.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 화천 학교 대청소 클린코리아협동조합에게 맡겨주세요",
+      "published_at": "2026-03-12 09:08",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-02c0e0642e3b850c58b28d54",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223650485756",
+      "collected_at": "2026-11-17T07:32:18.843713+00:00",
+      "captured_at": null,
+      "sha256": "02c0e0642e3b850c58b28d54b37f06e75e622c46093bb77424763a86aa67ecf9",
+      "visual_hash": "cdc3c1c180818011",
+      "width": 365,
+      "height": 365,
+      "bytes": 48396,
+      "original_location": "case-images/70f99e992887c3e66de8.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 동보빌리지 바닥청소",
+      "published_at": "2024-11-07 10:42",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-28a51e8837f4800e0df9ffeb",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223650822831",
+      "collected_at": "2026-11-17T07:32:18.845327+00:00",
+      "captured_at": null,
+      "sha256": "28a51e8837f4800e0df9ffeb10b19b57019a49e7a7e50a0ca6727b23f76664a3",
+      "visual_hash": "9218929294e091f0",
+      "width": 365,
+      "height": 365,
+      "bytes": 38987,
+      "original_location": "case-images/723159ca1aa5cb7535d3.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 출신 제임스 킬 짐 에어컨청소",
+      "published_at": "2024-11-07 15:04",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-7e606e19521ae95d327179b2",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223872020603",
+      "collected_at": "2026-11-17T07:32:18.847618+00:00",
+      "captured_at": null,
+      "sha256": "7e606e19521ae95d327179b26ab5546fb3678139bd04d31efc0f661f1efea770",
+      "visual_hash": "7171733232343431",
+      "width": 365,
+      "height": 365,
+      "bytes": 46613,
+      "original_location": "case-images/74878f51eaa5233ed38f.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 에어컨 청소(데*앙아파트)",
+      "published_at": "2025-05-20 18:31",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-f804fcc87c03f2da09475c1a",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224251667363",
+      "collected_at": "2026-11-17T07:32:18.849507+00:00",
+      "captured_at": null,
+      "sha256": "f804fcc87c03f2da09475c1ac7cef8ac9124a394c90a531fa0a68c9878b3b570",
+      "visual_hash": "81060707074f077f",
+      "width": 365,
+      "height": 365,
+      "bytes": 41290,
+      "original_location": "case-images/76f7b5e574a6c71f104a.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 문화 예술 회관 카펫 청소 다녀왔습니다",
+      "published_at": "2026-04-14 10:11",
+      "service": "carpet",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-0b5435b6e4c4dfb2e989402a",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224446217996",
+      "collected_at": "2026-11-17T07:32:18.852026+00:00",
+      "captured_at": null,
+      "sha256": "0b5435b6e4c4dfb2e989402a20aa534ece745077087e53253ce5f7d58f446227",
+      "visual_hash": "070e55145cfd7101",
+      "width": 365,
+      "height": 365,
+      "bytes": 219196,
+      "original_location": "case-images/7b482c0f67c4ca664f89.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천·화천 카펫청소, 춘천문화예술회관 객석 후기",
+      "published_at": "2026-10-20 09:30",
+      "service": "carpet",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-85cf057d50ff4ba810d92dfe",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224262538219",
+      "collected_at": "2026-11-17T07:32:18.858660+00:00",
+      "captured_at": null,
+      "sha256": "85cf057d50ff4ba810d92dfe92820df2dadb7e3d4653ce575c1209a00371e3b9",
+      "visual_hash": "1f07c76564766733",
+      "width": 365,
+      "height": 365,
+      "bytes": 43117,
+      "original_location": "case-images/7b94904112a6cf72bcd2.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "어쩌다 청소",
+      "published_at": "2026-04-23 15:21",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-845293329877213d609ccac3",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223660550800",
+      "collected_at": "2026-11-17T07:32:18.861248+00:00",
+      "captured_at": null,
+      "sha256": "845293329877213d609ccac3e228ee73f4f5902feeef64cc9d2aa224ace5dc97",
+      "visual_hash": "001f0f1930330503",
+      "width": 365,
+      "height": 365,
+      "bytes": 37931,
+      "original_location": "case-images/7d1c475b6643a93de024.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 오케이청소 춘천문화예술회관 매트청소했어요",
+      "published_at": "2024-11-14 17:45",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-5a8108d9b0e0aefcbf43a451",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223667607506",
+      "collected_at": "2026-11-17T07:32:18.864096+00:00",
+      "captured_at": null,
+      "sha256": "5a8108d9b0e0aefcbf43a4513e27b0ef30920519e4c9d6f5bc22953c44b03d45",
+      "visual_hash": "f77cb5f5f43b76c7",
+      "width": 365,
+      "height": 365,
+      "bytes": 18128,
+      "original_location": "case-images/7da5d2d42eb40fb45f6f.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 청소 업체 오케이 청소 춘천미술관 바닥 왁스코팅과 에어컨 청소 다녀왔습니다.",
+      "published_at": "2024-11-20 19:07",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-4fa7b720b5a06f30547e2881",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223587368400",
+      "collected_at": "2026-11-17T07:32:18.865876+00:00",
+      "captured_at": null,
+      "sha256": "4fa7b720b5a06f30547e2881f974304a50fe9adf2ef2d77908bdd328d4a30fc3",
+      "visual_hash": "0318b83a3a3c8c57",
+      "width": 365,
+      "height": 365,
+      "bytes": 28782,
+      "original_location": "case-images/7fcd25aeefe810c15bc1.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "더 해빙 효과?",
+      "published_at": "2024-09-18 11:53",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-a6c42328d21782cde0f84fc5",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223594357004",
+      "collected_at": "2026-11-17T07:32:18.867725+00:00",
+      "captured_at": null,
+      "sha256": "a6c42328d21782cde0f84fc5e655d18a123931a1eb3ac64e9bd8ff8ae13fa2e1",
+      "visual_hash": "8d87878787033970",
+      "width": 365,
+      "height": 365,
+      "bytes": 24072,
+      "original_location": "case-images/8711427444957812ccfa.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 이유바이오로직스 후드 청소 다녀왔습니다",
+      "published_at": "2024-09-24 10:43",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-0a9ffa0aeb8de03786dc5585",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223684650955",
+      "collected_at": "2026-11-17T07:32:18.869441+00:00",
+      "captured_at": null,
+      "sha256": "0a9ffa0aeb8de03786dc558538970bbb50543822b3bc8bde64c634790b6760f5",
+      "visual_hash": "0f0f0f27838561e1",
+      "width": 365,
+      "height": 365,
+      "bytes": 48240,
+      "original_location": "case-images/88a7fe47abed06fe3b81.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 카펫 청소 전문 업체 오케이청소 춘천문화예술회관 카펫 청소했어요",
+      "published_at": "2024-12-06 14:41",
+      "service": "carpet",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-d34e8077d0c5e353df195db5",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224444054759",
+      "collected_at": "2026-11-17T07:32:18.871744+00:00",
+      "captured_at": null,
+      "sha256": "d34e8077d0c5e353df195db5e053a27fcda8c7add80aef553d6e9379f35d03ae",
+      "visual_hash": "afac9cdc96b68a36",
+      "width": 365,
+      "height": 365,
+      "bytes": 207612,
+      "original_location": "case-images/88bff7d4b92109f62cc9.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천교회 천장형 에어컨 분해청소 후기, 드레인판까지",
+      "published_at": "2026-10-16 20:09",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-0258d3fea49f4dd60b6e3671",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223601469204",
+      "collected_at": "2026-11-17T07:32:18.877590+00:00",
+      "captured_at": null,
+      "sha256": "0258d3fea49f4dd60b6e3671c02bf5440ea483ba82d9bb4266ab0315a4a8061e",
+      "visual_hash": "0101038338301399",
+      "width": 365,
+      "height": 365,
+      "bytes": 31472,
+      "original_location": "case-images/8fbe8e60f17b8d11a24c.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 바디텍메드 후드청소 다녀왔습니다",
+      "published_at": "2024-09-30 08:53",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-02479d15b13f4fba2b5e695a",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223595310478",
+      "collected_at": "2026-11-17T07:32:18.879673+00:00",
+      "captured_at": null,
+      "sha256": "02479d15b13f4fba2b5e695a30b16f7a2c3f45ca0d9f09366c8c669dae88e88a",
+      "visual_hash": "0ffab1bbe3e1c8eb",
+      "width": 365,
+      "height": 365,
+      "bytes": 23522,
+      "original_location": "case-images/9b1bdb9e9a29c457922b.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "영화를 보고 '싱글 인 서울'",
+      "published_at": "2024-09-26 09:00",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-bd8ab50c563c99e12010ec41",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224451329620",
+      "collected_at": "2026-11-17T07:32:18.882082+00:00",
+      "captured_at": null,
+      "sha256": "bd8ab50c563c99e12010ec4162adf0bf2c15bc46c0f3c86edd6baeda2febc0fc",
+      "visual_hash": "4357410e4bc7d339",
+      "width": 365,
+      "height": 365,
+      "bytes": 248547,
+      "original_location": "case-images/9dd144f87d3a875fff44.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천(강원도) 현업자가 알려주는 통돌이 세탁기 청소 5단계",
+      "published_at": "2026-10-23 15:14",
+      "service": "washer",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-58a6c3405b34cd33b14ccdb2",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224292213306",
+      "collected_at": "2026-11-17T07:32:18.888682+00:00",
+      "captured_at": null,
+      "sha256": "58a6c3405b34cd33b14ccdb2eab96e6dfa87601acef870ee95ca477c60b07541",
+      "visual_hash": "0000b8f93022e6e6",
+      "width": 365,
+      "height": 365,
+      "bytes": 42753,
+      "original_location": "case-images/9fd75868b8848cc1c61d.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 교회 천정형 냉난방기 필터 청소",
+      "published_at": "2026-05-21 11:44",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-883f42cdece623a3972acee6",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224444005144",
+      "collected_at": "2026-11-17T07:32:18.890841+00:00",
+      "captured_at": null,
+      "sha256": "883f42cdece623a3972acee64048b83a54f864df6a4933fb00921bf5f24e512f",
+      "visual_hash": "b48cacd3174e4f3f",
+      "width": 365,
+      "height": 365,
+      "bytes": 203189,
+      "original_location": "case-images/a0bcec844f0a5fde2525.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "락스와 산성 세제, 섞으면 안 되는 이유와 쓰는 순서",
+      "published_at": "2026-10-16 18:59",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-2564355567f2ba34860fefdd",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224444048841",
+      "collected_at": "2026-11-17T07:32:18.896186+00:00",
+      "captured_at": null,
+      "sha256": "2564355567f2ba34860fefdd3716365d17a8b696141eb44a70c861d2c36ee8f0",
+      "visual_hash": "cd4d63737a5871df",
+      "width": 365,
+      "height": 365,
+      "bytes": 170498,
+      "original_location": "case-images/a217472ed9564689c452.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "배수구 냄새 올라오는 이유, 물 한 컵으로 구분하는 법",
+      "published_at": "2026-10-17 13:00",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-3c01dda1fe32bddf132fe67f",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223581431440",
+      "collected_at": "2026-11-17T07:32:18.901041+00:00",
+      "captured_at": null,
+      "sha256": "3c01dda1fe32bddf132fe67f3b36976e3393635126a3840b2fc8d8c096869d79",
+      "visual_hash": "26063765e627cbc9",
+      "width": 365,
+      "height": 365,
+      "bytes": 41319,
+      "original_location": "case-images/a567d9bf00f5a9f0f1f8.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "쓰레기집 # 여선생님의 집",
+      "published_at": "2024-09-12 11:16",
+      "service": "special-home",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-f29cccc106f525f39f877f3f",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224447807675",
+      "collected_at": "2026-11-17T07:32:18.903281+00:00",
+      "captured_at": null,
+      "sha256": "f29cccc106f525f39f877f3f1a53107433bddbb960c5c1ff9f7f59effb846673",
+      "visual_hash": "dca8283a737f6fe7",
+      "width": 365,
+      "height": 365,
+      "bytes": 234187,
+      "original_location": "case-images/aa73c0d7383a7e4d5776.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "학교 계단 논슬립 백화현상 청소, 제거+코팅 후기",
+      "published_at": "2026-10-20 15:29",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-1c2c02aa2030f805c75e7740",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223683258730",
+      "collected_at": "2026-11-17T07:32:18.909259+00:00",
+      "captured_at": null,
+      "sha256": "1c2c02aa2030f805c75e7740b842634d06d06116250ed20fc6846d7d20a15182",
+      "visual_hash": "8d999ac2c6cece87",
+      "width": 365,
+      "height": 365,
+      "bytes": 36455,
+      "original_location": "case-images/ace093bd182d32c9964f.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 소독 전문 업체 오케이청소 오음리 다녀왔습니다",
+      "published_at": "2024-12-05 10:57",
+      "service": "disinfect",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-394f9b5beb10e3b891fed605",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224002535713",
+      "collected_at": "2026-11-17T07:32:18.911268+00:00",
+      "captured_at": null,
+      "sha256": "394f9b5beb10e3b891fed605df22def5e0a4b89245bcf1425f1380f146cbe611",
+      "visual_hash": "048ee26161111818",
+      "width": 365,
+      "height": 365,
+      "bytes": 19847,
+      "original_location": "case-images/ad5baefd5e5f4bf40875.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천청소업체 오케이청소 화천교회 천정형 냉난방기 청소",
+      "published_at": "2025-09-10 13:24",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-dff5de64a10ca59bf5792ab1",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224260874167",
+      "collected_at": "2026-11-17T07:32:18.913601+00:00",
+      "captured_at": null,
+      "sha256": "dff5de64a10ca59bf5792ab1885841ba5720c23d4a51de218347d072c594242c",
+      "visual_hash": "67e6e61c9e3e46e6",
+      "width": 365,
+      "height": 365,
+      "bytes": 38159,
+      "original_location": "case-images/ae69a7026396f5834da3.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 '숲과 나무 애니 앤 주니어 미술학원' 인테리어 후 청소 다녀왔습니다",
+      "published_at": "2026-04-22 09:21",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-6bfa9038c829b1a34b0f12e8",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223882653548",
+      "collected_at": "2026-11-17T07:32:18.915318+00:00",
+      "captured_at": null,
+      "sha256": "6bfa9038c829b1a34b0f12e80d9ef2d8327c3d042631bd662e09ece4dc357ce7",
+      "visual_hash": "2e71c886828684e8",
+      "width": 365,
+      "height": 365,
+      "bytes": 40859,
+      "original_location": "case-images/b53eda9e8dca9dfda664.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 투인원 에어컨 청소(대* 아파트)",
+      "published_at": "2025-05-30 07:33",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-56f6524d5c34d5656c7de08f",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223665145620",
+      "collected_at": "2026-11-17T07:32:18.917226+00:00",
+      "captured_at": null,
+      "sha256": "56f6524d5c34d5656c7de08ff455362ef2191030794a0810a5c257ae0a08e745",
+      "visual_hash": "e9984c96168dc860",
+      "width": 365,
+      "height": 365,
+      "bytes": 32544,
+      "original_location": "case-images/c596cc90071cead597d5.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "신풍리 화천교회 에어컨 냉난방기 청소했습니다",
+      "published_at": "2024-11-18 17:20",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-52ba6dfb867563df68b9a8cc",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224360644241",
+      "collected_at": "2026-11-17T07:32:18.918898+00:00",
+      "captured_at": null,
+      "sha256": "52ba6dfb867563df68b9a8cc2292342d68c68669eabb275d3dbadcb79c2178af",
+      "visual_hash": "c5a76363395b9b1c",
+      "width": 365,
+      "height": 365,
+      "bytes": 29481,
+      "original_location": "case-images/cbc93f2c06ec22b70cdf.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 최고의 인테리어는 청소입니다~^^",
+      "published_at": "2026-07-28 16:25",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-424f85fdfded3bf70fed6596",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224000118588",
+      "collected_at": "2026-11-17T07:32:18.920361+00:00",
+      "captured_at": null,
+      "sha256": "424f85fdfded3bf70fed6596e761e874ee4c6cd0b81947c04a9475085e2f735e",
+      "visual_hash": "0dfb438f961ef0c0",
+      "width": 365,
+      "height": 365,
+      "bytes": 33848,
+      "original_location": "case-images/ccd599b42f5da6bd436f.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 장애인복지센터 냉난방기 멸균 청소",
+      "published_at": "2025-09-08 17:49",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-1d6d3e18d58746425b4e68c5",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224246215252",
+      "collected_at": "2026-11-17T07:32:18.921881+00:00",
+      "captured_at": null,
+      "sha256": "1d6d3e18d58746425b4e68c50efc01aa8f5f4b9502edec74a0ce60171743cb42",
+      "visual_hash": "000048594a0c0803",
+      "width": 365,
+      "height": 365,
+      "bytes": 27303,
+      "original_location": "case-images/ceeef6b00074f6964590.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "화천 아름드리 군인관사 벽걸이 에어컨 청소 다녀왔습니다",
+      "published_at": "2026-04-09 11:03",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-362779d921f6a31bb9090ba7",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224444512880",
+      "collected_at": "2026-11-17T07:32:18.923638+00:00",
+      "captured_at": null,
+      "sha256": "362779d921f6a31bb9090ba721d3f86340159b75f4995bca6618b3cc22a83bbc",
+      "visual_hash": "2b2fcdc4c4acd4e8",
+      "width": 365,
+      "height": 365,
+      "bytes": 128876,
+      "original_location": "case-images/d4d4d95c519ee996b499.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "통돌이 세탁조 청소, 과탄산 vs 세탁조클리너 차이",
+      "published_at": "2026-10-17 10:38",
+      "service": "washer",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-36deb04172307feabdfa6790",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224367465550",
+      "collected_at": "2026-11-17T07:32:18.928250+00:00",
+      "captured_at": null,
+      "sha256": "36deb04172307feabdfa6790604a2106930212030a33e582c245f020b4d5ec90",
+      "visual_hash": "f8f3fbfb7bf8fbf8",
+      "width": 365,
+      "height": 365,
+      "bytes": 28649,
+      "original_location": "case-images/e644898b9e4ee7752e33.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 학교 대청소도 역시 클린코리아입니다.",
+      "published_at": "2026-08-04 09:03",
+      "service": "regular",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-a3f9e94091ede785d9ce65fa",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224462359992",
+      "collected_at": "2026-11-17T07:32:18.930383+00:00",
+      "captured_at": null,
+      "sha256": "a3f9e94091ede785d9ce65fa6c863e7f148ef96ba6e21a07b96622c13c9b4190",
+      "visual_hash": "63637c721616334c",
+      "width": 365,
+      "height": 365,
+      "bytes": 169340,
+      "original_location": "case-images/eed36e1cd53b19b28966.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 에어컨청소 필터만 씻으면 끝일까요",
+      "published_at": "2026-11-02 15:54",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-dfa6a11344c3734de21f446f",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/224445535925",
+      "collected_at": "2026-11-17T07:32:18.935756+00:00",
+      "captured_at": null,
+      "sha256": "dfa6a11344c3734de21f446f46f2e1fcc676c7986f757cae5c48e216d4a79e07",
+      "visual_hash": "51f464c4c4a2b060",
+      "width": 365,
+      "height": 365,
+      "bytes": 214700,
+      "original_location": "case-images/f0dd348b77f2d1e25a81.png",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 쓰레기집 청소 후기, 5명이 3일 걸린 현장",
+      "published_at": "2026-10-19 19:00",
+      "service": "special-home",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-a093c772ef012e661f96fd23",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/boss6008/223926412289",
+      "collected_at": "2026-11-17T07:32:18.942455+00:00",
+      "captured_at": null,
+      "sha256": "a093c772ef012e661f96fd234fee82b774ed8fe0b045e68b9364baf66f19ccdc",
+      "visual_hash": "537fc6c4aceccda5",
+      "width": 365,
+      "height": 365,
+      "bytes": 47414,
+      "original_location": "case-images/f906cbc2dbaff4c822a4.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "봉오 초등학교 폐교 폐기물처리 청소",
+      "published_at": "2025-07-08 17:51",
+      "service": "",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-30544e7a25886171329766e7",
+      "type": "image",
+      "source": "naver-existing-cache",
+      "source_url": "https://blog.naver.com/cleankoreacoop/224368638831",
+      "collected_at": "2026-11-17T07:32:18.944863+00:00",
+      "captured_at": null,
+      "sha256": "30544e7a25886171329766e79fbd5ed62290bbef1448d215d1b718d26db9f7ee",
+      "visual_hash": "e5c4a6a3012466c3",
+      "width": 365,
+      "height": 365,
+      "bytes": 24951,
+      "original_location": "case-images/fcb86c5fe3b059a3e5f7.jpg",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": "춘천 신도브래뉴 아파트 스탠드 에어컨 청소 다녀왔습니다",
+      "published_at": "2026-08-05 10:36",
+      "service": "aircon",
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-423e53d1c0af8e85f2aa2a5e",
+      "type": "image",
+      "source": "owner-provided-frame",
+      "source_url": null,
+      "collected_at": "2026-11-17T07:32:18.947533+00:00",
+      "captured_at": null,
+      "sha256": "423e53d1c0af8e85f2aa2a5e93fa6f690bb8bf10a6d734cfb5575f5521f798b1",
+      "visual_hash": "01273359b08c170b",
+      "width": 720,
+      "height": 1280,
+      "bytes": 33474,
+      "original_location": "case-images/washer-filter-process.webp",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": null,
+      "published_at": null,
+      "service": null,
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-77d4db7b7c7c5099022a426a",
+      "type": "image",
+      "source": "owner-provided-frame",
+      "source_url": null,
+      "collected_at": "2026-11-17T07:32:19.009595+00:00",
+      "captured_at": null,
+      "sha256": "77d4db7b7c7c5099022a426ac52d6ab8d87695f718d5c4769a1e3345d91ac201",
+      "visual_hash": "2303636454010100",
+      "width": 720,
+      "height": 1280,
+      "bytes": 36194,
+      "original_location": "case-images/washer-pulsator-process.webp",
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": null,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "title": null,
+      "published_at": null,
+      "service": null,
+      "original_scope": "existing-public-site-only; Threads reuse needs review"
+    },
+    {
+      "id": "okc-asset-1c9b991f9c226295a933f56a",
+      "type": "video",
+      "source": "owner-provided-original",
+      "source_url": null,
+      "original_location": "owner-private://1c9b991f9c226295a933f56a03a6dabb274643057b4ae5193c880b0eb4e69307",
+      "sha256": "1c9b991f9c226295a933f56a03a6dabb274643057b4ae5193c880b0eb4e69307",
+      "visual_hash": "3070e0f0e4c6c642",
+      "collected_at": "2026-11-17T07:37:13.734991+00:00",
+      "captured_at": null,
+      "service": "washer",
+      "bytes": 23630615,
+      "width": 1080,
+      "height": 1920,
+      "duration_seconds": 58.933333,
+      "visual_hash_frame_seconds": 5,
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": false,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "youtube_matching": "not-verified",
+      "audio_rights": "not-reviewed; variant defaults to muted"
+    },
+    {
+      "id": "okc-asset-fb013bb6f386e6615ad2b3d4",
+      "type": "video",
+      "source": "owner-provided-original",
+      "source_url": null,
+      "original_location": "owner-private://fb013bb6f386e6615ad2b3d45cec663e322021c77d58c61f612b9d9472284e56",
+      "sha256": "fb013bb6f386e6615ad2b3d45cec663e322021c77d58c61f612b9d9472284e56",
+      "visual_hash": "ffffdf5c7cf8f0c3",
+      "collected_at": "2026-11-17T07:37:14.263780+00:00",
+      "captured_at": null,
+      "service": "washer",
+      "bytes": 21784229,
+      "width": 1080,
+      "height": 1920,
+      "duration_seconds": 48.500667,
+      "visual_hash_frame_seconds": 5,
+      "rights": {
+        "status": "pending",
+        "evidence": null
+      },
+      "privacy": {
+        "status": "pending",
+        "reviewed_by": null
+      },
+      "consent": {
+        "threads_reuse": false,
+        "evidence": null
+      },
+      "synthetic": false,
+      "public_url": null,
+      "variant_sha256": null,
+      "threads_posted": false,
+      "threads_id": null,
+      "reusable": false,
+      "youtube_matching": "not-verified",
+      "audio_rights": "not-reviewed; variant defaults to muted"
+    }
+  ],
+  "updated_at": "2026-11-17T07:32:19.038191+00:00"
+}

@@ -1,0 +1,18 @@
+{
+  "brand": "okclean",
+  "naver_blogs": [
+    "boss6008",
+    "cleankoreacoop"
+  ],
+  "instagram": {
+    "expected_username": "ky.lee0912",
+    "expected_id": null,
+    "status": "identity-known-api-not-connected",
+    "profile_url": "https://www.instagram.com/ky.lee0912/"
+  },
+  "youtube": {
+    "channel_id": "UCjo7jtGpV6OMwc4Gm-kWl2A",
+    "status": "identity-known-original-video-mapping-unverified",
+    "originals": []
+  }
+}

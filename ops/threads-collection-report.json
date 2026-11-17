@@ -1,0 +1,37 @@
+{
+  "checked_at": "2026-11-17T07:32:19.038191+00:00",
+  "sources": [
+    {
+      "source": "naver",
+      "status": "50-existing-cached-images-catalogued-live-original-fetch-not-verified"
+    },
+    {
+      "source": "instagram",
+      "status": "identity-known-missing-official-api-connection"
+    },
+    {
+      "source": "youtube",
+      "status": "channel-known-owner-originals-available-mapping-not-verified"
+    }
+  ],
+  "cached_assets": 50,
+  "private_candidates": 0,
+  "approved_assets": 0,
+  "owner_original_videos": 2,
+  "network_original_collection": "not-verified-local-attempt-exceeded-time-budget",
+  "source_identities": "known",
+  "youtube_original_mapping": "not-verified",
+  "naver_feed_probe": {
+    "source": "GitHub Actions read-only audit",
+    "run_id": 44041080715,
+    "boss6008": {
+      "posts": 50,
+      "image_references": 43
+    },
+    "cleankoreacoop": {
+      "posts": 50,
+      "image_references": 41
+    },
+    "original_fetch_verified": false
+  }
+}

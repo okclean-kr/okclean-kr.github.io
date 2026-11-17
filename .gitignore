@@ -9,3 +9,9 @@ test-results/
 *.okcbackup
 private-backups/
 *.okckey
+
+# Original SNS media stays outside the public site until reviewed.
+.okclean-private/
+.okclean-threads-lock/
+
+__pycache__/

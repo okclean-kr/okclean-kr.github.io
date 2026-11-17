@@ -1,0 +1,40 @@
+name: Public source backup
+on:
+  schedule:
+    - cron: '0 23 * * *' # 08:00 Asia/Seoul; GitHub may delay scheduled starts.
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/source-backup.yml', 'scripts/source_backup.py', 'tests/test_source_backup.py']
+  pull_request:
+    paths: ['.github/workflows/source-backup.yml', 'scripts/source_backup.py', 'tests/test_source_backup.py']
+permissions:
+  contents: read
+concurrency:
+  group: source-backup-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+jobs:
+  source-backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Check backup and safe restore behavior
+        run: python3 -m unittest discover -s tests -p 'test_source_backup.py'
+      - name: Create and restore-check committed public source
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/source_backup.py --output "$RUNNER_TEMP/okclean-source-backup"
+      - name: Store verified source for 14 days
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: okclean-source-${{ github.run_id }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/okclean-source-backup/source.tar.gz
+            ${{ runner.temp }}/okclean-source-backup/manifest.json
+          retention-days: 14
+          compression-level: 0
+          if-no-files-found: error

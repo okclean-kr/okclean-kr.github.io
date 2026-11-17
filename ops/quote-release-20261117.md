@@ -4,7 +4,7 @@
 
 | 항목 | 완료 여부 | 실제 검증 결과 |
 |---|---|---|
-| 기존 홈페이지 백업 | 완료 | 변경 전 126개 소스 파일을 ZIP과 Git 백업 브랜치로 보존. 고객 자료는 별도로 11월 16일 23:21 KST에 암호화 내보내기하고 복호화·체크섬을 검증했다. |
+| 기존 홈페이지 백업 | 완료 | 변경 전 126개 소스 보존에 더해 정상 배포본 182개 파일을 별도 복구용 브랜치에 보존하고 전체 파일·실행 권한·Git 이력을 격리 복원해 검증. 정기 공개 소스 백업을 별도 job으로 구성하며 실제 첫 실행 여부는 후속 기록으로 구분한다. 고객 자료는 별도의 11월 16일 암호화 백업 범위를 따른다. |
 | 간편 견적 계산 | 완료 | 기존 계산기를 유지하고 296개 가격 조합을 비교. 확인된 기존 기준을 사용하며 확정 견적으로 표시하지 않는다. |
 | 상세 견적 신청 | 완료 | 운영 서버 시험 접수 2건에서 저장·접수증 재조회·같은 번호 재시도·저장 실패 후 입력 보존을 확인. 실제 고객 집계와 분리. |
 | 서비스별 맞춤 질문 | 완료 | 기존 홈페이지에서 확인한 12개 서비스에 맞게 질문 표시. 작업 내용·날짜 오류는 해당 단계에서 안내하고 입력칸에 초점 이동. 마지막 검증에서도 앞 단계 오류를 보여주며 기존 입력·사진 유지. 임의 서비스·가격이나 새로운 접수 제한을 추가하지 않았다. |
@@ -67,6 +67,14 @@
 이번 PR #51은 `notifications/apps-script/Code.gs`, `notifications/apps-script/appsscript.json`, `notifications/apps-script/README.md`, `tests/mail-notifications.test.cjs`, `tests/mail-notifications-rest.test.mjs`, `package.json`, `.github/workflows/quote-checks.yml`, `ops/private-email-alert-verification-20261117.json`을 변경했다. PR #52는 `admin/quotes.html`의 알림 안내와 실제 연결 증거 JSON, 본 결과 문서를 갱신한다. 관리자 기존 기능 DOM 검사 14개도 통과했다.
 
 견적 본체 변경은 `quote/`, `admin/quotes.html`, `admin/quotes.mjs`와 기존 홈페이지·통계 연결에 반영돼 있다. 이번 메일 작업에서 홈페이지 실행 코드·Firebase 규칙·요금제·고객 자료·블로그·Threads 자동화는 변경하지 않았다.
+
+## 최신 정상 소스 복구 검증
+
+- 지속 스냅샷: `backup/verified-release-20261117-755805d` / `755805d2c91adcf1f4023474627cc5eab72db622`.
+- 격리 Git bundle clone·checkout·strict fsck, 182개 파일과 실행 모드 전부 일치. 전체 142커밋 이력 확인. 주요 스크립트 5개 문법 검사 통과. 운영 복원·고객 데이터 쓰기 없음.
+- 기존 Google 관리자 서버 목록 연결과 14:43:06 KST의 실제 예약 메일 회차 완료를 확인. 트리거 1개·표시 오류율 0%. 추가 시험 메일·견적은 만들지 않았다. 고객 집계·개인정보는 공개 기록에 넣지 않는다.
+- 기존 게시 자동화와 분리한 `source-backup.yml`을 추가한다. 공개 Git 소스만 매일 08:00 KST 요청·14일 artifact 보관, 매회 격리 복원 후 업로드. 새 백업 검사는 6개이며 기존 기능 소스는 변경하지 않는다. 스케줄 구성과 실제 예약 실행은 구분한다.
+- 세부 근거: `release-source-restore-verification-20261117.json`, `verified-release-recovery-20261117.md`. 고객 DB·Auth와 비공개 메일 상태는 소스 백업 대상이 아니다.
 
 ## 백업과 복구
 

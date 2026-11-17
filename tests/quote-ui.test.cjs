@@ -171,3 +171,22 @@ test('사진 압축 대기 중에는 제출 차단·완료 후 모든 사진을 
  Object.defineProperty(ui.$('photos'),'files',{value:[{}],configurable:true});const pending=ui.$('photos').onchange();assert.equal(ui.$('submit').disabled,true);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,0);assert.equal(ui.$('complete').hidden,true);
  release({data:'data:image/jpeg;base64,/9j/AAAA'});await pending;assert.equal(ui.$('submit').disabled,false);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,1);assert.equal(count,1);ui.dom.window.close();
 });
+
+function estimateClock(ui){
+ let serial=0;const pending=new Map();ui.w.setTimeout=(callback,delay)=>{assert.equal(delay,800);const id=++serial;pending.set(id,callback);return id;};ui.w.clearTimeout=id=>pending.delete(id);
+ return{count:()=>pending.size,flush:()=>{const callbacks=[...pending.values()];pending.clear();for(const callback of callbacks)callback();}};
+}
+function estimateAircon(ui,count){ui.w.document.querySelector('[name=type]').value='벽걸이';ui.w.document.querySelector('[name=count]').value=String(count);ui.$('questions').dispatchEvent(new ui.w.Event('input',{bubbles:true}));}
+test('계산 대기 중 서비스가 바뀌어도 계산 이벤트는 실제 계산한 서비스로 기록',async()=>{
+ const ui=await setup(),clock=estimateClock(ui),events=[];ui.w.OKCleanAnalytics.track=(name,details)=>events.push({name,service:details.service});ui.$('next').click();estimateAircon(ui,2);assert.match(ui.$('estimate').textContent,/참고 예상 비용/);assert.equal(clock.count(),1);
+ ui.$('previous').click();const nextService=ui.w.document.querySelector('[name=service][value="special-home"]');nextService.checked=true;nextService.dispatchEvent(new ui.w.Event('change',{bubbles:true}));ui.$('next').click();assert.match(ui.$('estimate').textContent,/현장 사진/);clock.flush();
+ const calculated=events.filter(e=>e.name==='quote_calculate');assert.equal(calculated.length,1);assert.equal(calculated[0].service,'aircon');ui.dom.window.close();
+});
+test('연속 수량 변경은 최종 예상 비용의 계산 이벤트 한 번으로 묶음',async()=>{
+ const ui=await setup(),clock=estimateClock(ui),events=[];ui.w.OKCleanAnalytics.track=(name,details)=>events.push({name,service:details.service});ui.$('next').click();for(const count of[1,2,4])estimateAircon(ui,count);assert.equal(clock.count(),1);clock.flush();assert.deepEqual(events.filter(e=>e.name==='quote_calculate'),[{name:'quote_calculate',service:'aircon'}]);ui.dom.window.close();
+});
+test('미리보기·관리자 시험의 지연 계산 이벤트는 실제 통계로 전송하지 않음',async()=>{
+ for(const mode of['quote_preview','quote_test']){
+  const store={getBackend:async()=>({auth:{currentUser:{uid:'H1MfdqGkFRZzU8qkqwXTsiKv3CO2',providerData:[{providerId:'google.com'}]}}})};const ui=await setup(true,store,'https://test.invalid/quote/?svc=aircon&'+mode+'=1'),clock=estimateClock(ui),events=[];ui.w.OKCleanAnalytics.track=(name,details)=>events.push({name,service:details.service});ui.$('next').click();estimateAircon(ui,2);assert.equal(clock.count(),1);clock.flush();assert.deepEqual(events,[]);ui.dom.window.close();
+ }
+});

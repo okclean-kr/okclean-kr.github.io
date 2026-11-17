@@ -1,0 +1,80 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "local_checks_passed_deployment_pending",
+  "baseCommit": "8946b4fe651c4a5b695863cb27613a01ab4c2b3d",
+  "backupBranch": "backup/calculate-event-before-20261117-8946b4f",
+  "moduleVersion": "20261117-calculate1",
+  "problemReproducedBeforeFix": {
+    "uiTests": 34,
+    "failed": 1,
+    "passed": 33,
+    "scenario": "Calculate an air-conditioner estimate, switch to special-home before the existing 800ms callback; the callback incorrectly recorded special-home."
+  },
+  "changes": [
+    "Capture the service ID used by the displayed calculation in its existing delayed event callback.",
+    "Keep other event callers on their existing current-service default.",
+    "Keep existing debounce timing, event schema, suppression of preview/admin-test events, pricing and storage behavior."
+  ],
+  "automatedChecks": {
+    "node": 195,
+    "uiSubset": 34,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 288,
+    "failed": 0,
+    "skipped": 0,
+    "newChecks": 3
+  },
+  "isolatedBrowserChecks": {
+    "browser": "Chrome",
+    "actualFormSourceAndNativeTimer": true,
+    "backendAndAnalyticsReplacedWithLocalStubs": true,
+    "pc": {
+      "passed": true,
+      "calculatedService": "aircon",
+      "currentService": "special-home",
+      "recordedCalculationService": "aircon",
+      "calculationEvents": 1
+    },
+    "mobile390px": {
+      "passed": true,
+      "calculatedService": "aircon",
+      "currentService": "special-home",
+      "recordedCalculationService": "aircon",
+      "calculationEvents": 1,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    },
+    "productionAnalyticsOrCustomerDataWrites": false
+  },
+  "beforeSourceRestore": {
+    "sourceCommit": "8946b4fe651c4a5b695863cb27613a01ab4c2b3d",
+    "persistentBranch": "backup/calculate-event-before-20261117-8946b4f",
+    "archiveBytes": 4814488,
+    "archiveSha256": "f45a913ca5550b32797f1ab6fa611401f3b3ae829ae50befdac5953c8515b32b",
+    "filesVerified": 214,
+    "bytesVerified": 6133648,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false
+  },
+  "backendRulesOrPermissionsChanged": false,
+  "pricingOrEventSchemaChanged": false,
+  "historicAnalyticsDocumentsRewrittenOrDeleted": false,
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "deploymentVerified": false,
+  "rollback": "Restore quote/index.html and quote/quote-form.mjs together from the pre-change backup. Preserve customer data, analytics documents and later automation changes.",
+  "limits": [
+    "Chrome PC and 390px iframe testing is not physical-phone/Safari testing.",
+    "Local analytics callbacks are observed without producing real conversion events.",
+    "Existing historical events were not rewritten; this fix applies to future events only."
+  ],
+  "checkedAtUTC": "2026-11-17T08:46:39.436384+00:00"
+}

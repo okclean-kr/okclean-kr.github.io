@@ -1,0 +1,39 @@
+{
+  "reviewedAt": "2026-11-17",
+  "sourceType": "owner-provided original work videos",
+  "backupBranch": "backup/work-photos-before-20261117-badd07f",
+  "backupCommit": "badd07f467a78c3564f9397603a2a41020aee29d",
+  "service": "washer",
+  "publicationScope": "Two face-free close-ups from supplied promotional work footage; original videos remain private.",
+  "manualReview": {
+    "facesVisible": false,
+    "readablePersonalOrSiteIdentifiers": false,
+    "locationOrWorkDateClaimed": false,
+    "completedAfterResultClaimed": false,
+    "reviewOrRatingClaimed": false
+  },
+  "assets": [
+    {
+      "path": "case-images/washer-pulsator-process.webp",
+      "caption": "회전판 뒷면 세척 중",
+      "sourceSha256": "d13d042cd74d80dfd0d7071351aac0d3d8c31385ff0811e4218747ef97646fc2",
+      "frameSeconds": 39,
+      "sha256": "77d4db7b7c7c5099022a426ac52d6ab8d87695f718d5c4769a1e3345d91ac201",
+      "bytes": 36194,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "path": "case-images/washer-filter-process.webp",
+      "caption": "필터 안쪽 세척 중",
+      "sourceSha256": "fb013bb6f386e6615ad2b3d45cec663e322021c77d58c61f612b9d9472284e56",
+      "frameSeconds": 34,
+      "sha256": "423e53d1c0af8e85f2aa2a5e93fa6f690bb8bf10a6d734cfb5575f5521f798b1",
+      "bytes": 33474,
+      "width": 720,
+      "height": 1280
+    }
+  ],
+  "encoding": "Single original frame per video, scaled to 720x1280 WebP quality 82; metadata removed. No generated or reconstructed content.",
+  "remainingContent": "The supplied videos do not establish a completed before/after pair or customer review. Those require verified originals and publication consent."
+}

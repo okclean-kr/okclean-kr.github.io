@@ -190,3 +190,17 @@ test('미리보기·관리자 시험의 지연 계산 이벤트는 실제 통계
   const store={getBackend:async()=>({auth:{currentUser:{uid:'H1MfdqGkFRZzU8qkqwXTsiKv3CO2',providerData:[{providerId:'google.com'}]}}})};const ui=await setup(true,store,'https://test.invalid/quote/?svc=aircon&'+mode+'=1'),clock=estimateClock(ui),events=[];ui.w.OKCleanAnalytics.track=(name,details)=>events.push({name,service:details.service});ui.$('next').click();estimateAircon(ui,2);assert.equal(clock.count(),1);clock.flush();assert.deepEqual(events,[]);ui.dom.window.close();
  }
 });
+
+test('전화번호 붙여넣기의 공백·하이픈 혼합을 잘림 없이 받고 저장 전 공백만 정리',async()=>{
+ for(const[raw,expected]of[['010 0000 0000','01000000000'],['010 - 0000 - 0000','010-0000-0000'],['010\u00a00000\u00a00000','01000000000']]){
+  let saved;const ui=await setup(true,{newRequestId:()=> 'N'.repeat(20),submitQuote:async(c,id,input)=>{saved=input;}});fillForm(ui);ui.$('phone').value=raw;assert.ok(ui.$('phone').maxLength>=raw.length,'붙여넣은 번호가 길이 제한으로 잘리지 않아야 함');ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(saved?.phone,expected);assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+ }
+});
+test('공백 포함 번호의 저장 실패는 원문 입력 유지·같은 번호와 정리된 스냅샷으로 재시도',async()=>{
+ const sent=[],ids=[];const raw='010 - 0000 - 0000';const ui=await setup(true,{newRequestId:()=> 'S'.repeat(20),submitQuote:async(c,id,input)=>{ids.push(id);sent.push(input);if(sent.length===1)throw{code:'unavailable'};}});fillForm(ui);ui.$('phone').value=raw;ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(sent.length,1);assert.equal(sent[0].phone,'010-0000-0000');assert.equal(ui.$('phone').value,raw);assert.equal(ui.$('phone').disabled,true);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('submit').disabled,false);ui.$('submit').click();await tick();assert.equal(sent.length,2);assert.equal(sent[0],sent[1]);assert.deepEqual(ids,['S'.repeat(20),'S'.repeat(20)]);assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+});
+test('전화번호 공백 정리는 문자·잘못된 구분자·빈 번호의 검증 오류를 숨기지 않음',async()=>{
+ for(const raw of['   ','010 00A0 0000','010 / 0000 / 0000','010\u200b00000000']){
+  let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}});fillForm(ui);ui.$('phone').value=raw;ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,0);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('phone').value,raw);assert.equal(ui.w.document.activeElement.id,'phone');assert.match(ui.$('formError').textContent,/휴대폰 번호/);ui.dom.window.close();
+ }
+});

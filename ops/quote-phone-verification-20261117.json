@@ -1,0 +1,88 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "local_checks_passed_deployment_pending",
+  "baseCommit": "f1e1e49a2e9ccfd5d9e9f6f5f7b331c4b1354c4c",
+  "backupBranch": "backup/phone-input-before-20261117-f1e1e49",
+  "moduleVersion": "20261117-phone1",
+  "problemReproducedBeforeFix": {
+    "uiTests": 37,
+    "failed": 2,
+    "passed": 35,
+    "findings": [
+      "Valid existing local phone digits with spaces were rejected before storage.",
+      "The previous phone maxlength was 13; a 17-character space/hyphen presentation exceeded the native input limit."
+    ]
+  },
+  "changes": [
+    "Increase phone input maxlength from 13 to 20 for ordinary pasted formatting.",
+    "Remove whitespace only when reading the submission snapshot; keep the displayed original during failure/retry.",
+    "Retain existing phone validation, hyphen handling, server payload schema, permissions and same-request retry."
+  ],
+  "automatedChecks": {
+    "node": 198,
+    "uiSubset": 37,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 291,
+    "failed": 0,
+    "skipped": 0,
+    "newChecks": 3
+  },
+  "isolatedBrowserChecks": {
+    "browser": "Chrome",
+    "actualFormSourceUnchangedInFixture": true,
+    "fakeBackendAndLocalTestIdentityOnly": true,
+    "realFirebaseConnected": false,
+    "pc": {
+      "passed": true,
+      "rawSyntheticPhone": "010 - 0000 - 0000",
+      "submittedSyntheticPhone": "010-0000-0000",
+      "requestCalls": 2,
+      "distinctRequestIds": 1,
+      "sameInputSnapshot": true,
+      "nativeEnterRetry": true,
+      "completionHeadingFocused": true
+    },
+    "mobile390px": {
+      "passed": true,
+      "rawSyntheticPhone": "010 - 0000 - 0000",
+      "submittedSyntheticPhone": "010-0000-0000",
+      "requestCalls": 2,
+      "distinctRequestIds": 1,
+      "sameInputSnapshot": true,
+      "nativeEnterRetry": true,
+      "completionHeadingFocused": true,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    },
+    "productionQuoteOrPhotoOrEmailCreated": false
+  },
+  "beforeSourceRestore": {
+    "sourceCommit": "f1e1e49a2e9ccfd5d9e9f6f5f7b331c4b1354c4c",
+    "persistentBranch": "backup/phone-input-before-20261117-f1e1e49",
+    "archiveBytes": 4973365,
+    "archiveSha256": "7b91b214dbc1431656114f2ff61d6b4122bacf63cde6d8f4e28959d6fc32efba",
+    "filesVerified": 220,
+    "bytesVerified": 6368639,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false
+  },
+  "pricingOrBackendRulesOrMembershipChanged": false,
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "deploymentVerified": false,
+  "rollback": "Restore quote/index.html and quote/quote-form.mjs together from the pre-change backup; preserve customer data and later automation changes.",
+  "limits": [
+    "Native browser checks use Chrome PC/390px and a local response stub, not physical-phone/Safari testing or a new production quote.",
+    "Whitespace cleanup does not expand existing accepted number prefixes or allow letters/other separators.",
+    "No existing customer contact data is rewritten."
+  ],
+  "checkedAtUTC": "2026-11-17T10:19:45.456818+00:00"
+}

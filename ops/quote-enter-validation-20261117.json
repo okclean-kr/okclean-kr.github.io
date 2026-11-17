@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "pc_mobile_preview_verified_pending_ci_and_deployment",
+  "status": "merged_deployed_and_live_preview_verified",
   "baseCommit": "1cfe2de4dff8f948e11df081cf38afbfbcb98755",
   "backupBranch": "backup/quote-enter-before-20261117-1cfe2de",
   "problem": "In a real browser, Enter on a numeric service answer did not advance when the final submit button was disabled in preview mode. The Next button worked.",
@@ -21,7 +21,17 @@
     "afterFixSkipped": 0,
     "newRegressionTests": 2,
     "expectedStandardSuiteTotal": 252,
-    "ciVerified": false
+    "ciVerified": true,
+    "nodePassed": 160,
+    "ruleAndRESTPassed": 69,
+    "pythonPassed": 23,
+    "totalPassed": 252,
+    "totalSkipped": 0,
+    "prRun": 43998569551,
+    "prJob": 133756631600,
+    "mainRun": 43999861866,
+    "pagesRun": 43999861568,
+    "conclusion": "success"
   },
   "browserPreview": {
     "pcActualKeypressVerified": true,
@@ -105,7 +115,77 @@
     "status": "viewer_authentication_required",
     "existingAuthorizationAndTriggerNotChanged": true,
     "lastObservedScheduledSuccessKST": "2026-11-17T02:08:06+09:00",
-    "laterScheduledExecutionsChecked": false
+    "laterScheduledExecutionsChecked": false,
+    "latestViewerObservation": "Google sign-in session expired from inactivity before secure credential entry could be applied; current automatic mail-run health has not been rechecked."
   },
-  "recovery": "Revert this scoped change or restore the two quote UI source files from the backup branch; keep existing quote/customer data and other later automation commits."
+  "recovery": "Revert this scoped change or restore the two quote UI source files from the backup branch; keep existing quote/customer data and other later automation commits.",
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/53",
+  "mergeCommit": "edfcb41af019581b742518ef427296da09b32de7",
+  "browserProduction": {
+    "url": "https://okclean-kr.github.io/quote/?quote_preview=1",
+    "moduleURL": "quote-form.mjs?v=20261117-keyboard2",
+    "actualKeypressVerified": true,
+    "zeroCountRemainsOnStepTwo": true,
+    "invalidInputFocused": true,
+    "twoUnitsEnterAdvancesToContact": true,
+    "focusMovesToLegend": true,
+    "finalSubmitStillDisabled": true,
+    "newQuoteSubmitted": false,
+    "physicalPhoneTest": false
+  },
+  "liveHTTPVerification": {
+    "checkedAtUTC": "2026-11-17T02:04:31.252992+00:00",
+    "sourceCommit": "edfcb41af019581b742518ef427296da09b32de7",
+    "files": [
+      {
+        "path": "index.html",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "ec79770aaf2209f4a8f4c96a5c60aa38692dbff19bfe4f690523584eda6c92bb"
+      },
+      {
+        "path": "quote/index.html",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "cb9bf618e1c61eef8270c31c13cd6532c908022d306bb683bef9671624b0465d"
+      },
+      {
+        "path": "quote/quote-form.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "b6de0b3ca90858e6af5b2a16f5810f6eadaa21e65c26ebcf4bef8b68dea0f4bc"
+      },
+      {
+        "path": "quote/config.js",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "f91ecc2e2d702a887b729e3600d86ce1cec7cfc2df6504639a0f92480a250edd"
+      },
+      {
+        "path": "quote/catalog.json",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "3108940722e0f8d017a6f1a07cf9c3cbbe984247a12d9a574531394bf176e42a"
+      },
+      {
+        "path": "admin/quotes.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "9d81c4a518cb9dac36f1b9b7ffb9c0c3e5a2f09b86fbe24f94f50b76dde41590"
+      },
+      {
+        "path": "member-sync.js",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+      },
+      {
+        "path": "notifications/apps-script/Code.gs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "ea3902bf9de1b694302cc9cc88132b8823d7e8c3e8827bec6bf391a6ed1a4971"
+      }
+    ],
+    "allMatched": true
+  }
 }

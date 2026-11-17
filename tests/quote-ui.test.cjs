@@ -43,3 +43,20 @@ test('키보드로 미리보기 단계를 진행해도 운영 저장과 통계�
  let calls=0,events=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}},'https://test.invalid/quote/?svc=aircon&quote_preview=1');ui.w.OKCleanAnalytics.track=()=>events++;
  ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);ui.dom.window.close();assert.equal(calls,0);assert.equal(events,0);
 });
+
+test('접수 버튼이 비활성인 미리보기에서도 작업 수량 Enter는 검증 후 다음 단계로 이동',async()=>{
+ let calls=0,events=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}},'https://test.invalid/quote/?svc=aircon&quote_preview=1');ui.w.OKCleanAnalytics.track=()=>events++;
+ ui.$('next').click();assert.equal(ui.$('submit').disabled,true);
+ for(const[k,v]of Object.entries({type:'벽걸이',count:'0',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ const input=ui.w.document.querySelector('[name=count]'),enter=()=>{const event=new ui.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true});input.dispatchEvent(event);return event;};
+ assert.equal(enter().defaultPrevented,true);assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.w.document.activeElement,input);
+ input.value='2';assert.equal(enter().defaultPrevented,true);assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false);assert.equal(ui.w.document.activeElement.closest('fieldset').dataset.step,'3');assert.equal(ui.$('submit').disabled,true);assert.equal(calls,0);assert.equal(events,0);ui.dom.window.close();
+});
+
+test('한글 조합·선택 상자의 Enter와 연락처 단계 키보드 동작은 가로채지 않음',async()=>{
+ const ui=await setup();ui.$('next').click();const input=ui.w.document.querySelector('[name=count]');
+ const composed=new ui.w.KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true,cancelable:true});input.dispatchEvent(composed);assert.equal(composed.defaultPrevented,false);assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);
+ const selection=new ui.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true});ui.w.document.querySelector('[name=type]').dispatchEvent(selection);assert.equal(selection.defaultPrevented,false);assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);
+ for(const[k,v]of Object.entries({type:'벽걸이',count:'2',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;ui.$('next').click();
+ const contact=new ui.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true});ui.$('phone').dispatchEvent(contact);assert.equal(contact.defaultPrevented,false);assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false);ui.dom.window.close();
+});

@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "local_checks_passed_deployment_pending",
+  "status": "deployed_live_input_limit_and_isolated_whitespace_retry_verified",
   "baseCommit": "f1e1e49a2e9ccfd5d9e9f6f5f7b331c4b1354c4c",
   "backupBranch": "backup/phone-input-before-20261117-f1e1e49",
   "moduleVersion": "20261117-phone1",
@@ -77,12 +77,119 @@
   },
   "pricingOrBackendRulesOrMembershipChanged": false,
   "productionQuoteOrCustomerDataWritesPerformed": false,
-  "deploymentVerified": false,
+  "deploymentVerified": true,
   "rollback": "Restore quote/index.html and quote/quote-form.mjs together from the pre-change backup; preserve customer data and later automation changes.",
   "limits": [
     "Native browser checks use Chrome PC/390px and a local response stub, not physical-phone/Safari testing or a new production quote.",
     "Whitespace cleanup does not expand existing accepted number prefixes or allow letters/other separators.",
-    "No existing customer contact data is rewritten."
+    "No existing customer contact data is rewritten.",
+    "The ordinary live page review may be included in existing page_view analytics. No quote, contract or contact message was created and no metrics were rewritten."
   ],
-  "checkedAtUTC": "2026-11-17T10:19:45.456818+00:00"
+  "checkedAtUTC": "2026-11-17T10:27:04.080720+00:00",
+  "pullRequest": 66,
+  "headCommit": "e97d94fa73132dbcc7dcb25d5d05f952bf633b1b",
+  "mergeCommit": "e96fe49ce2f27461f241de8c2c58d8bbdfa6d35d",
+  "githubChecks": {
+    "prRunId": 44063826778,
+    "prJobId": 133972251211,
+    "prConclusion": "success",
+    "mainRunId": 44064153726,
+    "mainConclusion": "success",
+    "pagesRunId": 44064152864,
+    "pagesConclusion": "success"
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "e96fe49ce2f27461f241de8c2c58d8bbdfa6d35d",
+    "persistentBranch": "backup/verified-phone-20261117-e96fe49",
+    "archiveBytes": 4974881,
+    "archiveSha256": "0b6dfc1d81a58b735375d52d2fed8b5ef9c77dc8a52b8879021c0de1c5757b67",
+    "filesVerified": 221,
+    "bytesVerified": 6374352,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6395,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13564,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22295,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesMergedSource": true
+    }
+  ],
+  "operationalReadOnlyChecks": {
+    "intakeAvailable": true,
+    "newModuleVersionObserved": "quote-form.mjs?v=20261117-phone1",
+    "existingServicesVisible": 12,
+    "nextEnabled": true,
+    "livePreviewPhoneMaxLength": 20,
+    "syntheticSpacedPhoneEnteredInPreview": true,
+    "previewSubmitDisabled": true,
+    "noLiveQuoteSubmissionOrContactClickPerformed": true,
+    "ordinaryLivePageViewMayBeMeasuredByExistingAnalytics": true,
+    "internalReviewVisitIsNotACustomerQuoteOrContract": true,
+    "analyticsDocumentsDeletedOrRewritten": false
+  },
+  "protectedExistingFilesUnchanged": true,
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-phone-input-isolated-20261117.jpg",
+    "bytes": 62997,
+    "sha256": "d4185a7aaa688133537981f89f846fb9385cadb4932d46156857888accda3d3e",
+    "scope": "Local 390px frame, synthetic zero phone number and a response stub; success is not a new production receipt or real customer conversion."
+  }
 }

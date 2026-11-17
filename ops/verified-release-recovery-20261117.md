@@ -14,6 +14,14 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 전화번호 입력 개선 후 최신 정상 소스
+
+PR #66 병합 `e96fe49ce2f27461f241de8c2c58d8bbdfa6d35d`를 `backup/verified-phone-20261117-e96fe49`에 보존했다. 임시 tar **4,974,881바이트**, SHA-256 `0b6dfc1d81a58b735375d52d2fed8b5ef9c77dc8a52b8879021c0de1c5757b67`에서 **221파일·6,374,352바이트** 전부 격리 복원 일치했다. 변경 전 `backup/phone-input-before-20261117-f1e1e49` / `f1e1e49a2e9ccfd5d9e9f6f5f7b331c4b1354c4c`도 **220파일·6,368,639바이트** 전부 복원했다. 변경 전 tar **4,973,365바이트**, SHA-256 `7b91b214dbc1431656114f2ff61d6b4122bacf63cde6d8f4e28959d6fc32efba`다.
+
+이 변경만 복구할 때는 변경 전 브랜치에서 `quote/index.html`, `quote/quote-form.mjs`를 함께 가져온다. 수정은 전화번호 입력 여유와 제출 직전 공백 정리이며 실패 시 원문·같은 번호 재시도를 유지했다. 기존 고객 연락처·회원가입/쿠폰 형식·가격·사진·권한·관리자·알림·게시/백업 workflow를 변경하지 않았다. 이후 고객/자동화 자료·통계·코드를 과거로 덮어쓰지 않는다.
+
+CI 291개·main·Pages 성공. Chrome PC/390px 격리 실제 form에서 공백 혼합 번호의 정리·실패·Enter 동일 신청 재시도·완료를 확인했고, 운영 미리보기의 새 입력 제한과 일반 접수 가능·주요 파일 10개 원본 일치도 확인했다. 새 운영 견적·사진·메일·계약은 만들지 않았다. Git 브랜치는 같은 저장소의 지속 스냅샷이며 임시 tar·고객 DB/Auth·비공개 메일 상태·이후 문서까지 포함하는 독립 영구 외부 백업이 아니다. 앞선 실제 GitHub ZIP의 218파일 검증도 유지한다. 근거: `quote-phone-verification-20261117.json`.
+
 ## 경고 없는 백업 런타임의 최신 정상 소스
 
 PR #65 병합 `71ef5afda739209104b524507696dc16a8c2fdcd`를 `backup/verified-runtime-20261117-71ef5af`에 보존했다. `.github/workflows/source-backup.yml`의 checkout을 공식 서명 확인한 v6.1.0 커밋 `d23441a48e516b6c34aea4fa41551a30e30af803`(Node.js 24)으로 고정하고, 직전 실제 정상 이미지와 같은 Ubuntu 26.04 레이블을 명시했다. 매일 08시·14일 보관·권한·인증 정보 미보존·백업/복원 단계·임시 예약 확인 task는 유지한다.

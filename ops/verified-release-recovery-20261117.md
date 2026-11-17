@@ -14,7 +14,13 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
-## 관리자 갱신 복구 개선 후 최신 정상 소스
+## 접수 완료 개선 후 최신 정상 소스
+
+PR #61까지 포함한 정상 소스는 `backup/verified-receipt-completion-20261117-28205a6` / `28205a6d12322e3834d1e6c52b406ab9d26db370`에 추가 보존했다. 임시 tar에서 193파일·5,875,754바이트를 전부 격리 복원했다. tar SHA-256은 `ecb16f2b1142c2497504cf5b57b914d4749002933e0f44d3809763be590374e0`다. 영구 보존은 Git 브랜치·커밋이며 임시 tar를 독립 영구 백업으로 표현하지 않는다.
+
+이 변경만 복구할 때는 `backup/receipt-completion-before-20261117-dd6e4f6`에서 `quote/index.html`과 `quote/quote-form.mjs`를 함께 가져온다. 기존 서버 저장·접수증·고객 자료·회원·쿠폰·관리자·알림·게시 workflow를 초기화하지 않는다. 276개 검사·main·Pages 통과, PC/390px 격리 응답에서 실패→같은 번호 Enter 재시도→완료 제목→상담 링크 초점 및 PC의 경고 없는 이탈을 확인했다. 운영에서는 새 모듈·접수 가능 화면을 읽기 확인했고 접수는 추가하지 않았다. 상세 근거는 `quote-completion-verification-20261117.json`이다.
+
+## 관리자 갱신 복구 개선 시점의 정상 소스
 
 PR #59를 포함한 정상 소스는 `backup/verified-admin-refresh-20261117-695fbaa` / `695fbaae30cbb1592ae079972d9b16056be9bccc`에 추가 보존했다. 191개 파일·5,792,212바이트를 임시 tar에서 전부 격리 복원했다. tar SHA-256은 `76ad07ec3294121b93985e814345c2a8b8a02dd2f398f413a22ad6f68aa29c22`다. 영구 보존은 Git 브랜치·커밋이며 임시 tar를 별도 영구 보관으로 표현하지 않는다.
 

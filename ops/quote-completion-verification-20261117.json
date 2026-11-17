@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "local_checks_and_pc_isolated_receipt_flow_passed_pending_deployment",
+  "status": "deployed_live_initial_screen_and_isolated_completion_flow_verified",
   "baseCommit": "dd6e4f6617ba82d0c4bc44260f16cc2898d4547b",
   "backupBranch": "backup/receipt-completion-before-20261117-dd6e4f6",
   "moduleVersion": "20261117-complete1",
@@ -45,17 +45,121 @@
       "navigationAfterCompletionSucceeded": true,
       "beforeunloadDialogAfterCompletion": false
     },
-    "mobile390pxPending": true
+    "mobile390px": {
+      "failurePreservedInputAndFocusedRetry": true,
+      "nativeEnterRetriedSameRequestId": true,
+      "requestCalls": 2,
+      "distinctRequestIds": 1,
+      "completionHeadingFocused": true,
+      "nativeTabFocusedKakaoLink": true,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    }
   },
   "serverSaveAndReceiptReadbackUnchanged": true,
-  "productionDataWritesPerformed": false,
   "newQuoteOrPhotoOrEmailCreated": false,
   "backendRulesOrPermissionsChanged": false,
-  "deploymentVerified": false,
+  "deploymentVerified": true,
   "rollback": "Restore quote/index.html and quote/quote-form.mjs together from the backup branch; preserve customer documents, receipt IDs, Firebase rules and later automation changes.",
   "limits": [
     "Receipt success/failure browser scenarios use a synthetic in-memory backend, not a production customer submission.",
     "No Kakao message or phone call was sent.",
-    "Physical phone and assistive-technology screen-reader testing are not claimed."
-  ]
+    "Physical phone and assistive-technology screen-reader testing are not claimed.",
+    "The ordinary live page opened for deployment review may be included in existing page_view analytics. This internal visit is not a customer quote or contract; no metric documents were deleted or rewritten."
+  ],
+  "checkedAtUTC": "2026-11-17T07:48:22.107043+00:00",
+  "pullRequest": 61,
+  "headCommit": "791845dde4eca432301afa3409ab07cfbddd001b",
+  "mergeCommit": "28205a6d12322e3834d1e6c52b406ab9d26db370",
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "githubChecks": {
+    "prRunId": 44039738581,
+    "prJobId": 133891129080,
+    "prConclusion": "success",
+    "mainRunId": 44040358072,
+    "mainConclusion": "success",
+    "pagesRunId": 44040356754,
+    "pagesConclusion": "success"
+  },
+  "operationalReadOnlyChecks": {
+    "intakeAvailable": true,
+    "newModuleVersionObserved": "quote-form.mjs?v=20261117-complete1",
+    "completionHeadingTabindex": "-1",
+    "completionAriaLabelledby": "completeTitle",
+    "existingServicesVisible": 12,
+    "noLiveQuoteSubmissionOrContactClickPerformed": true,
+    "ordinaryLivePageViewMayBeMeasuredByExistingAnalytics": true,
+    "internalReviewVisitIsNotACustomerQuoteOrContract": true,
+    "analyticsDocumentsDeletedOrRewritten": false
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6398,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13501,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5228,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22277,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    }
+  ],
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-completion-mobile-isolated-20261117.jpg",
+    "bytes": 57449,
+    "sha256": "fc15fbeacab878ff6bd3e912d04e4170e2007bc1fd79856aef6cb7c9a6adb777",
+    "scope": "Local 390px iframe and synthetic test input with an in-memory response stub. Completion and retry behavior is not a new production receipt, customer conversion or real message."
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "28205a6d12322e3834d1e6c52b406ab9d26db370",
+    "persistentBranch": "backup/verified-receipt-completion-20261117-28205a6",
+    "filesVerified": 193,
+    "bytesVerified": 5875754,
+    "archiveBytes": 4694345,
+    "archiveSha256": "ecb16f2b1142c2497504cf5b57b914d4749002933e0f44d3809763be590374e0",
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "protectedExistingFilesUnchanged": true
 }

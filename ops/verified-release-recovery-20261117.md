@@ -14,6 +14,14 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 관리자 저장 안내 개선 후 최신 정상 소스
+
+PR #68 병합 `65b9fbd427903d89144d5d019591bfcc9ab8b792`를 `backup/verified-admin-save-20261117-65b9fbd`에 보존했다. 임시 tar **5,098,835바이트**, SHA-256 `9c53b9ae01979f8036317adfcfb6126ca8e43d9b44badfe73fd3c9cf57c6d47d`에서 **226파일·6,558,370바이트** 전부 격리 복원 일치했다. 변경 전 `backup/admin-save-before-20261117-5842170` / `5842170fc19b75163ebd3d14f54f2a4322ca2553`도 **226파일·6,553,954바이트** 복원했다. 변경 전 tar **5,098,216바이트**, SHA-256 `4c32af35dcc6d947fa23c1b31a7570a5a2f1e359206cdaee0325b2ebd7349491`다.
+
+이 변경만 복구할 때는 변경 전 브랜치에서 `admin/quotes.html`, `admin/quotes.mjs`를 함께 가져온다. 저장 성공 안내를 목록 밖에서 유지하고 응답 뒤에만 표시하도록 수정했으며 세션 변경 시 옛 안내를 버린다. 기존 트랜잭션·권한·고객 접수/사진·회원·쿠폰·가격·알림·다른 자동화는 변경하지 않았다. 이후 고객 문서·통계·자동화 코드를 과거로 덮어쓰지 않는다.
+
+297개 검사·PR CI·main·Pages 성공, PC/390px 격리 응답에서 저장 대기→실패 시 초안 보존→동일 초안 재시도→저장 후 목록 갱신에도 접수번호별 안내·초점을 확인했다. 운영에서는 새 모듈/상태 영역·기존 관리자 연결과 주요 파일 원본 일치만 읽기 확인했고 고객 상태·메모·금액·계약·메일을 추가하거나 수정하지 않았다. 같은 저장소 Git 브랜치와 임시 tar를 독립 외부 백업으로 보고하지 않으며 고객 DB/Auth·비공개 메일 상태·이후 문서 갱신도 포함하지 않는다. 근거: `quote-admin-save-verification-20261117.json`.
+
 ## 저장 실패 확인용 번호 개선 후 최신 정상 소스
 
 PR #67 병합 `cc17a9734ba9615444f83ef9d42a6cd8109bdb89`를 `backup/verified-retry-reference-20261117-cc17a97`에 보존했다. 임시 tar **5,028,275바이트**, SHA-256 `d5d289561ad1f957232dbcb3f8cd654e8a5dac62b7c21475eb9944c408df136f`에서 **222파일·6,449,162바이트** 전부 격리 복원 일치했다. 변경 전 `backup/retry-reference-before-20261117-cdcb0da` / `cdcb0da6162c743c40635f9758f5e1ff473381bb`도 **222파일·6,445,569바이트** 복원했다. 변경 전 tar **5,027,630바이트**, SHA-256 `7eafc7dd3c1ea12d204a02f754ed76492b8d802d55d8c63edd2e6c7605299ab7`다.

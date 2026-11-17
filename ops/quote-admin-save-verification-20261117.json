@@ -1,0 +1,204 @@
+{
+  "dateKST": "2026-11-17",
+  "checkedAtUTC": "2026-11-17T13:48:38.892788+00:00",
+  "status": "deployed_live_admin_connection_and_isolated_save_feedback_verified",
+  "pullRequest": 68,
+  "headCommit": "cb42d3b394971691bf88b820f683639268855e74",
+  "baseCommit": "5842170fc19b75163ebd3d14f54f2a4322ca2553",
+  "moduleVersion": "20261117-adminsave1",
+  "problemReproducedBeforeFix": {
+    "administratorTests": 20,
+    "passed": 18,
+    "failed": 2,
+    "finding": "Successful save rebuilt the list, detached its details node and removed the completion message."
+  },
+  "changes": [
+    "Keep confirmed management-save feedback outside the refreshed requests list and identify the saved receipt.",
+    "Show and focus the status only after server transaction resolution.",
+    "Clear feedback at a new attempt/auth change and ignore old completion messages after logout or a different auth session."
+  ],
+  "automatedChecks": {
+    "node": 204,
+    "administratorSubset": 20,
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 297,
+    "failed": 0,
+    "skipped": 0,
+    "newChecks": 3,
+    "finalPrCiPending": false,
+    "localFinalFeedbackTextChangeRetestedWithAdministratorSubset": true,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "finalPrCiAll297VerifiedInJobLog": true
+  },
+  "isolatedBrowserChecks": {
+    "browser": "Chrome",
+    "actualAdminModuleSourceUnchangedInFixture": true,
+    "fakeBackendAndSyntheticTestRecordOnly": true,
+    "realFirebaseConnected": false,
+    "pc": {
+      "passed": true,
+      "pendingSuccessHidden": true,
+      "failedDraftPreserved": true,
+      "nativeEnterRetry": true,
+      "saveRequests": 2,
+      "committedLocalHistoryEntries": 1,
+      "finalStatus": "consulting",
+      "syntheticAmount": 180000,
+      "successPersistedOutsideRecreatedList": true,
+      "successIdentifiesReceipt": true,
+      "statusFocused": true,
+      "detailsClosedAfterSuccess": true
+    },
+    "mobile390px": {
+      "passed": true,
+      "pendingSuccessHidden": true,
+      "failedDraftPreserved": true,
+      "nativeEnterRetry": true,
+      "saveRequests": 2,
+      "committedLocalHistoryEntries": 1,
+      "finalStatus": "consulting",
+      "syntheticAmount": 180000,
+      "successPersistedOutsideRecreatedList": true,
+      "successIdentifiesReceipt": true,
+      "statusFocused": true,
+      "detailsClosedAfterSuccess": true,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    },
+    "productionCustomerOrContractOrMailCreated": false
+  },
+  "beforeSourceRestore": {
+    "sourceCommit": "5842170fc19b75163ebd3d14f54f2a4322ca2553",
+    "archiveBytes": 5098216,
+    "archiveSha256": "4c32af35dcc6d947fa23c1b31a7570a5a2f1e359206cdaee0325b2ebd7349491",
+    "persistentBranch": "backup/admin-save-before-20261117-5842170",
+    "filesVerified": 226,
+    "bytesVerified": 6553954,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false
+  },
+  "protectedExistingFilesUnchanged": true,
+  "serverStoreRulesOrMembershipOrPricingChanged": false,
+  "productionCustomerDataMutationPerformed": false,
+  "productionRestorePerformed": false,
+  "deploymentVerified": true,
+  "rollback": "Restore admin/quotes.html and admin/quotes.mjs together from backup/admin-save-before-20261117-5842170; preserve customer documents and later automation changes.",
+  "limits": [
+    "Native flow tests used local response stubs and synthetic test records; no production management save or real contract was performed.",
+    "Physical phone/Safari and screen-reader speech were not tested.",
+    "A transaction already sent may finish after logout; the UI guard prevents an old confirmation appearing in the new session, not cancellation of an accepted server write."
+  ],
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-admin-save-isolated-20261117.jpg",
+    "bytes": 70224,
+    "sha256": "1e21dcc49539be2e1e7c0ce53138c03c1fa20e818242c9338cb954532d7f065f",
+    "scope": "Local 390px admin frame, synthetic test receipt/zero phone and fake storage only; not a customer update."
+  },
+  "mergeCommit": "65b9fbd427903d89144d5d019591bfcc9ab8b792",
+  "githubChecks": {
+    "prRunId": 44095577790,
+    "prJobId": 134081700542,
+    "prConclusion": "success",
+    "mainRunId": 44095844819,
+    "pagesRunId": 44095843883,
+    "mainConclusion": "success",
+    "pagesConclusion": "success",
+    "mainJobId": 134082626307
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "65b9fbd427903d89144d5d019591bfcc9ab8b792",
+    "archiveBytes": 5098835,
+    "archiveSha256": "9c53b9ae01979f8036317adfcfb6126ca8e43d9b44badfe73fd3c9cf57c6d47d",
+    "persistentBranch": "backup/verified-admin-save-20261117-65b9fbd",
+    "filesVerified": 226,
+    "bytesVerified": 6558370,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterSnapshotExcluded": true
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6397,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13799,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5297,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22723,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesMergedSource": true
+    }
+  ],
+  "operationalReadOnlyChecks": {
+    "administratorSessionRestoredWithoutNewLogin": true,
+    "administratorServerListConnected": true,
+    "moduleVersionObserved": "quotes.mjs?v=20261117-adminsave1",
+    "initialSaveStatusHiddenAndEmpty": true,
+    "productionManagementSaveOrTestSubmissionPerformed": false,
+    "ordinaryQuoteIntakeAvailable": true,
+    "ordinaryQuoteServices": 12,
+    "ordinaryQuoteNextEnabled": true,
+    "ordinaryQuoteModuleUnchanged": "quote-form.mjs?v=20261117-retryid1",
+    "ordinaryLivePageViewMayBeMeasuredByExistingAnalytics": true,
+    "internalReviewIsNotCustomerQuoteOrContract": true,
+    "analyticsDocumentsDeletedOrRewritten": false
+  }
+}

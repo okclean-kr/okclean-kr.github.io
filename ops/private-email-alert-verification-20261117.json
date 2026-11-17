@@ -270,5 +270,27 @@
     "The setup-test email was received, and a real time-driven production poll completed with no-new-quotes; an actual new customer quote email has not yet occurred.",
     "A five-minute interval is requested, not a guarantee of exact or immediate delivery.",
     "Production mail delivery failures and quota exhaustion were not deliberately injected; recovery cases passed isolated tests."
-  ]
+  ],
+  "mailOperationalFollowup": {
+    "status": "verified_after_secure_browser_signin",
+    "existingAuthorizationAndTriggerNotChanged": true,
+    "reauthenticationCompleted": true,
+    "laterScheduledExecutionsChecked": true,
+    "reviewedScheduledExecutions": 119,
+    "completedScheduledExecutions": 119,
+    "failedScheduledExecutions": 0,
+    "reviewedPages": 3,
+    "reviewedFromKST": "2026-11-17T02:08:06+09:00",
+    "reviewedThroughKST": "2026-11-17T11:53:06+09:00",
+    "latestReviewedLogAtKST": "2026-11-17T11:53:07+09:00",
+    "latestReviewedLogResult": "no-new-quotes",
+    "triggerCount": 1,
+    "triggerErrorRateDisplayed": "0%",
+    "latestTriggerRunDisplayedKST": "2026-11-17T11:58:06+09:00",
+    "mailConfigurationChanged": false,
+    "extraTestEmailSent": false,
+    "customerQuoteOrDataMutated": false,
+    "doesNotProveDeliveryForAnActualNewCustomerQuote": true,
+    "checkedAtUTC": "2026-11-17T03:01:09.669830+00:00"
+  }
 }

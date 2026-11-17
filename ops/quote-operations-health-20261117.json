@@ -1,0 +1,159 @@
+{
+  "dateKST": "2026-11-17",
+  "checkedAtUTC": "2026-11-17T13:26:33.053530+00:00",
+  "status": "read_only_production_health_verified_no_runtime_change",
+  "sourceCommit": "505c49946abff316978b278f332da036787af8e4",
+  "applicationCodeChanged": false,
+  "newProductionQuoteOrPhotoOrContractCreated": false,
+  "customerOrNotificationStateMutated": false,
+  "manualPollOrTestMailSent": false,
+  "authorizationOrTriggerConfigurationChanged": false,
+  "mailScheduledExecutions": {
+    "function": "pollQuoteNotifications",
+    "type": "time-driven",
+    "reviewed": 51,
+    "completed": 51,
+    "failed": 0,
+    "rangeFromKST": "2026-11-17T18:13:06+09:00",
+    "rangeThroughKST": "2026-11-17T22:23:06+09:00",
+    "latestDurationSeconds": 1.721,
+    "latestLogAtKST": "2026-11-17T22:23:08+09:00",
+    "latestLogResult": "no-new-quotes",
+    "scope": "The current native executions table only; not all historical executions or proof of actual customer email delivery."
+  },
+  "mailTrigger": {
+    "count": 1,
+    "function": "pollQuoteNotifications",
+    "type": "time-driven",
+    "displayedErrorRate": "0%",
+    "latestRunDisplayedKST": "2026-11-17T22:23:06+09:00",
+    "configurationChanged": false
+  },
+  "existingRecoveryReview": {
+    "pendingBatchPersistedBeforeSend": true,
+    "quotaExhaustionKeepsCursorAndQueue": true,
+    "ambiguousSendHeldForManualReview": true,
+    "retryUsesSameBatchId": true,
+    "customerStorageIndependentOfNotification": true,
+    "implementationChanged": false
+  },
+  "existingAutomatedChecks": {
+    "latestTotal": 294,
+    "failed": 0,
+    "skipped": 0,
+    "rerunThisReadOnlyAudit": false,
+    "reason": "Application and test source unchanged from PR 67 passing checks."
+  },
+  "existingGithubChecks": {
+    "applicationMainRunId": 44070221811,
+    "pagesRunId": 44070801368,
+    "conclusion": "success"
+  },
+  "blogCaseSyncObserved": {
+    "workflow": ".github/workflows/sync-blog-cases.yml",
+    "runs": [
+      {
+        "id": 44072450498,
+        "event": "schedule",
+        "createdAtUTC": "2026-11-17T11:16:01Z",
+        "conclusion": "success"
+      },
+      {
+        "id": 44080414112,
+        "event": "schedule",
+        "createdAtUTC": "2026-11-17T12:08:52Z",
+        "conclusion": "success"
+      }
+    ],
+    "workflowChanged": false
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6397,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13799,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22295,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesCurrentSource": true
+    }
+  ],
+  "screenshotEvidence": {
+    "path": "ops/evidence/mail-trigger-health-20261117.jpg",
+    "bytes": 16494,
+    "sha256": "96f23a00b0ed8653ab7699837448ace640196ca40036e3d6b1730088ac0f2cc9",
+    "scope": "Native trigger view cropped at capture to omit account identity; no customer fields or private project URL."
+  },
+  "existingSourceBackup": {
+    "branch": "backup/verified-retry-reference-20261117-cc17a97",
+    "commit": "cc17a9734ba9615444f83ef9d42a6cd8109bdb89",
+    "filesPreviouslyRestored": 222,
+    "doesNotIncludeFirebaseDataAuthOrPrivateScriptState": true
+  },
+  "remaining": [
+    "First future daily GitHub backup schedule has not yet occurred in the current KST date.",
+    "Actual new customer notification delivery is still not established by this no-new-quotes poll.",
+    "Physical phone/Safari and physical IME checks remain unperformed.",
+    "Consented review originals and verified same-site completed-after photos remain unavailable."
+  ],
+  "firstScheduledBackupCheck": {
+    "taskId": "Automation_34b50cf4c52881918473ace3013c43ca",
+    "enabled": true,
+    "nextRunKST": "2026-11-18T08:30:00+09:00",
+    "lastRun": null,
+    "lookupVerified": true,
+    "changed": false,
+    "futureSuccessNotYetVerified": true
+  }
+}

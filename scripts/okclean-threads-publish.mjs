@@ -14,7 +14,8 @@ const now = new Date();
 const kst = new Date(now.getTime() + 9 * 3600000);
 const day = kst.toISOString().slice(0, 10);
 const hour = kst.getUTCHours();
-const slot = hour >= 20 ? '20' : hour >= 13 ? '13' : hour >= 8 ? '08' : null;
+// Only the two approved AI slots may publish; 20:00 is reserved for a human field post.
+const slot = hour === 8 ? '08' : hour === 16 ? '16' : null;
 if (!slot) { console.log('Outside the approved KST publishing windows.'); process.exit(0); }
 
 const api = 'https://graph.threads.net/v1.0';
@@ -32,7 +33,7 @@ const queue = read(queuePath);
 const ledger = read(ledgerPath);
 if (!Array.isArray(queue) || !Array.isArray(ledger)) throw new Error('Malformed queue or ledger.');
 const today = ledger.filter(x => x.day === day);
-if (today.length >= 3) { console.log('Daily ceiling reached.'); process.exit(0); }
+if (today.length >= 2) { console.log('Daily ceiling reached.'); process.exit(0); }
 const items = queue.filter(x => x.day === day && x.slot === slot);
 if (items.length !== 1) { console.log('No unique approved post for '+ day +' '+slot+'.'); process.exit(0); }
 const item = items[0];
@@ -42,17 +43,14 @@ if (typeof item.text !== 'string' || item.text.length < 30 || item.text.length >
 if (/https?:\/\/|www\.|\b[a-z0-9-]+\.(com|kr|net|org|io)\b/i.test(item.text)) throw new Error('URLs/domains forbidden in post body.');
 if (!item.text.trimEnd().endsWith('무료견적은 프로필링크 확인')) throw new Error('CTA missing.');
 if (item.approved !== true) throw new Error('Post not approved.');
-if (slot === '20' && (item.type !== 'field' || !item.image_url?.startsWith('https://'))) throw new Error('Field slot requires verified public HTTPS image URL.');
-if (item.type !== 'text' && item.type !== 'field') throw new Error('Unsupported post type.');
+if (item.type !== 'text') throw new Error('Only approved text posts are allowed in automated slots; field posts are manual.');
 const fingerprint = crypto.createHash('sha256').update(item.text).digest('hex');
 if (ledger.some(x => x.fingerprint === fingerprint)) throw new Error('Duplicate content previously attempted.');
 ledger.push({id:item.id, day, slot, fingerprint, status:'attempted-unconfirmed', at:now.toISOString()});
 writeLedger(ledger);
 // Persist attempt BEFORE sending. If the process crashes after the API call, do not auto-post again.
 // GitHub Actions always() step commits the ledger even on API failure. Manual reconciliation required.
-const args = item.type === 'field'
-  ? {media_type:'IMAGE',image_url:item.image_url,text:item.text}
-  : {media_type:'TEXT',text:item.text};
+const args = {media_type:'TEXT',text:item.text};
 const container = await request('/me/threads', args, 'POST');
 if (!container.id) throw new Error('API did not return a container id.');
 const published = await request('/me/threads_publish', {creation_id:container.id}, 'POST');

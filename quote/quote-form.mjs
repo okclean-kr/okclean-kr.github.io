@@ -1,4 +1,4 @@
-import{compressPhoto}from'./photos.mjs';
+import{compressPhoto}from'./photos.mjs?v=20261117-photo1';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let catalog,step=1,photos=[],busy=false,completed=false,photoBusy=false,requestId,frozen=null,started=false,estimateTimer,lastEstimate='';
 const answersByService=new Map(),params=new URLSearchParams(location.search);

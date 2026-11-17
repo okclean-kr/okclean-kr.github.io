@@ -12,7 +12,7 @@ async function setup(){
  state.add=(r)=>{state.records.set(r.id,r);state.listen?.({metadata:{fromCache:false},docs:[...state.records.values()].map(x=>({id:x.id,data:()=>x})),size:state.records.size,docChanges:()=>[{type:'added',doc:{id:r.id,data:()=>r}}]});};
  state.logout=()=>b.h.signOut(b.auth);state.login=()=>{b.auth.currentUser={uid:w.OKCleanQuote.ADMIN_UID,providerData:[{providerId:'google.com'}]};state.authChanged(b.auth.currentUser);};
  w.__store={getBackend:async()=>b,saveAdminChange:async(backend,id,previous,patch)=>{state.writes.push({id,previous,patch});await state.beforeSave();const current=state.records.get(id);assert.equal(current.version,previous.version);state.emit([{...current,...patch,version:current.version+1}]);},purgeExpiredQuote:async()=>{},submitQuote:async()=>{},newRequestId:()=> 'T'.repeat(20)};
- const source=fs.readFileSync('admin/quotes.mjs','utf8').replace("import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}from'../quote/quote-store.mjs';",'const{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}=window.__store;').replace("import{compressPhoto}from'../quote/photos.mjs';",'const compressPhoto=async()=>({});');
+ const source=fs.readFileSync('admin/quotes.mjs','utf8').replace("import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}from'../quote/quote-store.mjs';",'const{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}=window.__store;').replace(/import\{compressPhoto\}from'\.\.\/quote\/photos\.mjs(?:\?[^']*)?';/,'const compressPhoto=async()=>({});');
  await w.eval('(async()=>{'+source+'})()');
  return{dom,w,$:id=>w.document.getElementById(id),state};
 }

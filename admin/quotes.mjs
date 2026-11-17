@@ -1,5 +1,5 @@
 import{getBackend,saveAdminChange,purgeExpiredQuote,submitQuote,newRequestId}from'../quote/quote-store.mjs';
-import{compressPhoto}from'../quote/photos.mjs';
+import{compressPhoto}from'../quote/photos.mjs?v=20261117-photo1';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
 let b,catalog,unsub,rows=new Map(),lastVisible=null,initial=true,capped=false,testRequestId=null;
 let notificationMessage='',notificationSession=0,listSession=0,olderRequest=null;

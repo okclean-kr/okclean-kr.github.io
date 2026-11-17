@@ -1,9 +1,9 @@
 const{test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),{JSDOM}=require('jsdom');
 const catalog=JSON.parse(fs.readFileSync('quote/catalog.json','utf8'));
-async function setup(enabled=true,store={newRequestId:()=> 'Q'.repeat(20),submitQuote:async()=>({})},url='https://test.invalid/quote/?svc=aircon'){
+async function setup(enabled=true,store={newRequestId:()=> 'Q'.repeat(20),submitQuote:async()=>({})},url='https://test.invalid/quote/?svc=aircon',photoCompressor=async()=>({data:'data:image/jpeg;base64,/9j/AAAA'})){
  const dom=new JSDOM(fs.readFileSync('quote/index.html','utf8'),{url,runScripts:'outside-only'}),w=dom.window;
- w.HTMLElement.prototype.scrollIntoView=function(){};w.HTMLInputElement.prototype.reportValidity=function(){return this.checkValidity();};w.fetch=async()=>({ok:true,json:async()=>catalog});w.OKCLEAN_QUOTES={enabled,verified:enabled};w.OKCleanAnalytics={track:()=>{},status:()=>({source:'threads'})};w.__store=store;
- w.eval(fs.readFileSync('quote/quote-core.js','utf8'));const source=fs.readFileSync('quote/quote-form.mjs','utf8').replace("import{compressPhoto}from'./photos.mjs';","const compressPhoto=async()=>({data:'data:image/jpeg;base64,/9j/AAAA'});").replaceAll("await import('./quote-store.mjs')","window.__store");await w.eval('(async()=>{'+source+'})()');
+ w.HTMLElement.prototype.scrollIntoView=function(){};w.HTMLInputElement.prototype.reportValidity=function(){return this.checkValidity();};w.fetch=async()=>({ok:true,json:async()=>catalog});w.OKCLEAN_QUOTES={enabled,verified:enabled};w.OKCleanAnalytics={track:()=>{},status:()=>({source:'threads'})};w.__store=store;w.__compressPhoto=photoCompressor;
+ w.eval(fs.readFileSync('quote/quote-core.js','utf8'));const source=fs.readFileSync('quote/quote-form.mjs','utf8').replace(/import\{compressPhoto\}from'\.\/photos\.mjs(?:\?[^']*)?';/,"const compressPhoto=window.__compressPhoto;").replaceAll("await import('./quote-store.mjs')","window.__store");await w.eval('(async()=>{'+source+'})()');
  return{dom,w,$:id=>w.document.getElementById(id)};
 }
 function fillForm(ui){const{$,w}=ui;$('next').click();for(const[key,value]of Object.entries({type:'벽걸이',count:'1',condition:'보통'}))w.document.querySelector('[name="'+key+'"]').value=value;$('questions').dispatchEvent(new w.Event('change',{bubbles:true}));$('next').click();$('region').value='춘천';$('name').value='시험';$('phone').value='010-0000-0000';$('consent').checked=true;}
@@ -155,4 +155,19 @@ test('저장 실패 뒤 재시도 버튼으로 초점 이동하고 같은 번호
  let calls=0;const ids=[];const ui=await setup(true,{newRequestId:()=> 'F'.repeat(20),submitQuote:async(c,id)=>{ids.push(id);if(++calls===1)throw{code:'unavailable'};}});fillForm(ui);
  ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.$('complete').hidden,true);assert.equal(ui.w.document.activeElement,ui.$('submit'));assert.equal(ui.$('submit').disabled,false);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');
  ui.$('submit').click();await tick();assert.equal(ui.$('complete').hidden,false);assert.deepEqual(ids,['F'.repeat(20),'F'.repeat(20)]);assert.equal(ui.w.document.activeElement.textContent,'견적 접수가 완료됐습니다.');ui.dom.window.close();
+});
+
+
+test('사진 묶음 처리 실패는 기존 사진·연락처 유지하고 새 묶음 전체만 재시도',async()=>{
+ let savedPhotos;const ui=await setup(true,{newRequestId:()=> 'P'.repeat(20),submitQuote:async(c,id,input,photos)=>{savedPhotos=Array.from(photos,p=>p.data);}},'https://test.invalid/quote/?svc=aircon',async f=>{if(f.bad)throw new Error('사진을 변환하지 못했습니다.');return{data:f.data};});fillForm(ui);
+ const choose=async files=>{Object.defineProperty(ui.$('photos'),'files',{value:files,configurable:true});await ui.$('photos').onchange();};
+ await choose([{data:'data:image/jpeg;base64,/9j/AAAA'}]);await choose([{data:'data:image/jpeg;base64,/9j/BBBB'},{bad:true}]);
+ assert.equal(ui.$('photoPreview').querySelectorAll('img').length,1);assert.match(ui.$('formError').textContent,/변환/);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');assert.equal(ui.$('submit').disabled,false);
+ await choose([{data:'data:image/jpeg;base64,/9j/CCCC'}]);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.deepEqual(savedPhotos,['data:image/jpeg;base64,/9j/AAAA','data:image/jpeg;base64,/9j/CCCC']);assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+});
+
+test('사진 압축 대기 중에는 제출 차단·완료 후 모든 사진을 함께 한 번 저장',async()=>{
+ let release,calls=0,count;const ui=await setup(true,{newRequestId:()=> 'W'.repeat(20),submitQuote:async(c,id,input,photos)=>{calls++;count=photos.length;}},'https://test.invalid/quote/?svc=aircon',()=>new Promise(resolve=>release=resolve));fillForm(ui);
+ Object.defineProperty(ui.$('photos'),'files',{value:[{}],configurable:true});const pending=ui.$('photos').onchange();assert.equal(ui.$('submit').disabled,true);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,0);assert.equal(ui.$('complete').hidden,true);
+ release({data:'data:image/jpeg;base64,/9j/AAAA'});await pending;assert.equal(ui.$('submit').disabled,false);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,1);assert.equal(count,1);ui.dom.window.close();
 });

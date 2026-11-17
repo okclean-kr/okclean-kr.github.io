@@ -89,7 +89,33 @@ var OKCleanMail = (function () {
     var s = load(env); if (!s) return {configured: false, enabled: false};
     return {configured: true, enabled: s.enabled, baseline: s.baseline, outboxStatus: s.outbox && s.outbox.status || null, queuedCount: s.outbox && s.outbox.count || 0, lastSuccessAt: s.lastSuccessAt, lastError: s.lastError, lastSent: s.lastSent};
   }
-  return {PROJECT: PROJECT, ROOT: ROOT, STATE_KEY: STATE_KEY, ADMIN_URL: ADMIN_URL, PAGE_SIZE: PAGE_SIZE, initial: initial, load: load, save: save, query: query, parseRows: parseRows, message: message, run: run, status: status};
+  // Manual connection check: read one existing test record, keep all production state untouched.
+  function storedQuoteTest(env) {
+    try {
+      var before = env.read(), q = query(initial(env.now()));
+      q.structuredQuery.where = {fieldFilter: {field: {fieldPath: 'test'}, op: 'EQUAL', value: {booleanValue: true}}};
+      q.structuredQuery.limit = 1;
+      delete q.structuredQuery.orderBy; // No composite index or production baseline change is needed.
+      var response = env.fetch(q), rows = parseRows(response);
+      if (rows.length !== 1 || rows[0].test !== true) fail('stored-test-quote-required');
+      var scratch = initial(rows[0].cursor.at); scratch.enabled = true;
+      var memory = JSON.stringify(scratch);
+      var excluded = run({
+        read: function () { return memory; }, write: function (raw) { memory = raw; },
+        now: env.now, id: env.id, quota: function () { return 0; },
+        fetch: function () { return response; }, send: function () { fail('unexpected-test-delivery'); }
+      }, false);
+      if (excluded.status !== 'test-quotes-excluded') fail('test-exclusion-failed');
+      if (env.read() !== before) fail('production-state-changed');
+      if (env.quota() < 1) fail('mail-quota');
+      try {
+        env.send({subject: '[시험] 오케이청소 저장 견적·메일 연결 확인', body: '이 메일은 관리자 연결 시험입니다.\n서버에 이미 저장된 시험 견적 1건의 상태를 확인했습니다.\n시험 접수는 실제 고객 알림과 계약 집계에서 제외됩니다.\n\n이름·연락처·주소·사진은 조회하거나 포함하지 않았습니다.\n' + ADMIN_URL + '\n\n새 고객 견적이나 계약을 생성하지 않았으며 운영 알림의 처리 위치를 변경하지 않았습니다.'});
+      } catch (ignored) { fail('delivery-unconfirmed'); }
+      if (env.read() !== before) fail('production-state-changed');
+      return {status: 'stored-test-quote-mail-api-accepted', testQuoteRead: true, excludedFromCustomerNotification: true, productionStateUnchanged: true};
+    } catch (e) { fail(e && e.safeCode || 'stored-test-failed'); }
+  }
+  return {PROJECT: PROJECT, ROOT: ROOT, STATE_KEY: STATE_KEY, ADMIN_URL: ADMIN_URL, PAGE_SIZE: PAGE_SIZE, initial: initial, load: load, save: save, query: query, parseRows: parseRows, message: message, run: run, status: status, storedQuoteTest: storedQuoteTest};
 }());
 
 function okcleanMailEnvironment_() {
@@ -162,4 +188,9 @@ function sendSetupTestEmail() {
   var env = okcleanMailEnvironment_(); if (env.quota() < 1) throw new Error('OKCLEAN_MAIL_mail-quota');
   env.send({subject: '[시험] 오케이청소 접수 알림 연결 확인', body: '이 메일은 관리자 알림 연결 시험입니다.\n고객 견적을 생성하거나 계약 건수에 포함하지 않습니다.\n' + OKCleanMail.ADMIN_URL});
   console.log('시험 메일 발송 API가 요청을 수락했습니다. 받은편지함에서 실제 도착을 별도로 확인해 주세요.');
+}
+function sendStoredQuoteTestEmail() {
+  var lock = LockService.getScriptLock(); if (!lock.tryLock(1000)) throw new Error('OKCLEAN_MAIL_execution-busy');
+  try { var result = OKCleanMail.storedQuoteTest(okcleanMailEnvironment_()); console.log(JSON.stringify(result)); return result; }
+  finally { lock.releaseLock(); }
 }

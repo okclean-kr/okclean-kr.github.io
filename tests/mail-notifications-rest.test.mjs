@@ -26,10 +26,10 @@ async function seed(records){
   await batch.commit();
  });
 }
-async function rest(state,authenticated=true){
+async function rest(state,authenticated=true,suppliedQuery=null){
  // Only the test project reference is mapped. Collection, projection, filter,
  // ordering, timestamp and cursor-before semantics are the shipped query.
- const body=JSON.parse(JSON.stringify(api.query(state)));
+ const body=JSON.parse(JSON.stringify(suppliedQuery||api.query(state)));
  if(body.structuredQuery.startAt){const v=body.structuredQuery.startAt.values[1];assert.ok(v.referenceValue.startsWith(api.ROOT+'/'));v.referenceValue=root+v.referenceValue.slice(api.ROOT.length);}
  const response=await fetch('http://'+host+'/v1/'+root+':runQuery',{method:'POST',headers:{'Content-Type':'application/json',...(authenticated?{Authorization:'Bearer owner'}:{})},body:JSON.stringify(body)});
  const rows=await response.json();
@@ -64,5 +64,15 @@ try{
   s.cursor=r.parsed[0].cursor;const next=await rest(s);assert.equal(next.parsed.length,1);assert.equal(next.parsed[0].cursor.name,api.ROOT+'/quote_requests/'+id(1));assert.equal(next.parsed[0].cursor.at,r.parsed[1].cursor.at);
  });
  await check('인증 없는 실제 REST 목록 조회는 기존 보안 규칙으로 차단',async()=>{const r=await rest(api.initial(baseline),false);assert.equal(r.status,403);assert.equal(r.rows.error.status,'PERMISSION_DENIED');});
+ await check('저장 접수 시험은 실제 REST로 과거 시험 자료만 읽고 운영 상태·문서를 보존',async()=>{
+  await seed([{id:id(0)},{id:id(1),test:true,at:new f.Timestamp(Date.parse(baseline)/1000-3600,0)}]);
+  const beforeDocs=await env.withSecurityRulesDisabled(async context=>JSON.stringify((await f.getDocs(f.collection(context.firestore(),'quote_requests'))).docs.map(d=>[d.id,d.data()])));
+  let query;assert.throws(()=>api.storedQuoteTest({read:()=>null,now:()=>baseline,fetch:q=>{query=q;return[];}}),/stored-test-quote-required/);
+  const r=await rest(api.initial(baseline),true,query);assert.equal(r.status,200);assert.equal(r.parsed.length,1);assert.equal(r.parsed[0].test,true);assert.equal(r.parsed[0].cursor.name,api.ROOT+'/quote_requests/'+id(1));
+  const production=JSON.stringify(api.initial(baseline)),sent=[];
+  const result=api.storedQuoteTest({read:()=>production,write:()=>assert.fail('production state write forbidden'),now:()=>baseline,id:()=> '1234567890abcdef',quota:()=>1,fetch:q=>{assert.deepEqual(JSON.parse(JSON.stringify(q)),JSON.parse(JSON.stringify(query)));return r.rows;},send:m=>sent.push(m)});
+  assert.equal(result.productionStateUnchanged,true);assert.equal(result.excludedFromCustomerNotification,true);assert.equal(sent.length,1);assert.match(sent[0].subject,/^\[시험\]/);assert.doesNotMatch(sent[0].body,/010-|격리 REST 시험|not projected/);
+  const afterDocs=await env.withSecurityRulesDisabled(async context=>JSON.stringify((await f.getDocs(f.collection(context.firestore(),'quote_requests'))).docs.map(d=>[d.id,d.data()])));assert.equal(afterDocs,beforeDocs);
+ });
  console.log('MAIL_REST_TESTS_PASSED='+passed);
 }finally{await env.cleanup();}

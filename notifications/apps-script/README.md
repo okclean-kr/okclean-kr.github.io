@@ -41,6 +41,14 @@ Google 공식 문서의 일반 소비자 계정 MailApp 할당은 하루 수신�
 
 현재 실제 권한 승인·시험 메일 도착·트리거 실행 여부는 `ops/private-email-alert-verification-20261117.json`의 검증 상태를 따른다. 로컬 검사 통과를 운영 연결 성공으로 표현하지 않는다.
 
+## 저장된 시험 접수로 수동 연결 검사
+
+`sendStoredQuoteTestEmail`은 기존 서버의 `test:true` 견적 **1건만** 조회해 `[시험] 오케이청소 저장 견적·메일 연결 확인` 메일을 실행 계정으로 보낸다. 조회 필드는 `schema`, `test`, `createdAt`뿐이다. 새 고객·시험 견적을 만들거나 고객 정보를 읽지 않는다. 시험 접수를 실제 고객으로 바꾸지 않으며, 기존 처리 함수가 해당 자료를 고객 알림에서 제외하는지도 메모리 상태에서 확인한다.
+
+운영 알림의 ScriptProperties·기준 시각·처리 위치·발송 대기·트리거를 변경하지 않는다. 같은 실행 잠금을 사용하며, 시험 자료가 없거나 응답이 잘못되거나 한도가 부족하면 발송하지 않는다. 수동 시험의 API 수락은 수신함 도착과 구분하고, 받은편지함의 정확한 시험 제목을 확인해야 한다. 이 검사는 실제 신규 고객 알림 수신을 대신하는 증거가 아니다. 재실행하면 시험 메일이 한 통 더 도착할 수 있으므로 자동 트리거로 등록하지 않는다. 기존 승인 범위 다섯 개와 수신 계정을 그대로 사용한다.
+
+변경 전 코드는 `backup/stored-mail-test-before-20261117-d92142b`에 보존했다. 비공개 프로젝트의 실제 편집기 원문 SHA-256도 기존 저장소 버전과 일치함을 확인했다. 복구 시 해당 브랜치의 `Code.gs`만 비공개 편집기에 되돌리고 저장한다. 운영 ScriptProperties·트리거·Firebase 고객 데이터는 초기화하지 않는다.
+
 ## REST 연동 격리 검사
 
-`tests/mail-notifications-rest.test.mjs`는 loopback Firestore Emulator의 `demo-okclean-mail-query`에서만 실행한다. 실제 REST projection, 같은 시각 103건의 100+3건 커서 조회, 원문 불변, 활성화 기준·컬렉션 분리, 소수 초 보존, 비인증 목록 차단을 검증한다. 테스트 프로젝트의 문서 경로만 변환하고 배포 쿼리의 projection·필터·정렬·커서 값은 그대로 사용한다. 6개 검사가 통과했다. Google OAuth/IAM 권한·메일 수신함 도착·실제 예약 회차를 대신하는 검사는 아니다.
+`tests/mail-notifications-rest.test.mjs`는 loopback Firestore Emulator의 `demo-okclean-mail-query`에서만 실행한다. 실제 REST projection, 같은 시각 103건의 100+3건 커서 조회, 원문 불변, 활성화 기준·컬렉션 분리, 소수 초 보존, 비인증 목록 차단, 저장된 시험 접수만 읽는 수동 연결 검사를 검증한다. 테스트 프로젝트의 문서 경로만 변환하고 배포 쿼리의 projection·필터·정렬·커서 값은 그대로 사용한다. Google OAuth/IAM 권한·메일 수신함 도착·실제 예약 회차를 대신하는 검사는 아니다.

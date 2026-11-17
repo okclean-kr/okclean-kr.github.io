@@ -39,3 +39,27 @@ test('활성화·재활성화는 자기 트리거 한 개와 기존 기준 시�
 test('실제 조회 사전검사 실패 시 알림 트리거·활성 상태 생성 금지',()=>{
  const t=setup();let creates=0,released=false;t.runtime.okcleanMailEnvironment_=()=>({...t.env,owner:()=> 'owner@example.invalid'});t.runtime.LockService={getScriptLock:()=>({tryLock:()=>true,releaseLock:()=>released=true})};t.runtime.ScriptApp={newTrigger:()=>creates++};t.state.fetchError=new Error('permission denied');assert.throws(()=>t.runtime.activateNotifications());assert.equal(creates,0);assert.equal(t.state.raw,null);assert.equal(t.state.sent.length,0);assert.equal(released,true);
 });
+test('저장된 시험 접수를 읽고 시험 메일만 발송하며 운영 커서·대기 상태 보존',()=>{
+ const t=setup();t.activate();t.state.rows=[doc('T',true,'2026-11-16T01:00:00Z')];
+ const s=t.api.load(t.env);s.outbox={id:'1234567890abcdef',count:2,nextCursor:{name:doc().document.name,at:'2026-11-17T00:01:00Z'},createdAt:t.env.now(),status:'unknown'};t.api.save(t.env,s);
+ const before=t.state.raw,writes=t.state.writeCalls,result=t.api.storedQuoteTest(t.env);
+ assert.equal(result.status,'stored-test-quote-mail-api-accepted');assert.equal(result.productionStateUnchanged,true);assert.equal(result.excludedFromCustomerNotification,true);
+ assert.equal(t.state.raw,before);assert.equal(t.state.writeCalls,writes);assert.equal(t.state.sent.length,1);
+ assert.match(t.state.sent[0].subject,/^\[시험\]/);assert.doesNotMatch(JSON.stringify(t.state.sent),/새로운 실제 고객|010-|ownerUid|Bearer|T{20}/);
+ const q=t.state.requests[0].structuredQuery;assert.deepEqual(JSON.parse(JSON.stringify(q.select.fields)),[{fieldPath:'schema'},{fieldPath:'test'},{fieldPath:'createdAt'}]);assert.equal(q.where.fieldFilter.field.fieldPath,'test');assert.equal(q.where.fieldFilter.value.booleanValue,true);assert.equal(q.limit,1);assert.equal(q.orderBy,undefined);
+});
+test('저장된 시험 접수가 없거나 실제 고객·개인정보 응답이면 시험 메일도 거부',()=>{
+ const privateDoc=doc('T',true);privateDoc.document.fields.phone={stringValue:'010-0000-0000'};
+ for(const rows of[[],[doc('A',false)],[privateDoc],[doc('T',true),doc('U',true)]]){const t=setup();t.activate();const before=t.state.raw;t.state.rows=rows;assert.throws(()=>t.api.storedQuoteTest(t.env));assert.equal(t.state.sent.length,0);assert.equal(t.state.raw,before);}
+});
+test('저장 접수 연결 시험의 한도 부족·조회 실패도 운영 상태 불변',()=>{
+ for(const failure of['quota','fetch']){const t=setup();t.activate();const before=t.state.raw;t.state.rows=[doc('T',true)];if(failure==='quota')t.state.quota=0;else t.state.fetchError=new Error('Bearer private response');assert.throws(()=>t.api.storedQuoteTest(t.env),/OKCLEAN_MAIL_(mail-quota|stored-test-failed)/);assert.equal(t.state.sent.length,0);assert.equal(t.state.raw,before);}
+});
+test('시험 메일 API 오류의 원문을 숨기고 운영 대기 메일을 변경하지 않음',()=>{
+ const t=setup();t.activate();const before=t.state.raw;t.state.rows=[doc('T',true)];t.state.sendError=new Error('owner@example.invalid private failure');assert.throws(()=>t.api.storedQuoteTest(t.env),/^Error: OKCLEAN_MAIL_delivery-unconfirmed$/);assert.equal(t.state.raw,before);assert.equal(t.state.sent.length,1);
+});
+test('저장 접수 시험은 예약 회차와 같은 잠금을 사용하고 항상 해제',()=>{
+ const t=setup();t.activate();t.state.rows=[doc('T',true)];let released=0;t.runtime.okcleanMailEnvironment_=()=>t.env;t.runtime.LockService={getScriptLock:()=>({tryLock:()=>false,releaseLock:()=>released++})};assert.throws(()=>t.runtime.sendStoredQuoteTestEmail(),/execution-busy/);assert.equal(t.state.requests.length,0);assert.equal(t.state.sent.length,0);
+ t.runtime.LockService={getScriptLock:()=>({tryLock:()=>true,releaseLock:()=>released++})};assert.equal(t.runtime.sendStoredQuoteTestEmail().productionStateUnchanged,true);assert.equal(released,1);
+ t.state.rows=[];assert.throws(()=>t.runtime.sendStoredQuoteTestEmail(),/stored-test-quote-required/);assert.equal(released,2);
+});

@@ -121,7 +121,7 @@ export async function reconcile(row,api,profile,save) {
   row.container_status=c.status;
   if(c.status==='PUBLISHED'){
     const posts=await recentPosts(api,profile.id);
-    const matches=posts.filter(p=>sha256(p.text||'')===row.fingerprint && new Date(p.timestamp)>=new Date(row.at)-60000);
+    const matches=posts.filter(p=>sha256(p.text||'')===row.fingerprint && (!row.type || p.media_type===(row.type==='text'?'TEXT_POST':row.type.toUpperCase())) && new Date(p.timestamp)>=new Date(row.at)-60000);
     if(matches.length===1){row.threads_id=matches[0].id;row.permalink=matches[0].permalink;row.status='published';row.reconciled_at=new Date().toISOString();}
     else row.status='published-id-unresolved';
   } else if(c.status==='ERROR'||c.status==='EXPIRED')row.status='blocked-container-failed';

@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-11-17T07:43:51.332639+00:00",
+  "account": "ky.lee0912",
+  "method": "public-browser-visible-records",
+  "local_ledger_rows": 0,
+  "actual_account_empty": false,
+  "followers_visible": 18,
+  "official_api_reconciliation": "blocked-missing-dedicated-token",
+  "posts": [
+    {
+      "url": "https://www.threads.com/@ky.lee0912/post/Dfti1bdl5sH",
+      "topic": "업소용 건습식 진공청소기 구조·분해·조립",
+      "rendered_date": "3 days ago"
+    },
+    {
+      "url": "https://www.threads.com/@ky.lee0912/post/DfrVqB0DCnP",
+      "topic": "용도별 걸레 분리",
+      "rendered_date": "3 days ago"
+    },
+    {
+      "url": "https://www.threads.com/@ky.lee0912/post/DfmjMO1k8p-",
+      "topic": "홈페이지 예상 견적 안내",
+      "rendered_date": "5 days ago",
+      "visible_ai_content_label": true
+    },
+    {
+      "url": "https://www.threads.com/@ky.lee0912/post/DfjYfdsk2DH",
+      "topic": "손 닿는 물체 표면 관리",
+      "rendered_date": "11/09/26"
+    },
+    {
+      "url": "https://www.threads.com/@ky.lee0912/post/DfjYf9iE_A3",
+      "topic": "메디록스-S 사용 안내",
+      "rendered_date": "11/09/26"
+    }
+  ],
+  "limitations": [
+    "not full account history",
+    "numeric IDs and media hashes not obtained",
+    "public browsing later requires login"
+  ],
+  "conversion": {
+    "profile_domain_visible": "okclean-kr.github.io",
+    "profile_clickthrough": "not-verified-login-wall",
+    "homepage": "https://okclean-kr.github.io/",
+    "free_quote": "https://okclean-kr.github.io/quote/",
+    "verified_ui": "homepage free-quote button -> quote service selection -> washer-specific questions",
+    "request_submitted": false,
+    "admin_received": false,
+    "contract_measured": false
+  },
+  "other_brands_modified": false
+}

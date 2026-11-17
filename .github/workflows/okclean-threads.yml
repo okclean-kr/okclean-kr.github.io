@@ -29,6 +29,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install media validation tools
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - name: Static and API mock tests
         run: |
           node --check scripts/okclean-threads-publish.mjs
@@ -81,6 +83,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install media validation tools
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - name: Prepare tomorrow's unapproved drafts using an approved provider
         env:
           OKC_AI_ENABLED: ${{ vars.OKC_AI_ENABLED }}

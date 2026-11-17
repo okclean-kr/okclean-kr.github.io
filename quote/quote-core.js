@@ -19,7 +19,7 @@ const REQUIRED={...FIELDS, 'move-in':['purpose','size','unit','tier','rooms','ba
 const clean=s=>String(s??'').trim();
 const day=()=>new Date(Date.now()+9*3600000).toISOString().slice(0,10);
 function validDate(value){if(!value)return true;const d=new Date(value+'T12:00:00+09:00');return /^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(+d)&&new Date(+d+9*3600000).toISOString().slice(0,10)===value&&value>=day()&&+d<Date.now()+366*86400000;}
-function validate(data,catalog){
+function validateWork(data,catalog){
  const errors=[];const service=catalog.services.find(s=>s.id===data.service);
  if(!service||!FIELDS[data.service])errors.push('청소 종류');
  const fields=FIELDS[data.service]||[];
@@ -33,6 +33,10 @@ function validate(data,catalog){
  if(service&&answers.tier&&!service.tiers?.some(t=>t.name===answers.tier))errors.push('집 크기 기준');
  if(service&&['aircon','washer','mattress'].includes(data.service)&&!service.variants?.some(t=>t.name===answers.type))errors.push('기기 종류');
  if(!validDate(data.date))errors.push('희망 날짜');
+ return [...new Set(errors)];
+}
+function validate(data,catalog){
+ const errors=validateWork(data,catalog);
  if(!catalog.regions.includes(data.region))errors.push('지역');
  if(!clean(data.name)||clean(data.name).length>30)errors.push('성함 또는 호칭');
  if(!/^01[016789]-?\d{3,4}-?\d{4}$/.test(clean(data.phone)))errors.push('휴대폰 번호');
@@ -62,5 +66,5 @@ function transition(from,to){return from===to||({new:['consulting','held','cance
 function receipt(id){return 'OKQ-'+id;}
 function source(value){return SOURCES.includes(value)?value:'other';}
 function retentionDue(row,now=Date.now()){const at=row.createdAt?.toMillis?.()??0;return at>0&&at<now-180*86400000;}
-return Object.freeze({STATES,SOURCES,ADMIN_UID,VERSION,FIELDS,LABELS,validate,validDate,estimate,formEstimate,transition,receipt,source,retentionDue});
+return Object.freeze({STATES,SOURCES,ADMIN_UID,VERSION,FIELDS,LABELS,validateWork,validate,validDate,estimate,formEstimate,transition,receipt,source,retentionDue});
 });

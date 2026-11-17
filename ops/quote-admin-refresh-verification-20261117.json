@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "local_checks_and_isolated_stale_edit_preview_passed_pending_deployment",
+  "status": "deployed_live_admin_connection_and_isolated_conflict_recovery_verified",
   "baseCommit": "c3fc185da855d30af0b020a2d204e256d9cf898a",
   "backupBranch": "backup/admin-refresh-before-20261117-c3fc185",
   "moduleVersion": "20261117-detailrefresh1",
@@ -35,17 +35,114 @@
     "realFirebaseConnected": false,
     "staleDraftPreserved": true,
     "staleSaveBlockedWithoutWrite": true,
-    "refreshCancelAndAcceptPending": true
+    "refreshCancelPreservesDraft": true,
+    "refreshAcceptLoadsLatestStatusAmountMemo": true,
+    "normalSaveAfterRefreshSucceededOnce": true,
+    "nativeConfirmationTested": true,
+    "previewUsesCompactQaOnlyLayout": true
   },
   "productionDataWritesPerformed": false,
   "retentionDeletionPerformed": false,
   "newQuoteOrEmailCreated": false,
   "backendRulesOrPermissionsChanged": false,
-  "deploymentVerified": false,
+  "deploymentVerified": true,
   "rollback": "Restore admin/quotes.html and admin/quotes.mjs together from the backup branch, preserving all customer documents, Firebase rules and later unrelated automation changes.",
   "limits": [
     "Browser conflict scenarios use an isolated in-memory backend and synthetic test:true rows, not concurrent writes against a real customer.",
     "No customer record, production test receipt, notification state, private mail setting or retention data was modified.",
     "Physical phones, verified completed before/after originals, consented review text and first organic customer mail remain outside this check."
-  ]
+  ],
+  "checkedAtUTC": "2026-11-17T07:15:22.545887+00:00",
+  "pullRequest": 59,
+  "headCommit": "2b59904bcdc2fa10db5f59462b68350f696ede07",
+  "mergeCommit": "695fbaae30cbb1592ae079972d9b16056be9bccc",
+  "githubChecks": {
+    "prRunId": 44036124320,
+    "prJobId": 133879296171,
+    "prConclusion": "success",
+    "mainRunId": 44036621727,
+    "mainConclusion": "success",
+    "pagesRunId": 44036620761,
+    "pagesConclusion": "success"
+  },
+  "operationalReadOnlyChecks": {
+    "existingGoogleAdminSessionRestored": true,
+    "newCredentialsEntered": false,
+    "newOAuthGrantOrPermissionChange": false,
+    "serverListConnectionVerified": true,
+    "newModuleVersionObserved": "quotes.mjs?v=20261117-detailrefresh1",
+    "privateCustomerCountsNotPublished": true,
+    "newTestQuoteOrPhotoOrEmailCreated": false,
+    "customerRecordsOrNotificationStateManuallyChanged": false,
+    "retentionDeletionPerformed": false
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6328,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13344,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5228,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22277,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    }
+  ],
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-admin-refresh-isolated-20261117.jpg",
+    "bytes": 70327,
+    "sha256": "85e2a5e01f15bd9662f7bfd47db32fbc72829cbd3343ffafcaead96c117bdcdf",
+    "scope": "Isolated Chrome preview with in-memory test:true row and synthetic name/phone/memo. Not a screenshot of a real customer or concurrent production edits. QA-only compact layout hides unrelated panels."
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "695fbaae30cbb1592ae079972d9b16056be9bccc",
+    "persistentBranch": "backup/verified-admin-refresh-20261117-695fbaa",
+    "filesVerified": 191,
+    "bytesVerified": 5792212,
+    "archiveBytes": 4638425,
+    "archiveSha256": "76ad07ec3294121b93985e814345c2a8b8a02dd2f398f413a22ad6f68aa29c22",
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "protectedExistingFilesUnchanged": true
 }

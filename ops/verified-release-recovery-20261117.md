@@ -14,7 +14,13 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
-## 한글 입력 개선 후 최신 정상 소스
+## 관리자 갱신 복구 개선 후 최신 정상 소스
+
+PR #59를 포함한 정상 소스는 `backup/verified-admin-refresh-20261117-695fbaa` / `695fbaae30cbb1592ae079972d9b16056be9bccc`에 추가 보존했다. 191개 파일·5,792,212바이트를 임시 tar에서 전부 격리 복원했다. tar SHA-256은 `76ad07ec3294121b93985e814345c2a8b8a02dd2f398f413a22ad6f68aa29c22`다. 영구 보존은 Git 브랜치·커밋이며 임시 tar를 별도 영구 보관으로 표현하지 않는다.
+
+이 변경만 복구할 때는 `backup/admin-refresh-before-20261117-c3fc185`에서 `admin/quotes.html`과 `admin/quotes.mjs`를 함께 가져온다. 고객 견적·회원·쿠폰·메일·Firebase 규칙·기존 자동화는 이 PR에서 변경하지 않았다. CI 272개·main·Pages 통과, 격리 Chrome에서 동시 수정 시 입력 보존·취소·최신 내용 재열기·정상 저장을 확인했고 운영에서는 관리자 서버 연결을 읽기 확인했다. 동시 수정 시험은 실제 고객 문서에 수행하지 않았다. 근거는 `quote-admin-refresh-verification-20261117.json`이다.
+
+## 한글 입력 개선 시점의 정상 소스
 
 PR #58 입력 이벤트 개선을 포함한 정상 소스는 `backup/verified-ime-20261117-a3c98a8` / `a3c98a83c55e5aef268d40db428c48f7036efc57`에 추가 보존했다. 새 임시 tar에서 189개 파일·5,743,778바이트를 격리 복원해 검증했다. tar SHA-256은 `90cbe7b04c9e934ffce8a46d36568997a6ba8b09404bee96af7db33738eac281`이며 임시 파일을 독립 영구 백업으로 표현하지 않는다. 이전 스냅샷과 14일 artifact 보관도 유지한다.
 

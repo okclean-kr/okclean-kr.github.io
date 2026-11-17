@@ -1747,14 +1747,18 @@
         "evidence": null
       },
       "privacy": {
-        "status": "pending",
-        "reviewed_by": null
+        "status": "passed",
+        "reviewed_by": "assistant-visual-review",
+        "reviewed_at": "2026-11-17T08:32:31.055Z",
+        "faces_visible": false,
+        "readable_address_phone_plate": false,
+        "scope": "reviewed still frame only; full source video not cleared"
       },
       "consent": {
         "threads_reuse": false,
         "evidence": null
       },
-      "synthetic": null,
+      "synthetic": false,
       "public_url": null,
       "variant_sha256": null,
       "threads_posted": false,
@@ -1763,7 +1767,9 @@
       "title": null,
       "published_at": null,
       "service": null,
-      "original_scope": "existing-public-site-only; Threads reuse needs review"
+      "original_scope": "existing-public-site-only; Threads reuse needs review",
+      "verified_observation": "세탁기 필터 안쪽을 물로 세척하는 모습",
+      "provenance_reference": "ops/work-process-provenance-20261117.json"
     },
     {
       "id": "okc-asset-77d4db7b7c7c5099022a426a",
@@ -1783,14 +1789,18 @@
         "evidence": null
       },
       "privacy": {
-        "status": "pending",
-        "reviewed_by": null
+        "status": "passed",
+        "reviewed_by": "assistant-visual-review",
+        "reviewed_at": "2026-11-17T08:32:31.055Z",
+        "faces_visible": false,
+        "readable_address_phone_plate": false,
+        "scope": "reviewed still frame only; full source video not cleared"
       },
       "consent": {
         "threads_reuse": false,
         "evidence": null
       },
-      "synthetic": null,
+      "synthetic": false,
       "public_url": null,
       "variant_sha256": null,
       "threads_posted": false,
@@ -1799,7 +1809,9 @@
       "title": null,
       "published_at": null,
       "service": null,
-      "original_scope": "existing-public-site-only; Threads reuse needs review"
+      "original_scope": "existing-public-site-only; Threads reuse needs review",
+      "verified_observation": "세탁기 회전판 뒷면을 물로 세척하는 모습",
+      "provenance_reference": "ops/work-process-provenance-20261117.json"
     },
     {
       "id": "okc-asset-1c9b991f9c226295a933f56a",
@@ -1876,5 +1888,5 @@
       "audio_rights": "not-reviewed; variant defaults to muted"
     }
   ],
-  "updated_at": "2026-11-17T07:32:19.038191+00:00"
+  "updated_at": "2026-11-17T08:32:31.055Z"
 }

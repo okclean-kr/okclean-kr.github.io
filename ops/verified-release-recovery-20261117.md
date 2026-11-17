@@ -14,6 +14,12 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 사진 압축 개선 후 최신 정상 소스
+
+PR #62까지 포함한 정상 소스는 `backup/verified-photo-20261117-f04abc2` / `f04abc238aeda60d7adceb072e2fcc9b64ae2cc2`에 추가 보존했다. 임시 tar에서 **213파일·6,068,308바이트**를 전부 격리 복원했다. tar 4,770,832바이트, SHA-256 `fe1533f4836d1cfb413edc7f5fd794dddb54d0c846864f55200ddfba940e5ac1`다. 변경 전 `backup/photo-compression-before-20261117-c799d04` / `c799d043e38357363d632b4be9bab782e6507960`도 **211파일·6,056,634바이트** 격리 복원했다. 변경 전 tar 4,767,289바이트, SHA-256 `b86ef2b5725bc39a6fb8018a14c1c1ae8249d93de4ed41012b3915b414de8420`다. 영구 보존은 Git 브랜치·커밋이며 임시 tar나 이번 스냅샷 이후 문서까지 포함한다고 주장하지 않는다.
+
+이 변경만 복구할 때는 변경 전 브랜치에서 `quote/photos.mjs`, `quote/quote-form.mjs`, `quote/index.html`, `admin/quotes.mjs`, `admin/quotes.html` 다섯 파일을 함께 가져온다. 관리자와 고객이 사진 압축기를 공유하므로 import 버전을 함께 맞춘다. 같은 시점의 회원·쿠폰·고객 자료·접수번호·Firebase 규칙·알림·기존 자동화는 이 PR에서 변경하지 않았다. c799d04의 다른 Threads 개선과 이후 자동화 변경도 보존한다. CI 285개·main·Pages 성공, 격리 Chrome PC/390px 실제 이미지 압축·손상 사진 거부와 운영 미리보기 파일 선택 압축을 확인했다. 운영 주요 파일 10개가 원본과 일치했다. 새 견적·사진·메일 저장이나 운영 복구는 수행하지 않았다. 근거는 `quote-photo-verification-20261117.json`이다.
+
 ## 접수 완료 개선 후 최신 정상 소스
 
 PR #61까지 포함한 정상 소스는 `backup/verified-receipt-completion-20261117-28205a6` / `28205a6d12322e3834d1e6c52b406ab9d26db370`에 추가 보존했다. 임시 tar에서 193파일·5,875,754바이트를 전부 격리 복원했다. tar SHA-256은 `ecb16f2b1142c2497504cf5b57b914d4749002933e0f44d3809763be590374e0`다. 영구 보존은 Git 브랜치·커밋이며 임시 tar를 독립 영구 백업으로 표현하지 않는다.

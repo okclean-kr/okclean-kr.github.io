@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "local_checks_passed_deployment_pending",
+  "status": "deployed_native_compression_and_live_preview_verified",
   "baseCommit": "c799d043e38357363d632b4be9bab782e6507960",
   "backupBranch": "backup/photo-compression-before-20261117-c799d04",
   "moduleVersion": "20261117-photo1",
@@ -81,17 +81,145 @@
   ],
   "backendRulesOrPermissionsChanged": false,
   "productionQuoteOrCustomerDataWritesPerformed": false,
-  "deploymentVerified": false,
+  "deploymentVerified": true,
   "rollback": "Restore quote/photos.mjs, quote/quote-form.mjs, quote/index.html, admin/quotes.mjs and admin/quotes.html together from the pre-change backup; preserve customer data and later automation changes.",
   "limits": [
     "Native codec checks used Chrome on PC and a 390px iframe, not a physical phone or Safari.",
     "The bitmap is decoded before the existing 48-million-pixel check; this is not a pre-decode resource-bomb guarantee.",
     "JPEG checks validate the browser encoder output shape, not a complete independent JPEG parser.",
-    "No new production customer quote, photo upload, message or contract was created for these checks."
+    "No new production customer quote, photo upload, message or contract was created for these checks.",
+    "The ordinary live page opened for deployment review may be included in existing page_view analytics. This internal visit is not a customer quote or contract; no metric documents were deleted or rewritten."
   ],
   "officialReferences": [
     "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL",
     "https://html.spec.whatwg.org/dev/canvas.html"
   ],
-  "checkedAtUTC": "2026-11-17T08:26:12.837865+00:00"
+  "checkedAtUTC": "2026-11-17T08:34:24.965844+00:00",
+  "beforeSourceRestore": {
+    "sourceCommit": "c799d043e38357363d632b4be9bab782e6507960",
+    "persistentBranch": "backup/photo-compression-before-20261117-c799d04",
+    "archiveBytes": 4767289,
+    "archiveSha256": "b86ef2b5725bc39a6fb8018a14c1c1ae8249d93de4ed41012b3915b414de8420",
+    "filesVerified": 211,
+    "bytesVerified": 6056634,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false
+  },
+  "pullRequest": 62,
+  "headCommit": "eae409e4d22c9ce1fe7f59a8c39a564c70a0cdbe",
+  "mergeCommit": "f04abc238aeda60d7adceb072e2fcc9b64ae2cc2",
+  "githubChecks": {
+    "prRunId": 44046832536,
+    "prJobId": 133914496818,
+    "prConclusion": "success",
+    "mainRunId": 44047081315,
+    "pagesRunId": 44047079816,
+    "mainConclusion": "success",
+    "pagesConclusion": "success"
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "f04abc238aeda60d7adceb072e2fcc9b64ae2cc2",
+    "persistentBranch": "backup/verified-photo-20261117-f04abc2",
+    "archiveBytes": 4770832,
+    "archiveSha256": "fe1533f4836d1cfb413edc7f5fd794dddb54d0c846864f55200ddfba940e5ac1",
+    "filesVerified": 213,
+    "bytesVerified": 6068308,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-photo-compression-isolated-20261117.jpg",
+    "bytes": 53529,
+    "sha256": "0dc78215ed945d3d77dc62e16cae97b995da2543d7b05df42cc3638155dfc87b",
+    "scope": "Native Chrome canvas/codec in an isolated 390px iframe, using one existing public work photo and one synthetic portrait; no production quote/photo/email or analytics."
+  },
+  "protectedExistingFilesUnchanged": true,
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6395,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13519,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22295,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesMergedSource": true
+    }
+  ],
+  "operationalReadOnlyChecks": {
+    "intakeAvailable": true,
+    "newModuleVersionObserved": "quote-form.mjs?v=20261117-photo1",
+    "existingServicesVisible": 12,
+    "nextEnabled": true,
+    "livePreviewNativeFileChooser": {
+      "publicWorkPhotoSelected": true,
+      "jpeg": true,
+      "output": [
+        720,
+        1280
+      ],
+      "encodedCharacters": 75587,
+      "submitButtonDisabled": true,
+      "contactFieldsLeftEmpty": true,
+      "quoteOrPhotoOrEmailCreated": false
+    },
+    "administratorSharedImportVersionVerifiedByHttp": "20261117-photo1",
+    "noLiveQuoteSubmissionOrContactClickPerformed": true,
+    "ordinaryLivePageViewMayBeMeasuredByExistingAnalytics": true,
+    "internalReviewVisitIsNotACustomerQuoteOrContract": true,
+    "analyticsDocumentsDeletedOrRewritten": false
+  }
 }

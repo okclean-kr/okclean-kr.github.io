@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": "okc-20261118-08",
+    "day": "2026-11-18",
+    "slot": "08",
+    "type": "image",
+    "asset_id": "okc-asset-423e53d1c0af8e85f2aa2a5e",
+    "category": "tip",
+    "text": "세탁기 청소, 눈에 보이는 곳만 확인하고 계셨나요?\n\n거름망과 분리 가능한 부품은 제품 설명서에 맞춰 관리하고, 세척 후에는 물기를 충분히 말려 주세요.\n\n사진은 필터 안쪽을 물로 세척하는 작업 장면입니다. 세척 과정 사진이며 작업 전후 비교는 아닙니다.\n\n무료견적은 프로필링크 확인",
+    "approved": false,
+    "prepared_at": "2026-11-17T08:32:31.055Z",
+    "prepared_by": "assistant",
+    "review_status": "pending-owner-content-and-reuse-approval",
+    "media_status": "private-jpeg-prepared-not-public"
+  },
+  {
+    "id": "okc-20261118-16",
+    "day": "2026-11-18",
+    "slot": "16",
+    "type": "image",
+    "asset_id": "okc-asset-77d4db7b7c7c5099022a426a",
+    "category": "case",
+    "text": "세탁기 회전판은 뒷면도 살펴봅니다.\n\n사진은 분리한 회전판 뒷면을 물로 세척하는 작업 과정입니다. 완성된 결과나 작업 전후 비교 사진은 아닙니다.\n\n부품을 무리하게 분해하기보다 제품 구조와 작업 범위를 먼저 확인해 주세요. 청소 상담 때는 세탁기 종류와 신경 쓰이는 부분을 알려주시면 도움이 됩니다.\n\n무료견적은 프로필링크 확인",
+    "approved": false,
+    "prepared_at": "2026-11-17T08:32:31.055Z",
+    "prepared_by": "assistant",
+    "review_status": "pending-owner-content-and-reuse-approval",
+    "media_status": "private-jpeg-prepared-not-public"
+  }
+]

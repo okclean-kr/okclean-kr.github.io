@@ -1,0 +1,54 @@
+# 현재 정상 소스의 백업·복구 검증
+
+2026년 11월 17일 운영 소스 커밋 `755805d2c91adcf1f4023474627cc5eab72db622`를 `backup/verified-release-20261117-755805d` 브랜치에 보존했다. 견적 입력 오류 개선 PR #56까지 포함하는 버전이다. 이후의 검증 문서는 이 스냅샷에 덧붙는 기록이며, 운영 기능 코드를 추가로 바꾸지 않았다.
+
+## 실제 수행한 검증
+
+- 소스 Git bundle을 만들고 `git bundle verify`를 통과했다.
+- 별도 임시 폴더에서 bundle을 clone하고 지정 커밋으로 checkout했다. 운영 서버를 덮어쓰지 않았다.
+- 추적 파일 **182개, 5,644,678바이트** 전부를 Git 원본 blob과 비교했고 내용·실행 권한이 일치했다. 전체 이력과 `git fsck --strict` 검사도 통과했다.
+- 견적 core·form·사진 처리·관리자·백업 주요 스크립트 5개의 `node --check` 문법 검사를 통과했다.
+- PR #56의 266개 검사 통과 이후 기능 코드가 달라지지 않았음을 확인했다. 문서·읽기 전용 점검 때문에 동일한 전체 검사를 다시 실행하지 않았다.
+- 기존 Google 관리자 로그인 후 서버 접수 목록과 브라우저 알림 연결을 확인했다. 고객 건수·개인정보는 이 공개 문서와 화면 증빙에 포함하지 않았다.
+- 기존 이메일 트리거는 1개, 표시 오류율 0%였다. 14:43:06 KST 실제 시간 기반 실행이 1.694초로 완료됐고 로그를 별도로 확인했다. 수동 poll을 예약 실행으로 보고하지 않았다. 시험 메일·견적을 추가로 만들지 않았다.
+
+전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
+
+## 복구할 때
+
+1. 우선 현재 main에서 새 복구 브랜치를 만든다. 문제가 된 변경만 revert하거나 해당 장애 파일을 위 스냅샷에서 가져온다.
+2. PR #56 견적 화면을 복구할 경우 `quote/index.html`, `quote/quote-core.js`, `quote/quote-form.mjs`를 같은 버전으로 가져온다. core와 form을 서로 다른 버전으로 섞지 않는다.
+3. 고객 접수·회원·쿠폰·접수번호를 삭제하거나 과거로 덮어쓰지 않는다. `.github/workflows/okclean-threads.yml`, `.github/workflows/sync-blog-cases.yml`, 게시 대기·게시 이력·자동 수집 사례 등 이후 자동화 변경도 전체 과거 소스로 덮어쓰지 않는다.
+4. 기존 견적·회원·쿠폰·권한 검사와 화면을 확인한 뒤 PR로 배포하고 실제 운영 URL을 확인한다. 소스 복구 때문에 Firebase 규칙·요금제·관리자 권한을 새로 바꿀 필요는 없다.
+5. 이메일 소스가 문제라면 별도의 비공개 Apps Script에서 `Code.gs`만 해당 정상 소스로 복구한다. 기존 ScriptProperties·발송 대기·처리 위치·트리거를 초기화하지 않는다.
+
+## 백업 범위와 남은 확인
+
+지속 보존 위치는 GitHub 백업 브랜치와 커밋이다. 이번에 만든 4,790,873바이트 bundle은 임시 복구 검증용이며 별도의 영구 보관이나 독립 저장소 백업으로 보고하지 않는다. bundle SHA-256은 `4027d66b964ba744f90c37c2673a0d656bdcb06dd01684c8c76a31a3f1f6faec`다.
+
+이 소스 백업에는 Firebase 고객 데이터·Auth 계정, 비공개 Apps Script 상태·인증 정보·트리거가 포함되지 않는다. 기존 고객 백업은 별도 암호화 파일과 분리된 복구키를 사용한다. 11월 16일 고객 백업은 당시 알려진 회원·견적 스키마 17문서의 내보내기이며 현재 전체 데이터베이스나 Auth 백업을 뜻하지 않는다. 운영 데이터 복원은 수행하지 않았다.
+
+점검 당시 저장소 workflow는 Threads 게시, 블로그 사례 동기화, 견적 검사 3개였고 정기 소스 백업 job은 없었다. 별도의 `source-backup.yml`을 추가해 공개 Git 소스만 매일 08:00 KST(UTC 23:00)에 백업하도록 구성했다. 기존 자동화 파일은 변경하지 않았다. 첫 main 실행의 실제 산출물과 이후 첫 예약 회차는 구분해 검증하며, 스케줄 설정만으로 예약 실행 성공을 주장하지 않는다.
+
+실물 휴대전화 시험, 동일 현장의 검증된 완료 후 사진, 공개 동의된 고객 후기 원문, 실제 신규 고객 알림의 첫 수신은 별도 확인 항목이다. 새 고객 접수나 계약을 시험 결과로 만들어 집계하지 않는다.
+
+## 정기 소스 백업 사용법
+
+- 주기: 매일 08:00 KST 요청. GitHub 스케줄은 지연되거나 장기 비활성 저장소에서 중지될 수 있으므로 정확한 정시 실행을 보장하지 않는다. GitHub Actions 화면의 `Public source backup`에서 수동 실행도 가능하다.
+- 보관: 각 성공 회차의 `source.tar.gz`와 `manifest.json`을 GitHub Actions artifact로 14일간 보관한다. 별도의 지속 스냅샷 브랜치도 유지한다. artifact는 독립된 외부 저장소 백업이나 무기한 보관으로 표현하지 않는다.
+- 범위: 커밋된 공개 Git 파일만 포함한다. `.git` 인증 설정·작업 폴더의 미추적 파일·환경 변수·고객 DB·Auth·비공개 메일 상태·실제 인증키를 읽지 않는다. 추적된 `.env`, 개인 키·고객 백업 파일, 심볼릭 링크가 있으면 백업을 중단한다. 비밀키를 조용히 포함하거나 불완전 백업을 성공으로 표시하지 않는다.
+- 권한: 새 job은 `contents: read`만 사용하고 저장소·고객 데이터를 쓰지 않는다. checkout에 인증 정보를 남기지 않으며 공식 GitHub action 두 개를 검증한 커밋 SHA로 고정했다.
+- 검증: 매 백업에서 파일별 해시·크기·실행 모드를 계산하고 별도 임시 폴더에 전부 복원해 비교한 뒤에만 artifact를 업로드한다. 손상된 archive·경로 탈출·링크·기존 복구 폴더 덮어쓰기·비공개 파일 차단 등 신규 검사 6개를 별도로 실행한다. 기존 기능 검사 266개는 변경 없는 기능 소스에 대한 앞선 통과 기록을 유지한다.
+
+산출물 ZIP을 내려받아 두 파일을 꺼낸 뒤 현재 저장소의 검사 도구로 새 빈 폴더에 복구 검증할 수 있다.
+
+```bash
+python3 scripts/source_backup.py --verify /absolute/path/source.tar.gz --manifest /absolute/path/manifest.json --restore /absolute/path/new-empty-directory
+```
+
+이 명령은 새 복구 폴더에만 파일을 쓴다. 운영 배포·Firebase 데이터 복구·메일 상태 초기화를 수행하지 않는다.
+
+공식 동작 근거:
+
+- https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows
+- https://github.com/actions/upload-artifact

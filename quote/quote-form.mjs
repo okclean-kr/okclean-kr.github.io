@@ -28,8 +28,15 @@ function questions(){
 }
 function updateEstimate(){if(!catalog||!service())return;const a=readAnswers();answersByService.set(service(),a);const s=catalog.services.find(s=>s.id===service()),r=core.formEstimate(s,a);$('estimate').textContent=r?'참고 예상 비용: '+(Math.ceil(r.lo/1000)*1000).toLocaleString('ko-KR')+'원'+(r.hi===null?'부터':r.hi===r.lo?'':' ~ '+(Math.ceil(r.hi/1000)*1000).toLocaleString('ko-KR')+'원')+' (추가 작업·출장비 별도 확인)':'현장 사진과 작업 범위를 확인한 후 비용을 안내합니다.';if(r){const signature=service()+':'+r.lo+':'+r.hi;if(signature!==lastEstimate){lastEstimate=signature;clearTimeout(estimateTimer);estimateTimer=setTimeout(()=>track('quote_calculate'),800);}}}
 function showStep(n){step=n;document.querySelectorAll('[data-step]').forEach(el=>el.hidden=+el.dataset.step!==n);document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(+el.dataset.stepLabel===n)el.setAttribute('aria-current','step');});$('previous').hidden=n===1;$('next').hidden=n===3;$('submit').hidden=n!==3;$('formError').textContent='';if(n===2)questions();const heading=document.querySelector('[data-step="'+n+'"] legend');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});heading.scrollIntoView({block:'start',behavior:'smooth'});}}
-function currentValid(){const fs=document.querySelector('[data-step="'+step+'"]');for(const el of fs.querySelectorAll('input,select'))if(!el.checkValidity()){el.focus();el.reportValidity();return false;}return true;}
+function currentValid(){const fs=document.querySelector('[data-step="'+step+'"]');for(const el of fs.querySelectorAll('input,select'))if(!el.checkValidity()){el.focus();el.reportValidity();return false;}if(step===2){const errors=core.validateWork(read(),catalog);if(errors.length){showValidationErrors(errors);return false;}}return true;}
 function read(){return{service:service(),answers:readAnswers(),date:$('date').value,region:$('region').value,name:$('name').value,phone:$('phone').value,contactTime:$('contactTime').value,consent:$('consent').checked,source:core.source(window.OKCleanAnalytics?.status().source||'direct')};}
+function showValidationErrors(errors){
+ const fields={...Object.fromEntries(Object.entries(core.LABELS).map(([key,label])=>[label,'answer-'+key])),'면적':'answer-size','면적 단위':'answer-unit','기기 종류':'answer-type','희망 날짜':'date','지역':'region','성함 또는 호칭':'name','휴대폰 번호':'phone','상담 희망 시간':'contactTime','개인정보 동의':'consent'};
+ let targetId;for(const error of errors)if(fields[error]&&$(fields[error])){targetId=fields[error];break;}
+ if(targetId){const targetStep=+$(targetId).closest('[data-step]').dataset.step;if(targetStep!==step)showStep(targetStep);}
+ $('formError').textContent='다음 항목을 확인해 주세요: '+errors.join(', ');
+ if(targetId)$(targetId)?.focus();
+}
 function photoPreview(){const container=$('photoPreview');container.replaceChildren();photos.forEach((photo,i)=>{const figure=document.createElement('figure'),img=new Image(),remove=document.createElement('button');img.src=photo.data;img.alt='선택한 현장 사진 '+(i+1);remove.type='button';remove.textContent='사진 '+(i+1)+' 삭제';remove.disabled=busy;remove.onclick=()=>{photos.splice(i,1);photoPreview();};figure.append(img,remove);container.append(figure);});}
 function lock(value){busy=value;for(const el of $('quoteForm').querySelectorAll('input,select,button'))el.disabled=value;photoPreview();$('submit').disabled=value||!enabled();}
 function resultRow(label,value){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;$('result').append(dt,dd);}
@@ -46,7 +53,7 @@ $('region').onchange=()=>{$('regionNotice').textContent=$('region').value==='춘
 $('photos').onchange=async()=>{if(photoBusy||busy)return;photoBusy=true;$('next').disabled=true;$('submit').disabled=true;try{const files=[...$('photos').files];if(files.length+photos.length>5)throw new Error('사진은 최대 5장까지 첨부할 수 있습니다.');const added=[];for(const file of files)added.push(await compressPhoto(file));photos.push(...added);photoPreview();$('formError').textContent='';}catch(e){$('formError').textContent=e.message;}finally{$('photos').value='';photoBusy=false;$('next').disabled=false;$('submit').disabled=!enabled();}};
 $('quoteForm').onsubmit=async e=>{
  e.preventDefault();if(busy||photoBusy)return;if(step<3){advance();return;}if(!enabled())return;
- const input=frozen||read(),errors=core.validate(input,catalog);if(errors.length){$('formError').textContent='다음 항목을 확인해 주세요: '+errors.join(', ');const fields={region:'지역',name:'성함 또는 호칭',phone:'휴대폰 번호',contactTime:'상담 희망 시간',consent:'개인정보 동의'};for(const[id,label]of Object.entries(fields))if(errors.includes(label)){$(id).focus();break;}return;}
+ const input=frozen||read(),errors=core.validate(input,catalog);if(errors.length){showValidationErrors(errors);return;}
  if(!navigator.onLine){$('formError').textContent='인터넷 연결을 확인한 뒤 다시 접수해 주세요. 입력 내용은 이 화면에 유지됩니다.';return;}
  lock(true);$('formError').textContent='서버에 안전하게 저장하고 있습니다. 창을 닫지 말아 주세요.';frozen=input;
  try{

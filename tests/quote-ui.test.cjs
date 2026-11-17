@@ -60,3 +60,40 @@ test('한글 조합·선택 상자의 Enter와 연락처 단계 키보드 동작
  for(const[k,v]of Object.entries({type:'벽걸이',count:'2',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;ui.$('next').click();
  const contact=new ui.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true});ui.$('phone').dispatchEvent(contact);assert.equal(contact.defaultPrevented,false);assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false);ui.dom.window.close();
 });
+
+test('접수 가능 기간을 벗어난 날짜는 작업 단계에서 바로 수정하도록 안내',async()=>{
+ let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}});ui.$('next').click();
+ for(const[k,v]of Object.entries({type:'벽걸이',count:'2',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ const future=new Date(Date.now()+400*86400000).toISOString().slice(0,10);ui.$('date').value=future;ui.$('next').click();
+ assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.w.document.activeElement.id,'date');assert.match(ui.$('formError').textContent,/희망 날짜/);assert.equal(ui.$('date').value,future);assert.equal(calls,0);ui.dom.window.close();
+});
+
+test('작업 내용 형식 오류는 연락처 단계 전에 해당 질문에 초점·답변 유지',async()=>{
+ let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}},'https://test.invalid/quote/?svc=office');ui.$('next').click();
+ for(const[k,v]of Object.entries({industry:'카페 <시험>',size:'20',unit:'평',scope:'바닥·유리',frequency:'일회성',time:'영업 전 08시',condition:'보통'}))ui.w.document.querySelector('[name="'+k+'"]').value=v;
+ ui.$('next').click();assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.w.document.activeElement.id,'answer-industry');assert.match(ui.$('formError').textContent,/업종/);assert.equal(ui.w.document.querySelector('[name=scope]').value,'바닥·유리');assert.equal(calls,0);ui.dom.window.close();
+});
+
+test('마지막 확인에서 작업 날짜 오류가 발견돼도 이전 단계로 안내·연락처 유지',async()=>{
+ let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}});fillForm(ui);ui.$('date').value='2020-01-01';
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();
+ assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.w.document.activeElement.id,'date');assert.match(ui.$('formError').textContent,/희망 날짜/);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');assert.equal(ui.w.document.querySelector('[name=count]').value,'1');assert.equal(calls,0);ui.dom.window.close();
+});
+
+test('기존 12개 서비스의 정상 작업 답변은 연락처 단계로 진행',async()=>{
+ for(const service of catalog.services){
+  const ui=await setup(true,{},'https://test.invalid/quote/?svc='+service.id);ui.$('next').click();
+  const defaults={purpose:'입주청소',size:['mattress','carpet','window'].includes(service.id)?'200 × 150cm':'25',unit:'평',tier:service.tiers?.[0]?.name,rooms:'3',baths:'2',space:'아파트',condition:'보통',frequency:'일회성',type:service.variants?.[0]?.name||'러그',count:'1',material:'면',stain:'없음',industry:'카페',scope:'바닥·유리',time:'영업 전 08시',height:'1층 실내'};
+  for(const el of ui.$('questions').querySelectorAll('input,select'))el.value=defaults[el.name];
+  ui.$('next').click();assert.equal(ui.w.document.querySelector('[data-step="3"]').hidden,false,service.id);assert.equal(ui.$('formError').textContent,'',service.id);ui.dom.window.close();
+ }
+});
+
+test('사진 6장은 거부·기존 5장은 유지하고 작업 오류 이동·삭제 후에도 입력 보존',async()=>{
+ let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}});fillForm(ui);
+ const choose=async count=>{Object.defineProperty(ui.$('photos'),'files',{value:Array.from({length:count},()=>({})),configurable:true});await ui.$('photos').onchange();};
+ await choose(6);assert.match(ui.$('formError').textContent,/최대 5장/);assert.equal(ui.$('photoPreview').querySelectorAll('img').length,0);
+ await choose(5);assert.equal(ui.$('photoPreview').querySelectorAll('img').length,5);await choose(1);assert.match(ui.$('formError').textContent,/최대 5장/);assert.equal(ui.$('photoPreview').querySelectorAll('img').length,5);
+ ui.$('date').value='2020-01-01';ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.w.document.querySelector('[data-step="2"]').hidden,false);assert.equal(ui.$('photoPreview').querySelectorAll('img').length,5);
+ ui.$('date').value='';ui.$('next').click();ui.$('photoPreview').querySelectorAll('button')[2].click();assert.equal(ui.$('photoPreview').querySelectorAll('img').length,4);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');assert.equal(calls,0);ui.dom.window.close();
+});

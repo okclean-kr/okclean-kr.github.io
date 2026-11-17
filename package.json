@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "test:retention:rules": "firebase emulators:exec --only firestore --project demo-okclean-retention-audit --config firebase.quote.json 'OKCLEAN_RETENTION_EMULATOR=1 npm test'",
-    "test": "node --test tests/analytics.test.cjs tests/analytics-maintenance.test.cjs tests/quote-core.test.cjs tests/quote-gallery.test.cjs tests/quote-ui.test.cjs tests/quote-admin.test.cjs tests/member-ui.test.cjs tests/backup-core.test.cjs tests/backup-ui.test.cjs tests/mail-notifications.test.cjs",
+    "test": "node --test tests/analytics.test.cjs tests/analytics-maintenance.test.cjs tests/quote-core.test.cjs tests/quote-gallery.test.cjs tests/quote-photos.test.cjs tests/quote-ui.test.cjs tests/quote-admin.test.cjs tests/member-ui.test.cjs tests/backup-core.test.cjs tests/backup-ui.test.cjs tests/mail-notifications.test.cjs",
     "test:quotes:rules": "firebase emulators:exec --only firestore --project demo-okclean-quotes --config firebase.quote.json 'node tests/quote-rules.test.mjs && node tests/member-rules.test.mjs && node tests/backup-rules.test.mjs && node tests/mail-notifications-rest.test.mjs'"
   },
   "devDependencies": {

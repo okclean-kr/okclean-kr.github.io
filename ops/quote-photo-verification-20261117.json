@@ -1,0 +1,97 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "local_checks_passed_deployment_pending",
+  "baseCommit": "c799d043e38357363d632b4be9bab782e6507960",
+  "backupBranch": "backup/photo-compression-before-20261117-c799d04",
+  "moduleVersion": "20261117-photo1",
+  "problemsReproducedBeforeFix": {
+    "newCompressorChecks": 7,
+    "failed": 6,
+    "passed": 1,
+    "findings": [
+      "Only width was capped; a 320x12000 portrait retained height 12000.",
+      "Short canvas error or fallback data could be accepted as an attached photo.",
+      "Native decoder/canvas exceptions were not translated into actionable Korean guidance."
+    ]
+  },
+  "changes": [
+    "Cap both output dimensions to 1280 without enlargement, retaining the existing 6 attempts and 160000-character storage limit.",
+    "Require JPEG prefix, JPEG signature and valid base64 shape; reject empty canvas, PNG fallback and malformed output.",
+    "Translate header read, decode and canvas conversion failures into Korean recovery guidance.",
+    "Version the shared photo import for both quote and administrator pages."
+  ],
+  "automatedChecks": {
+    "node": 192,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 285,
+    "failed": 0,
+    "skipped": 0,
+    "photoSubset": 7,
+    "uiSubset": 31,
+    "newChecks": 9
+  },
+  "isolatedBrowserChecks": {
+    "browser": "Chrome",
+    "nativeImageCodecAndCanvas": true,
+    "pc": {
+      "passed": 3
+    },
+    "mobile390px": {
+      "passed": 3,
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "noHorizontalOverflow": true
+    },
+    "publicWorkPhoto": {
+      "input": [
+        720,
+        1280
+      ],
+      "output": [
+        720,
+        1280
+      ],
+      "encodedCharacters": 75587
+    },
+    "syntheticPortrait": {
+      "input": [
+        320,
+        12000
+      ],
+      "output": [
+        34,
+        1280
+      ],
+      "encodedCharacters": 12207
+    },
+    "corruptImageRejectedWithKoreanGuidance": true,
+    "realFirebaseConnected": false,
+    "quoteOrPhotoOrEmailCreated": false
+  },
+  "uiRegressionChecks": [
+    "A failed new photo group preserves the existing photo and contact fields; reselecting a valid photo submits only the retained and retried images.",
+    "While compression is pending, both the submit button and programmatic submission are blocked; all photos are saved once after completion."
+  ],
+  "backendRulesOrPermissionsChanged": false,
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "deploymentVerified": false,
+  "rollback": "Restore quote/photos.mjs, quote/quote-form.mjs, quote/index.html, admin/quotes.mjs and admin/quotes.html together from the pre-change backup; preserve customer data and later automation changes.",
+  "limits": [
+    "Native codec checks used Chrome on PC and a 390px iframe, not a physical phone or Safari.",
+    "The bitmap is decoded before the existing 48-million-pixel check; this is not a pre-decode resource-bomb guarantee.",
+    "JPEG checks validate the browser encoder output shape, not a complete independent JPEG parser.",
+    "No new production customer quote, photo upload, message or contract was created for these checks."
+  ],
+  "officialReferences": [
+    "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL",
+    "https://html.spec.whatwg.org/dev/canvas.html"
+  ],
+  "checkedAtUTC": "2026-11-17T08:26:12.837865+00:00"
+}

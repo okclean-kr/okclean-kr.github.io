@@ -1,0 +1,221 @@
+{
+  "dateKST": "2026-11-18",
+  "checkedAtUTC": "2026-11-17T22:35:24.987972+00:00",
+  "status": "deployed_preview_and_font_failure_flow_verified",
+  "pullRequest": 69,
+  "headCommit": "dcb9e8a847adbf6a4d46c3317c2fc8ffca09c184",
+  "baseCommit": "016774807e1197a7ba9437394778dc6155f481ad",
+  "runtimeChangedFiles": [
+    "index.html"
+  ],
+  "change": "Use a nonmatching print media for the optional font stylesheet and switch to all on native load; retain original font URL and noscript stylesheet fallback. Critical layout CSS stays synchronous.",
+  "fontCssAudit": {
+    "url": "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css",
+    "httpStatus": 200,
+    "bytes": 53513,
+    "sha256": "d274380cb7815e92479d38e43dd5b2eef585567091394022a3a2dede048474cb",
+    "fontFaceRules": 92,
+    "fontDisplaySwapRules": 92,
+    "onlyFontFaceRulesAfterCommentsRemoved": true
+  },
+  "staticChecks": {
+    "allNonFontMarkupByteIdentical": true,
+    "calculatorConfigurationByteIdentical": true,
+    "otherTrackedRuntimeFilesUnchanged": true,
+    "noscriptFallbackPresent": true,
+    "criticalLayoutCssUnchanged": true,
+    "primaryImagePreloadAndLazyImagesUnchanged": true
+  },
+  "automatedChecks": {
+    "node": 204,
+    "firestoreAndRest": 70,
+    "pythonCaseSync": 23,
+    "total": 297,
+    "failed": 0,
+    "skipped": 0,
+    "newTestsAdded": 0,
+    "all297VerifiedInFinalPrCiLog": true
+  },
+  "isolatedBrowserChecks": {
+    "browser": "Chrome",
+    "actualLayoutAndCalculatorSourceUnchanged": true,
+    "productionAnalyticsAndInstallScriptsOmittedInFixture": true,
+    "quoteSubmissionDisabledInFixture": true,
+    "normalPc": {
+      "passed": true,
+      "fontMediaAfterNativeLoad": "all",
+      "wallAircon2ReferenceCost": "20만원~",
+      "detailedQuoteHref": "quote/?svc=aircon",
+      "documentClientWidth": 1348,
+      "documentScrollWidth": 1348
+    },
+    "failedFontPc": {
+      "passed": true,
+      "fontUrlIsLocalMissingCssOnly": true,
+      "fontMediaAfterError": "print",
+      "headlineVisible": true,
+      "quantity3ReferenceCost": "30만원~",
+      "quantity2ReferenceCost": "20만원~",
+      "detailedQuoteSelectedService": "aircon",
+      "quoteSubmitDisabled": true
+    },
+    "failedFontMobile390px": {
+      "passed": true,
+      "fontMediaAfterError": "print",
+      "wallAircon2ReferenceCost": "20만원~",
+      "couponBenefitVisible": true,
+      "detailedQuoteSelectedService": "aircon",
+      "customQuestionTitle": "에어컨 청소 작업 내용",
+      "quoteSubmitDisabled": true,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    },
+    "normalFontMobile390px": {
+      "passed": true,
+      "fontMediaAfterNativeLoad": "all",
+      "wallAircon2ReferenceCost": "20만원~",
+      "detailedQuoteHref": "quote/?svc=aircon",
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    },
+    "realQuoteOrCustomerOrContractOrNotificationCreated": false
+  },
+  "githubChecks": {
+    "prRunId": 44190248604,
+    "prJobId": 134417418850,
+    "prConclusion": "success",
+    "mainRunId": 44191099728,
+    "pagesRunId": 44191099802,
+    "pagesConclusion": "success",
+    "mainJobId": 134420402217,
+    "mainConclusion": "success"
+  },
+  "beforeSourceRestore": {
+    "sourceCommit": "016774807e1197a7ba9437394778dc6155f481ad",
+    "archiveBytes": 5158900,
+    "archiveSha256": "054641f86cc654ab33d9898af2cbeb41ead4ec91a23e0ccfa1b5f0561a3e3772",
+    "persistentBranch": "backup/font-before-20261118-0167748",
+    "filesVerified": 228,
+    "bytesVerified": 6641014,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false
+  },
+  "technicalReferences": [
+    "https://web.dev/learn/performance/understanding-the-critical-path",
+    "https://shopify.dev/docs/storefronts/themes/best-practices/performance/defer-non-critical-resources"
+  ],
+  "screenshotEvidence": {
+    "path": "ops/evidence/home-font-fallback-mobile-20261118.jpg",
+    "bytes": 58015,
+    "sha256": "6911d5e6cf6532395504de1d6bcf04eecbb480c5a009166bad7f973f6ea964da",
+    "scope": "Local 390px frame with a deliberately unavailable font CSS; no real quote/analytics. The screenshot shows a usable detailed-quote CTA with fallback typography."
+  },
+  "deploymentVerified": true,
+  "pricingAuthRulesMembershipAnalyticsOrAutomationChanged": false,
+  "rollback": "Revert only the font link/noscript change in the current index.html, using backup/font-before-20261118-0167748 as the reference; preserve later homepage/automation changes and all customer data.",
+  "limits": [
+    "No LCP/FCP/CLS timing or percentage improvement was measured or asserted. This removes a render-blocking dependency; total font download bytes are not reduced.",
+    "The noscript fallback was inspected in source; native browser testing with JavaScript disabled was not performed.",
+    "Chrome PC/390px only; physical phones/Safari not tested.",
+    "The failed font scenario is a local missing CSS, not an induced production CDN outage."
+  ],
+  "mergeCommit": "018083bca4bcfbec9f712871cca9efcf2796dc84",
+  "latestSourceRestore": {
+    "sourceCommit": "018083bca4bcfbec9f712871cca9efcf2796dc84",
+    "archiveBytes": 5158940,
+    "archiveSha256": "75acf2c752573550578c61b6012bcf4643d37dbc7e47c4a55a47648da4804a97",
+    "persistentBranch": "backup/verified-font-20261118-018083b",
+    "filesVerified": 228,
+    "bytesVerified": 6641241,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterSnapshotExcluded": true
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57855,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6397,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13799,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5297,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22723,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesMergedSource": true
+    }
+  ],
+  "operationalPreviewChecks": {
+    "url": "https://okclean-kr.github.io/?quote_preview=1",
+    "fontCssNativeMediaAfterLoad": "all",
+    "onloadAttributeObserved": "this.onload=null;this.media='all'",
+    "criticalLayoutCssStillSynchronous": true,
+    "headlineVisible": true,
+    "serviceOptions": 12,
+    "wallAircon2ReferenceCost": "20만원~",
+    "detailHref": "quote/?svc=aircon",
+    "couponBenefitVisible": true,
+    "previewFlagDisablesExistingAnalytics": true,
+    "liveSignupQuoteOrContactSubmissionPerformed": false
+  },
+  "firstScheduledBackupCheck": {
+    "taskId": "Automation_34b50cf4c52881918473ace3013c43ca",
+    "enabled": true,
+    "nextRunKST": "2026-11-18T08:30:00+09:00",
+    "lastRun": null,
+    "changed": false,
+    "futureSuccessNotYetVerified": true
+  }
+}

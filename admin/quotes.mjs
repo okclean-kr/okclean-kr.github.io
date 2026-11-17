@@ -47,16 +47,17 @@ async function fillDetails(details,row){
  const fields=node('div',undefined,'grid'),status=node('select'),memo=node('textarea'),amount=node('input'),delivery=node('input');
  for(const[key,label]of Object.entries(core.STATES)){const option=new Option(label,key);option.disabled=!core.transition(row.status,key);status.append(option);}status.value=row.status;memo.maxLength=1000;memo.value=row.memo;amount.type='number';amount.min='0';amount.max='100000000';amount.step='1';amount.value=row.amount??'';delivery.type='checkbox';
  for(const[label,input]of[['상담 진행 상태',status],['견적 금액 (원, 미입력 가능)',amount],['관리자 메모 (고객에게 자동 전송하지 않음)',memo],['고객에게 견적을 실제 전달했음',delivery]]){const wrap=node('label',label);wrap.append(input);fields.append(wrap);}box.append(fields);
- const save=node('button','변경 저장','primary'),message=node('p',undefined,'muted');save.onclick=async()=>{save.disabled=true;try{
+ const save=node('button','변경 저장','primary'),message=node('p',undefined,'muted');save.onclick=async()=>{const session=notificationSession;save.disabled=true;try{
   if(!admin(b?.auth.currentUser)||!details.isConnected)return;
+  $('saveStatus').textContent='';$('saveStatus').hidden=true;
   if(rows.get(row.id)?.version!==row.version)throw new Error('서버 자료가 갱신됐습니다. 작성 내용을 복사한 뒤 최신 내용으로 다시 열어 확인해 주세요.');
   if(!core.transition(row.status,status.value))throw new Error('상담 단계에 맞게 상태를 선택해 주세요.');
   const value=amount.value===''?null:Number(amount.value);if(value!==null&&(!Number.isInteger(value)||value<0||value>100000000))throw new Error('견적 금액을 확인해 주세요.');
   if(status.value==='sent'&&(!delivery.checked&&!row.deliveredAt||value===null))throw new Error('견적 금액과 실제 전달 여부를 확인해 주세요.');
   if(status.value==='contracted'&&!confirm(row.test?'시험 접수의 계약 완료 상태를 확인합니까? 실제 계약 집계에서 제외됩니다.':'실제 고객 계약이 성사됐음을 확인했습니까?'))return;
   const patch={status:status.value,memo:memo.value.trim(),amount:value};if(delivery.checked)patch.deliveredAt=b.f.serverTimestamp();
-  await saveAdminChange(b,row.id,row,patch);details.open=false;render();message.textContent='서버에 저장했습니다. 견적이나 메시지를 자동 발송하지 않습니다.';
- }catch(e){message.textContent=e.message||e.code;}finally{save.disabled=false;}};box.append(save,message);
+  await saveAdminChange(b,row.id,row,patch);if(!admin(b?.auth.currentUser)||session!==notificationSession)return;details.open=false;render();$('saveStatus').textContent=core.receipt(row.id)+' · '+(row.test?'시험 접수':'접수')+' 변경 내용을 서버에 저장했습니다. 견적이나 메시지를 자동 발송하지 않습니다.';$('saveStatus').hidden=false;$('saveStatus').focus();
+ }catch(e){if(admin(b?.auth.currentUser)&&session===notificationSession)message.textContent=e.message||e.code;}finally{save.disabled=false;}};box.append(save,message);
  const history=node('button','견적·상태 변경 이력 보기');history.onclick=async()=>{history.disabled=true;try{const snap=await b.f.getDocs(b.f.query(b.f.collection(b.db,'quote_requests',row.id,'history'),b.f.orderBy('at','desc'),b.f.limit(100)));if(!admin(b.auth.currentUser)||!details.isConnected)return;const list=node('ul');for(const doc of snap.docs){const h=doc.data();list.append(node('li',format(h.at)+' · '+core.STATES[h.status]+' · '+(h.amount??'미입력')+'원 · '+h.note));}if(snap.empty)list.append(node('li','변경 이력이 없습니다.'));box.append(list);history.remove();}catch(e){history.disabled=false;box.append(node('p','이력 조회 실패. 재시도할 수 있습니다.','error'));}};box.append(history);
 }
 function renderNotificationStatus(){
@@ -110,7 +111,7 @@ $('permission').onclick=async()=>{
 
 function connectionStatus(message,retry=false){$('connectionStatus').textContent=message;$('retryConnection').hidden=!retry;$('retryConnection').disabled=!retry;}
 function currentList(session,epoch){return admin(b?.auth.currentUser)&&session===notificationSession&&epoch===listSession;}
-function clear(){listSession++;olderRequest=null;unsub?.();unsub=null;rows.clear();lastVisible=null;capped=false;initial=true;notificationSession++;notificationMessage='';notificationInFlight.clear();notificationUnsaved.clear();$('retryNotifications').disabled=false;$('notificationStatus').textContent='';connectionStatus('');$('older').disabled=false;$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
+function clear(){listSession++;olderRequest=null;unsub?.();unsub=null;rows.clear();lastVisible=null;capped=false;initial=true;notificationSession++;notificationMessage='';notificationInFlight.clear();notificationUnsaved.clear();$('retryNotifications').disabled=false;$('notificationStatus').textContent='';$('saveStatus').textContent='';$('saveStatus').hidden=true;connectionStatus('');$('older').disabled=false;$('panel').hidden=true;$('requests').replaceChildren();$('stats').replaceChildren();$('expired').replaceChildren();}
 async function start(){
  if(!admin(b?.auth.currentUser))return;
  const epoch=++listSession;olderRequest=null;unsub?.();unsub=null;initial=true;

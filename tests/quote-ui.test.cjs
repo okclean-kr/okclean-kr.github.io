@@ -204,3 +204,19 @@ test('전화번호 공백 정리는 문자·잘못된 구분자·빈 번호의 �
   let calls=0;const ui=await setup(true,{submitQuote:async()=>{calls++;}});fillForm(ui);ui.$('phone').value=raw;ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(calls,0);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('phone').value,raw);assert.equal(ui.w.document.activeElement.id,'phone');assert.match(ui.$('formError').textContent,/휴대폰 번호/);ui.dom.window.close();
  }
 });
+
+test('접수 미확인 오류는 실제 확인용 번호를 보여주되 완료 화면과 상담 발신은 만들지 않음',async()=>{
+ const ids=[];const ui=await setup(true,{newRequestId:()=> 'R'.repeat(20),submitQuote:async(c,id)=>{ids.push(id);if(ids.length===1)throw{code:'permission-denied'};}});fillForm(ui);ui.$('submit').click();await tick();
+ assert.match(ui.$('formError').textContent,new RegExp('확인용 번호: OKQ-'+ 'R'.repeat(20)));assert.match(ui.$('formError').textContent,/접수 완료 미확인/);assert.match(ui.$('formError').textContent,/권한/);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('receipt').textContent,'');assert.equal(ui.$('name').value,'시험');assert.equal(ui.w.document.activeElement,ui.$('submit'));assert.equal(ui.w.document.querySelector('a[href="tel:0339114457"]').textContent,'전화 상담');
+ ui.$('submit').click();await tick();assert.deepEqual(ids,['R'.repeat(20),'R'.repeat(20)]);assert.equal(ui.$('complete').hidden,false);assert.equal(ui.$('receipt').textContent,'OKQ-'+ 'R'.repeat(20));ui.dom.window.close();
+});
+test('번호 생성 전 실패는 가짜 확인용 번호 없이 안내하고 재시도에서만 실제 번호 생성',async()=>{
+ let generated=0,saved=0;const ui=await setup(true,{newRequestId:()=>{if(++generated===1)throw{code:'unavailable'};return 'B'.repeat(20);},submitQuote:async()=>{saved++;}});fillForm(ui);ui.$('submit').click();await tick();
+ assert.match(ui.$('formError').textContent,/확인용 번호를 아직 만들지 못/);assert.doesNotMatch(ui.$('formError').textContent,/OKQ-|undefined|null/);assert.equal(saved,0);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('phone').value,'010-0000-0000');assert.equal(ui.$('submit').disabled,false);
+ ui.$('submit').click();await tick();assert.equal(generated,2);assert.equal(saved,1);assert.equal(ui.$('receipt').textContent,'OKQ-'+ 'B'.repeat(20));assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+});
+test('오프라인 최초 신청은 번호를 만들지 않고 미확인 신청 재시도에는 같은 확인용 번호 유지',async()=>{
+ let generated=0;const ids=[];const ui=await setup(true,{newRequestId:()=>{generated++;return 'O'.repeat(20);},submitQuote:async(c,id)=>{ids.push(id);if(ids.length===1)throw{code:'unavailable'};}});fillForm(ui);const online=value=>Object.defineProperty(ui.w.navigator,'onLine',{value,configurable:true});online(false);ui.$('submit').click();await tick();assert.equal(generated,0);assert.equal(ids.length,0);assert.match(ui.$('formError').textContent,/인터넷 연결/);assert.doesNotMatch(ui.$('formError').textContent,/OKQ-/);
+ online(true);ui.$('submit').click();await tick();assert.equal(ids.length,1);online(false);ui.$('submit').click();await tick();assert.equal(ids.length,1);assert.equal(generated,1);assert.match(ui.$('formError').textContent,/인터넷 연결/);assert.match(ui.$('formError').textContent,new RegExp('확인용 번호: OKQ-'+ 'O'.repeat(20)));assert.match(ui.$('formError').textContent,/접수 완료 미확인/);assert.equal(ui.$('complete').hidden,true);assert.equal(ui.$('phone').value,'010-0000-0000');
+ online(true);ui.$('submit').click();await tick();assert.deepEqual(ids,['O'.repeat(20),'O'.repeat(20)]);assert.equal(generated,1);assert.equal(ui.$('complete').hidden,false);ui.dom.window.close();
+});

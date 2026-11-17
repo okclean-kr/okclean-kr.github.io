@@ -39,6 +39,7 @@ function showValidationErrors(errors){
 }
 function photoPreview(){const container=$('photoPreview');container.replaceChildren();photos.forEach((photo,i)=>{const figure=document.createElement('figure'),img=new Image(),remove=document.createElement('button');img.src=photo.data;img.alt='선택한 현장 사진 '+(i+1);remove.type='button';remove.textContent='사진 '+(i+1)+' 삭제';remove.disabled=busy;remove.onclick=()=>{photos.splice(i,1);photoPreview();};figure.append(img,remove);container.append(figure);});}
 function lock(value){busy=value;for(const el of $('quoteForm').querySelectorAll('input,select,button'))el.disabled=value;photoPreview();$('submit').disabled=value||!enabled();}
+function retryReference(){return requestId?' 확인용 번호: '+core.receipt(requestId)+' (접수 완료 미확인).':'';}
 function resultRow(label,value){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;$('result').append(dt,dd);}
 function advance(){if(busy||photoBusy||step>=3)return;if(step===1&&!service()){$('formError').textContent='청소 종류를 선택해 주세요.';document.querySelector('[name=service]')?.focus();return;}if(step===2&&!currentValid())return;if(step===1)startQuote();track('quote_step_complete');showStep(step+1);}
 $('next').onclick=advance;
@@ -63,14 +64,14 @@ $('photos').onchange=async()=>{if(photoBusy||busy)return;photoBusy=true;$('next'
 $('quoteForm').onsubmit=async e=>{
  e.preventDefault();if(completed||composing||imeEnter||busy||photoBusy)return;if(step<3){advance();return;}if(!enabled())return;
  const input=frozen||read(),errors=core.validate(input,catalog);if(errors.length){showValidationErrors(errors);return;}
- if(!navigator.onLine){$('formError').textContent='인터넷 연결을 확인한 뒤 다시 접수해 주세요. 입력 내용은 이 화면에 유지됩니다.';return;}
+ if(!navigator.onLine){$('formError').textContent='인터넷 연결을 확인한 뒤 다시 접수해 주세요. 입력 내용은 이 화면에 유지됩니다.'+retryReference();return;}
  lock(true);$('formError').textContent='서버에 안전하게 저장하고 있습니다. 창을 닫지 말아 주세요.';frozen=input;
  try{
   const mod=await import('./quote-store.mjs');requestId||=mod.newRequestId();await mod.submitQuote(catalog,requestId,input,photos,{test:testMode});
   $('quoteForm').hidden=true;$('complete').hidden=false;if(testMode)$('complete').querySelector('h2').textContent='시험 견적 접수가 완료됐습니다.';$('receipt').textContent=core.receipt(requestId);$('result').replaceChildren();resultRow('서비스',catalog.services.find(s=>s.id===input.service).name);for(const[k,v]of Object.entries(input.answers))resultRow(core.LABELS[k],v);resultRow('지역',input.region);resultRow('희망 날짜',input.date||'상담 후 협의');resultRow('상담 시간',input.contactTime);resultRow('현장 사진',photos.length+'장');
   document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(el.dataset.stepLabel==='4')el.setAttribute('aria-current','step');});photos=[];$('name').value='';$('phone').value='';$('photoPreview').replaceChildren();completed=true;busy=false;frozen=null;$('completeTitle').focus({preventScroll:true});$('complete').scrollIntoView({block:'start'});track('quote_submit_success');
  }catch(error){
-  $('formError').textContent='접수 완료를 확인하지 못했습니다. 입력과 사진은 이 화면에 유지됩니다. 같은 접수번호로 다시 확인·시도해 주세요.'+(error.code==='permission-denied'?' 서버 권한을 확인 중입니다. 카카오톡 또는 전화로 상담하실 수 있습니다.':'');
+  $('formError').textContent='접수 완료를 확인하지 못했습니다.'+(retryReference()||' 확인용 번호를 아직 만들지 못했습니다.')+' 입력과 사진은 이 화면에 유지됩니다. 아래 버튼으로 같은 신청을 다시 확인·시도해 주세요.'+(error.code==='permission-denied'?' 서버 권한을 확인 중입니다. 카카오톡 또는 전화로 상담하실 수 있습니다.':'');
   lock(false);
   // Keep the submitted snapshot until the same request ID has been checked on the server.
   for(const el of $('quoteForm').querySelectorAll('input,select,#photoPreview button'))el.disabled=true;

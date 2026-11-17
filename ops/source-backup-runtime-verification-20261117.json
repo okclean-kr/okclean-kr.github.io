@@ -1,0 +1,171 @@
+{
+  "checkedAtUTC": "2026-11-17T09:52:29.373647+00:00",
+  "sourceCommit": "71ef5afda739209104b524507696dc16a8c2fdcd",
+  "runId": 44059187296,
+  "event": "push",
+  "artifactId": 14317271992,
+  "zipBytes": 4977602,
+  "zipSha256": "4428fbb17e1016ee5cbccefe21886dd6c4980e1f97d1a9b267926bd0c11abb9e",
+  "matchesGitHubArtifactDigest": true,
+  "zipMembers": [
+    "manifest.json",
+    "source.tar.gz"
+  ],
+  "archiveBytes": 4922196,
+  "archiveSha256": "7fa38a48bf4a868c5ec3fc041500e644dab6500984d6bdc55bea6e284ce1b5ae",
+  "filesVerified": 218,
+  "bytesVerified": 6291560,
+  "allFilesRestored": true,
+  "allRestoredFilesMatchGitBlobs": true,
+  "productionRestorePerformed": false,
+  "customerDataOrAuthIncluded": false,
+  "dateKST": "2026-11-17",
+  "status": "deployed_native_node24_zero_annotations_and_downloaded_restore_verified",
+  "pullRequest": 65,
+  "baseCommit": "f0ac5d327838b9ff037cbf64e695a3aa022584e3",
+  "headCommit": "3122b67af527eeb23ff8cc13b7ba9564e7e520f0",
+  "mergeCommit": "71ef5afda739209104b524507696dc16a8c2fdcd",
+  "backupBeforeBranch": "backup/runtime-before-20261117-f0ac5d3",
+  "persistentSourceBranch": "backup/verified-runtime-20261117-71ef5af",
+  "workflowChange": "Only checkout pinned SHA and explicit previously successful OS label changed.",
+  "previousRuntime": {
+    "checkoutSha": "11d5960a326750d5838078e36cf38b85af677262",
+    "nodeTarget": 20,
+    "osLabel": "ubuntu-latest",
+    "actualOsImage": "ubuntu-26.04",
+    "runnerVersion": "2.338.2",
+    "mainJobId": 133946086355,
+    "warnings": 1,
+    "notices": 1
+  },
+  "currentRuntime": {
+    "checkoutVersion": "v6.1.0",
+    "checkoutSha": "d23441a48e516b6c34aea4fa41551a30e30af803",
+    "officialTagResolvedToExactCommit": true,
+    "officialCommitSignatureVerified": true,
+    "officialActionYamlRuntime": "node24",
+    "osLabel": "ubuntu-26.04",
+    "actualOsImage": "ubuntu-26.04",
+    "runnerVersion": "2.338.2",
+    "prWarnings": 0,
+    "prNotices": 0,
+    "mainWarnings": 0,
+    "mainNotices": 0,
+    "successPageVisuallyVerified": true
+  },
+  "githubChecks": {
+    "prRunId": 44059063457,
+    "prJobId": 133955853009,
+    "prConclusion": "success",
+    "prBackupTests": 6,
+    "mainRunId": 44059187296,
+    "mainJobId": 133956294227,
+    "mainConclusion": "success",
+    "mainBackupTests": 6,
+    "mainCreatesArchiveRestoresBeforeUpload": true,
+    "pagesRunId": 44059187732,
+    "pagesConclusion": "success"
+  },
+  "artifactName": "okclean-source-44059187296-71ef5afda739209104b524507696dc16a8c2fdcd",
+  "artifactCreatedAtUTC": "2026-11-17T09:50:10Z",
+  "artifactExpiresAtUTC": "2026-12-01T09:50:09Z",
+  "schedulePermissionsBackupStepsAndRetentionUnchanged": true,
+  "applicationAndMarketingAutomationFilesUnchanged": true,
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "historicAnalyticsDocumentsRewrittenOrDeleted": false,
+  "firstFutureScheduledBackupVerified": false,
+  "futureScheduledVerificationUnchanged": {
+    "registered": true,
+    "firstCheckKST": "2026-11-18T08:30:00+09:00",
+    "interval": "hourly",
+    "maxChecks": 6,
+    "stopOnConfirmedResult": true,
+    "executed": false
+  },
+  "applicationChecks": {
+    "previousTotal": 288,
+    "sourceUnchanged": true,
+    "fullApplicationTestsRepeated": false
+  },
+  "officialReferences": [
+    "https://github.com/actions/checkout/releases/tag/v6.1.0",
+    "https://github.com/actions/checkout/blob/d23441a48e516b6c34aea4fa41551a30e30af803/action.yml",
+    "https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job"
+  ],
+  "rollback": "Restore the two runtime configuration lines of .github/workflows/source-backup.yml from backup/runtime-before-20261117-f0ac5d3. Preserve later source, customer data, other workflows and schedule.",
+  "screenshotEvidence": {
+    "path": "ops/evidence/source-backup-runtime-20261117.jpg",
+    "bytes": 66307,
+    "sha256": "10e9efebefa99266b49533e0999335fbc7c8870071fc8188326e7e9ac23f5c02",
+    "scope": "Actual GitHub push backup success after runtime update, no warning or notice annotations; not a future schedule execution."
+  },
+  "limits": [
+    "Public committed Git source only; Firebase customer data/Auth and private mail state are not included.",
+    "The Git branch is a persistent snapshot in the same repository, not an independent external backup.",
+    "The GitHub artifact retains the existing 14-day expiry; downloaded ZIP/restore folder are temporary verification outputs.",
+    "This source snapshot excludes subsequent documentation updates.",
+    "A scheduled future check is not proof that a future scheduled backup ran."
+  ],
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6399,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13546,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "admin/index.html",
+      "httpStatus": 200,
+      "bytes": 1056,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "admin/products.html",
+      "httpStatus": 200,
+      "bytes": 10877,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "app/index.html",
+      "httpStatus": 200,
+      "bytes": 831,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "shop/index.html",
+      "httpStatus": 200,
+      "bytes": 13988,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesRuntimeSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesRuntimeSource": true
+    }
+  ]
+}

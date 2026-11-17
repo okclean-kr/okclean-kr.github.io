@@ -14,6 +14,16 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 경고 없는 백업 런타임의 최신 정상 소스
+
+PR #65 병합 `71ef5afda739209104b524507696dc16a8c2fdcd`를 `backup/verified-runtime-20261117-71ef5af`에 보존했다. `.github/workflows/source-backup.yml`의 checkout을 공식 서명 확인한 v6.1.0 커밋 `d23441a48e516b6c34aea4fa41551a30e30af803`(Node.js 24)으로 고정하고, 직전 실제 정상 이미지와 같은 Ubuntu 26.04 레이블을 명시했다. 매일 08시·14일 보관·권한·인증 정보 미보존·백업/복원 단계·임시 예약 확인 task는 유지한다.
+
+PR 검사 6개 및 main 검사·압축·복원·업로드 성공, 로그 경고 0·안내 0과 실제 성공 화면 확인. 실행은 https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44059187296 이며 `push`다. 첫 미래 예약 성공으로 보고하지 않는다. 홈페이지 기능 코드는 동일하고 기존 288개 통과 소스에 대한 전체 검사를 반복하지 않았다.
+
+Artifact `14317271992`를 실제 내려받았다. ZIP **4,977,602바이트**, SHA-256 `4428fbb17e1016ee5cbccefe21886dd6c4980e1f97d1a9b267926bd0c11abb9e`가 GitHub digest와 일치한다. 내부 tar **4,922,196바이트**, SHA-256 `7fa38a48bf4a868c5ec3fc041500e644dab6500984d6bdc55bea6e284ce1b5ae`를 검사하고 **218파일·6,291,560바이트** 전부 새 빈 폴더에 복원한 뒤 Git 원본 blob·목록·실행 모드까지 일치했다. 생성 2026-11-17 18:50:10 KST, 만료 2026-12-01 18:50:09 KST다. 실제 ZIP 구성은 `manifest.json`, `source.tar.gz` 두 파일이다.
+
+이 변경만 복구할 때는 `backup/runtime-before-20261117-f0ac5d3`에서 workflow의 checkout SHA와 runs-on 두 줄만 가져온다. 이후 코드·고객 문서·자동화·통계는 보존한다. Git 브랜치는 같은 저장소의 지속 스냅샷이며 독립 외부 백업이 아니다. artifact 14일 보관을 유지하고 임시 로컬 출력·고객 DB/Auth·비공개 메일 상태·이후 문서 갱신까지 포함한다고 주장하지 않는다. 근거: `source-backup-runtime-verification-20261117.json`.
+
 ## 최신 업로드 산출물의 실제 다운로드·복원 검증
 
 PR #64 병합 `2a65c08fb3befc0ea29b69e5dad1e2e9cd4175f5`의 정상 소스를 `backup/verified-artifact-20261117-2a65c08`에 보존했다. 기존 `source-backup.yml`은 실행 유형/브랜치를 보여주는 `run-name` 한 줄만 추가했고 주기·권한·검증·보관을 유지했다. PR 검사 6개와 main push의 검사·압축·복원·업로드가 성공했다. 실제 실행: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44056193089.

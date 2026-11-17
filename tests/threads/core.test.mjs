@@ -41,7 +41,7 @@ for(const type of ['text','image','video'])test(type+' full mock create / poll /
     if(p==='/123/threads')return {id:'456'};
     if(p==='/456')return {status:'FINISHED'};
     if(p==='/123/threads_publish')return {id:'789'};
-    if(p==='/789')return {id:'789',text:a.text,username:ACCOUNT,media_type:type.toUpperCase(),permalink:'https://www.threads.com/post/verified',timestamp:row.at};
+    if(p==='/789')return {id:'789',text:a.text,username:ACCOUNT,media_type:type==='text'?'TEXT_POST':type.toUpperCase(),permalink:'https://www.threads.com/post/verified',timestamp:row.at};
     throw new Error('Unexpected request');};
   await publishOne({item:a,asset:type==='text'?null:{public_url:'https://okclean-kr.github.io/threads-media/a'},row,api,profile,save:()=>states.push(row.status),sleep:async()=>{},checkMedia:async()=>{}});
   assert.equal(row.status,'published');assert.equal(row.threads_id,'789');assert.equal(calls.filter(x=>x.method==='POST').length,2);

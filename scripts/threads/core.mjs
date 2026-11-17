@@ -154,6 +154,6 @@ export async function publishOne({item,asset,row,api,profile,save,sleep=ms=>new 
   if(!/^\d+$/.test(p.id||''))throw new Error('PUBLISH_RESULT_UNKNOWN');
   row.threads_id=p.id;row.status='published-unverified';save();
   const actual=await api('/'+p.id,{fields:'id,text,permalink,username,media_type,timestamp'});
-  if(actual.id!==p.id||actual.username!==ACCOUNT||actual.text!==item.text||actual.media_type!==item.type.toUpperCase())throw new Error('PUBLISHED_POST_VERIFICATION_FAILED');
+  if(actual.id!==p.id||actual.username!==ACCOUNT||actual.text!==item.text||actual.media_type!==(item.type==='text'?'TEXT_POST':item.type.toUpperCase()))throw new Error('PUBLISHED_POST_VERIFICATION_FAILED');
   row.status='published';row.permalink=actual.permalink;row.published_at=actual.timestamp;save();
 }

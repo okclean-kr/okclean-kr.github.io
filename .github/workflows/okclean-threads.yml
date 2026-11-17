@@ -33,7 +33,7 @@ jobs:
         run: |
           node --check scripts/okclean-threads-publish.mjs
           node --check scripts/threads/core.mjs
-          node --check scripts/threads/drafts.mjs
+          for file in scripts/threads/*.mjs; do node --check "$file"; done
           node --test tests/threads/*.test.mjs
       - uses: actions/setup-python@v5
         with:
@@ -81,6 +81,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Prepare tomorrow's unapproved drafts using an approved provider
+        env:
+          OKC_AI_ENABLED: ${{ vars.OKC_AI_ENABLED }}
+          OKC_OPENAI_API_KEY: ${{ secrets.OKC_OPENAI_API_KEY }}
+          OKC_OPENAI_MODEL: ${{ vars.OKC_OPENAI_MODEL }}
+        run: |
+          node scripts/threads/prepare-next.mjs
+          if ! git diff --quiet -- ops/threads-queue.json; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' add ops/threads-queue.json
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'chore: prepare unapproved OKClean drafts'
+            git push origin HEAD:main
+          fi
       - name: Validate and publish eligible approved post
         env:
           THREADS_ENABLED: ${{ vars.OKC_THREADS_ENABLED }}

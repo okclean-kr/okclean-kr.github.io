@@ -14,7 +14,7 @@ const asset=approved[0];
 const n=queue.length%10;const category=n<7?'tip':n<9?'case':'consultation';
 if(category==='case'&&!asset){console.log('CASE_DRAFT_BLOCKED_NO_VERIFIED_ASSET');process.exit(0);}
 const facts=asset?{service:asset.service,verified_observation:asset.verified_observation||null}:null;
-const res=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{Authorization:'Bearer '+process.env.OKC_OPENAI_API_KEY,'Content-Type':'application/json'},signal:AbortSignal.timeout(60000),body:JSON.stringify({model:process.env.OKC_OPENAI_MODEL,max_output_tokens:700,store:false,input:[{role:'system',content:`오케이청소 Threads 한국어 원고 한 편만 작성. 30~450자, 청소 정보 중심의 자연스러운 말투. URL/도메인/해시태그 금지. 확인된 관찰 외의 현장·결과·후기·가격·할인 주장 금지. 고객 개인정보 금지. 마지막 문구는 정확히 한 번: ${CTA}. 원고 이외 설명 금지.`},{role:'user',content:JSON.stringify({category,facts,topic:'청소 전 확인사항과 일상 관리'})]})});
+const res=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{Authorization:'Bearer '+process.env.OKC_OPENAI_API_KEY,'Content-Type':'application/json'},signal:AbortSignal.timeout(60000),body:JSON.stringify({model:process.env.OKC_OPENAI_MODEL,max_output_tokens:700,store:false,input:[{role:'system',content:`오케이청소 Threads 한국어 원고 한 편만 작성. 30~450자, 청소 정보 중심의 자연스러운 말투. URL/도메인/해시태그 금지. 확인된 관찰 외의 현장·결과·후기·가격·할인 주장 금지. 고객 개인정보 금지. 마지막 문구는 정확히 한 번: ${CTA}. 원고 이외 설명 금지.`},{role:'user',content:JSON.stringify({category,facts,topic:'청소 전 확인사항과 일상 관리'})}]})});
 if(!res.ok)throw new Error('AI_PROVIDER_REQUEST_FAILED');
 const data=await res.json();
 const text=data.output?.flatMap(x=>x.content||[]).filter(x=>x.type==='output_text').map(x=>x.text).join('').trim();

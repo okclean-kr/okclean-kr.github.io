@@ -1,0 +1,150 @@
+{
+  "checkedAtUTC": "2026-11-17T09:33:32.718362+00:00",
+  "sourceCommit": "2a65c08fb3befc0ea29b69e5dad1e2e9cd4175f5",
+  "runId": 44056193089,
+  "event": "push",
+  "artifactId": 14315507832,
+  "zipBytes": 4919185,
+  "zipSha256": "677e9995efe801ef13e35a45c3dd91c4f6b9660ba5ff449583e5f3370b825d1a",
+  "matchesGitHubArtifactDigest": true,
+  "zipMembers": [
+    "manifest.json",
+    "source.tar.gz"
+  ],
+  "archiveBytes": 4864325,
+  "archiveSha256": "28920c8db2db5bab6dc121f0a606ab44c8e6734db81048f1d5d65dd1cc3b55af",
+  "filesVerified": 216,
+  "bytesVerified": 6207905,
+  "allFilesRestored": true,
+  "allRestoredFilesMatchGitBlobs": true,
+  "productionRestorePerformed": false,
+  "customerDataOrAuthIncluded": false,
+  "dateKST": "2026-11-17",
+  "status": "push_artifact_download_and_full_isolated_restore_verified",
+  "pullRequest": 64,
+  "baseCommit": "05596a2d4fa0936dc6b6419c1942fec00ad3d03a",
+  "headCommit": "75320eaed1b40fa4667c978452238359d4578aa4",
+  "mergeCommit": "2a65c08fb3befc0ea29b69e5dad1e2e9cd4175f5",
+  "backupBeforeBranch": "backup/checkpoint-before-20261117-05596a2",
+  "persistentSourceBranch": "backup/verified-artifact-20261117-2a65c08",
+  "workflowChange": "Only run-name metadata added; schedule, backup/restore steps, permissions and 14-day retention unchanged.",
+  "artifactName": "okclean-source-44056193089-2a65c08fb3befc0ea29b69e5dad1e2e9cd4175f5",
+  "artifactCreatedAtUTC": "2026-11-17T09:30:37Z",
+  "artifactExpiresAtUTC": "2026-12-01T09:30:36Z",
+  "githubChecks": {
+    "prRunId": 44056023547,
+    "prJobId": 133945511757,
+    "prConclusion": "success",
+    "prBackupTests": 6,
+    "mainRunId": 44056193089,
+    "mainJobId": 133946086355,
+    "mainConclusion": "success",
+    "mainBackupTests": 6,
+    "mainCreatesArchiveRestoresBeforeUpload": true,
+    "pagesRunId": 44056192712,
+    "pagesConclusion": "success"
+  },
+  "applicationRuntimeCodeUnchanged": true,
+  "existingApplicationChecks": {
+    "total": 288,
+    "source": "PR #63 source unchanged; full application tests not repeated for one metadata line and documentation."
+  },
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "historicAnalyticsDocumentsRewrittenOrDeleted": false,
+  "existingBackupTaskUnchanged": true,
+  "firstFutureScheduledBackupVerified": false,
+  "futureScheduledVerification": {
+    "registrationConfirmed": true,
+    "title": "오케이청소 첫 예약 백업 확인",
+    "defaultTimezone": "Asia/Seoul",
+    "firstCheckKST": "2026-11-18T08:30:00+09:00",
+    "timingMode": "condition_watch",
+    "interval": "hourly",
+    "maxChecks": 6,
+    "stopOnConfirmedResult": true,
+    "executionVerified": false,
+    "scope": "Read the first existing source-backup.yml schedule run after 2026-11-17T23:00:00Z, download artifact and restore-check before reporting success; do not create another backup or change other automations."
+  },
+  "runnerAnnotations": {
+    "warnings": 1,
+    "notices": 1,
+    "warning": "Existing checkout action targets Node.js 20 and GitHub forced it to run on Node.js 24; the job completed successfully.",
+    "notice": "ubuntu-latest migration notice was displayed.",
+    "workflowRuntimeActionVersionsChanged": false
+  },
+  "screenshotEvidence": {
+    "path": "ops/evidence/source-backup-checkpoint-20261117.jpg",
+    "bytes": 72840,
+    "sha256": "c166018772c75815ddd6e757346a32d0370a1df36c0b3df6a892b18a80b32fa2",
+    "scope": "Actual GitHub push backup result, with success and runner annotations visible; this is not a future schedule execution."
+  },
+  "limits": [
+    "Only committed public Git source is backed up; Firebase customer data/Auth and private mail state are excluded.",
+    "GitHub artifact expires after the existing 14-day retention; the Git branch is a persistent snapshot in the same repository, not an independent external backup.",
+    "The downloaded ZIP and restored scratch folder are temporary validation outputs.",
+    "This snapshot excludes later documentation updates.",
+    "A registered future verification task is not evidence of a successful future run."
+  ],
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6399,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13546,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "admin/index.html",
+      "httpStatus": 200,
+      "bytes": 1056,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "admin/products.html",
+      "httpStatus": 200,
+      "bytes": 10877,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "app/index.html",
+      "httpStatus": 200,
+      "bytes": 831,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "shop/index.html",
+      "httpStatus": 200,
+      "bytes": 13988,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesCheckpointSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesCheckpointSource": true
+    }
+  ]
+}

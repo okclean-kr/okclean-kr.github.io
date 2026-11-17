@@ -14,6 +14,18 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 최신 업로드 산출물의 실제 다운로드·복원 검증
+
+PR #64 병합 `2a65c08fb3befc0ea29b69e5dad1e2e9cd4175f5`의 정상 소스를 `backup/verified-artifact-20261117-2a65c08`에 보존했다. 기존 `source-backup.yml`은 실행 유형/브랜치를 보여주는 `run-name` 한 줄만 추가했고 주기·권한·검증·보관을 유지했다. PR 검사 6개와 main push의 검사·압축·복원·업로드가 성공했다. 실제 실행: https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44056193089.
+
+GitHub artifact `14315507832`를 실제 내려받았다. ZIP **4,919,185바이트**, SHA-256 `677e9995efe801ef13e35a45c3dd91c4f6b9660ba5ff449583e5f3370b825d1a`가 GitHub digest와 일치한다. 내부 tar **4,864,325바이트**, SHA-256 `28920c8db2db5bab6dc121f0a606ab44c8e6734db81048f1d5d65dd1cc3b55af`를 검사하고 새 빈 폴더에 **216파일·6,207,905바이트** 전부 복원한 뒤 Git 원본 blob·파일 목록·실행 모드와 대조해 일치했다. 이 검증은 업로드된 실제 산출물을 대상으로 했으며 운영 소스를 덮어쓰지 않았다.
+
+ZIP은 `manifest.json`, `source.tar.gz` 두 파일만 포함한다. 생성은 **2026-11-17 18:30:37 KST**, 만료는 **2026-12-01 18:30:36 KST**다. artifact는 기존 14일 보관이며 Git 브랜치는 같은 저장소의 지속 스냅샷이다. 임시 로컬 ZIP이나 같은 저장소 브랜치를 독립 영구 외부 백업으로 보고하지 않는다. 고객 DB/Auth·비공개 메일 상태를 포함하지 않고 이 스냅샷 뒤의 검증 문서 갱신도 포함하지 않는다.
+
+이름 표시만 복구할 때는 `backup/checkpoint-before-20261117-05596a2`에서 `.github/workflows/source-backup.yml`의 `run-name` 줄만 되돌리거나 PR #64를 revert한다. 다른 게시 workflow·고객 자료·후속 코드·통계 문서를 과거로 덮어쓰지 않는다. 실제 job 성공과 별도로 기존 Node.js 20 대상 checkout 경고 및 runner 전환 안내가 남았고, 이번 변경은 action 버전을 수정하지 않았다.
+
+이 실행은 `push`이며 첫 미래 `schedule` 실행은 아직 미검증이다. 기존 매일 08시 견적·제품 백업 task는 유지했다. 11월 18일 08:30부터 시간 간격·최대 6회의 임시 점검을 등록해 실제 첫 예약 run의 산출물까지 검증하고 결과 확인 후 그 점검만 종료하도록 했다. 등록 사실을 미래 실행 성공으로 표현하지 않는다. 근거는 `checkpoint-source-backup-verification-20261117.json`이다.
+
 ## 예상 비용 계산 통계 개선 후 최신 정상 소스
 
 PR #63까지 포함한 정상 소스는 `backup/verified-calculate-20261117-19f9bc5` / `19f9bc584ae1730ea2291e04ef40c2df58a88bea`에 보존했다. 임시 tar에서 **215파일·6,139,426바이트** 전부 격리 복원했다. tar 4,815,736바이트, SHA-256 `81f96bbe177f574b9f327108605cbd3b0ff4c81ac2a4db93b79e90cfca5403e7`다. 변경 전 `backup/calculate-event-before-20261117-8946b4f` / `8946b4fe651c4a5b695863cb27613a01ab4c2b3d`도 **214파일·6,133,648바이트** 격리 복원했다. 변경 전 tar 4,814,488바이트, SHA-256 `f45a913ca5550b32797f1ab6fa611401f3b3ae829ae50befdac5953c8515b32b`다. Git 브랜치·커밋이 지속 보존 위치이며 임시 tar·고객 DB/Auth·이후 문서 갱신까지 포함하는 것으로 보고하지 않는다.

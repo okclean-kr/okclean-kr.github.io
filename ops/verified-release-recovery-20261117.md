@@ -14,6 +14,14 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 저장 실패 확인용 번호 개선 후 최신 정상 소스
+
+PR #67 병합 `cc17a9734ba9615444f83ef9d42a6cd8109bdb89`를 `backup/verified-retry-reference-20261117-cc17a97`에 보존했다. 임시 tar **5,028,275바이트**, SHA-256 `d5d289561ad1f957232dbcb3f8cd654e8a5dac62b7c21475eb9944c408df136f`에서 **222파일·6,449,162바이트** 전부 격리 복원 일치했다. 변경 전 `backup/retry-reference-before-20261117-cdcb0da` / `cdcb0da6162c743c40635f9758f5e1ff473381bb`도 **222파일·6,445,569바이트** 복원했다. 변경 전 tar **5,027,630바이트**, SHA-256 `7eafc7dd3c1ea12d204a02f754ed76492b8d802d55d8c63edd2e6c7605299ab7`다.
+
+이 변경만 복구할 때는 변경 전 브랜치에서 `quote/index.html`, `quote/quote-form.mjs`를 함께 가져온다. 실패 문구의 확인용 번호 표시만 추가했으며 생성되지 않은 번호를 만들지 않는다. 기존 저장 확인·입력/사진 보존·같은 ID 재시도·가격·회원·쿠폰·권한·알림·다른 자동화는 변경하지 않았다. 이후 고객 자료·통계·자동화 코드를 과거로 덮어쓰지 않는다.
+
+294개 검사·PR CI·main·Pages 성공, PC/390px 격리 응답에서 실패→미확인 번호→같은 번호 재시도→성공 시 같은 번호와 완료 초점을 확인했다. 운영에서는 새 모듈·맞춤 질문·접수 가능·서비스 12종 및 주요 파일 10개 원본 일치만 확인했고 접수·사진·메일은 추가하지 않았다. Git 브랜치는 같은 저장소의 지속 스냅샷이며 독립 외부 백업이 아니다. 고객 DB/Auth·비공개 메일 상태·이후 문서 갱신을 포함하지 않는다. 근거: `quote-retry-reference-verification-20261117.json`.
+
 ## 전화번호 입력 개선 후 최신 정상 소스
 
 PR #66 병합 `e96fe49ce2f27461f241de8c2c58d8bbdfa6d35d`를 `backup/verified-phone-20261117-e96fe49`에 보존했다. 임시 tar **4,974,881바이트**, SHA-256 `0b6dfc1d81a58b735375d52d2fed8b5ef9c77dc8a52b8879021c0de1c5757b67`에서 **221파일·6,374,352바이트** 전부 격리 복원 일치했다. 변경 전 `backup/phone-input-before-20261117-f1e1e49` / `f1e1e49a2e9ccfd5d9e9f6f5f7b331c4b1354c4c`도 **220파일·6,368,639바이트** 전부 복원했다. 변경 전 tar **4,973,365바이트**, SHA-256 `7b91b214dbc1431656114f2ff61d6b4122bacf63cde6d8f4e28959d6fc32efba`다.

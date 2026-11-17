@@ -1,0 +1,200 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "deployed_live_module_and_isolated_uncertain_reference_retry_verified",
+  "pullRequest": 67,
+  "headCommit": "abe787529771a88b6942d1bf38cb43aa64f5f18a",
+  "baseCommit": "cdcb0da6162c743c40635f9758f5e1ff473381bb",
+  "moduleVersion": "20261117-retryid1",
+  "problemReproducedBeforeFix": {
+    "uiTests": 40,
+    "passed": 37,
+    "failed": 3,
+    "findings": [
+      "Failure text mentioned the same receipt number without showing the generated reference.",
+      "A failure before ID generation implied an existing receipt number.",
+      "An offline retry did not retain the available uncertain reference in its message."
+    ]
+  },
+  "changes": [
+    "Show an existing request ID only as a reference explicitly marked unconfirmed.",
+    "Distinguish a failure before ID generation without inventing a receipt.",
+    "Preserve uncertain reference on offline retry; keep completion conditional on storage confirmation."
+  ],
+  "automatedChecks": {
+    "node": 201,
+    "uiSubset": 40,
+    "firestoreAndRest": {
+      "QUOTE_RULE_TESTS_PASSED": 45,
+      "MEMBER_RULE_TESTS_PASSED": 12,
+      "BACKUP_RULE_TESTS_PASSED": 6,
+      "MAIL_REST_TESTS_PASSED": 7
+    },
+    "firestoreAndRestTotal": 70,
+    "pythonCaseSync": 23,
+    "total": 294,
+    "failed": 0,
+    "skipped": 0,
+    "newChecks": 3
+  },
+  "isolatedBrowserChecks": {
+    "browser": "Chrome",
+    "actualFormSourceUnchangedInFixture": true,
+    "fakeBackendAndLocalTestIdentityOnly": true,
+    "realFirebaseConnected": false,
+    "pc": {
+      "passed": true,
+      "uncertainReference": "OKQ-NNNNNNNNNNNNNNNNNNNN",
+      "completionHiddenOnFailure": true,
+      "confirmedReceiptEmptyOnFailure": true,
+      "nativeEnterRetry": true,
+      "requestCalls": 2,
+      "distinctRequestIds": 1,
+      "sameInputSnapshot": true,
+      "confirmedReceiptMatchesUncertainReference": true,
+      "completionHeadingFocused": true
+    },
+    "mobile390px": {
+      "passed": true,
+      "uncertainReference": "OKQ-NNNNNNNNNNNNNNNNNNNN",
+      "completionHiddenOnFailure": true,
+      "confirmedReceiptEmptyOnFailure": true,
+      "nativeEnterRetry": true,
+      "requestCalls": 2,
+      "distinctRequestIds": 1,
+      "sameInputSnapshot": true,
+      "confirmedReceiptMatchesUncertainReference": true,
+      "completionHeadingFocused": true,
+      "documentClientWidth": 375,
+      "documentScrollWidth": 375,
+      "noHorizontalOverflow": true
+    },
+    "productionQuoteOrPhotoOrEmailCreated": false
+  },
+  "beforeSourceRestore": {
+    "sourceCommit": "cdcb0da6162c743c40635f9758f5e1ff473381bb",
+    "archiveBytes": 5027630,
+    "archiveSha256": "7eafc7dd3c1ea12d204a02f754ed76492b8d802d55d8c63edd2e6c7605299ab7",
+    "persistentBranch": "backup/retry-reference-before-20261117-cdcb0da",
+    "filesVerified": 222,
+    "bytesVerified": 6445569,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false
+  },
+  "deploymentVerified": true,
+  "productionQuoteOrCustomerDataWritesPerformed": false,
+  "pricingOrBackendRulesOrMembershipChanged": false,
+  "rollback": "Restore quote/index.html and quote/quote-form.mjs together from backup/retry-reference-before-20261117-cdcb0da; preserve customer data and later automation changes.",
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-retry-reference-isolated-20261117.jpg",
+    "bytes": 68453,
+    "sha256": "2f0ec0b2443a18e7f3837caef0e6fb04a0d9b1bebc35e1802c1eb9ab355f17b6",
+    "scope": "Local 390px frame, fake backend and synthetic all-zero phone. The displayed reference is not a production receipt or completed submission."
+  },
+  "limits": [
+    "No new production quote, photo, contract or contact message was created.",
+    "Native UI tested in Chrome PC/390px, not a physical phone, Safari or a physical IME.",
+    "Only an in-memory reference is displayed; reload recovery and cross-session restoration were not added.",
+    "A reference is not proof of stored data; complete remains hidden until the existing server confirmation succeeds.",
+    "The ordinary live page review may be included in existing page_view analytics; no conversion or contact action was performed."
+  ],
+  "protectedExistingFilesUnchanged": true,
+  "mergeCommit": "cc17a9734ba9615444f83ef9d42a6cd8109bdb89",
+  "checkedAtUTC": "2026-11-17T11:03:32.517663+00:00",
+  "latestSourceRestore": {
+    "sourceCommit": "cc17a9734ba9615444f83ef9d42a6cd8109bdb89",
+    "archiveBytes": 5028275,
+    "archiveSha256": "d5d289561ad1f957232dbcb3f8cd654e8a5dac62b7c21475eb9944c408df136f",
+    "persistentBranch": "backup/verified-retry-reference-20261117-cc17a97",
+    "filesVerified": 222,
+    "bytesVerified": 6449162,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "githubChecks": {
+    "prRunId": 44069970379,
+    "prJobId": 133993415082,
+    "prConclusion": "success",
+    "mainRunId": 44070221811,
+    "pagesRunId": 44070221127,
+    "pagesConclusion": "success",
+    "mainConclusion": "success",
+    "mainJobId": 133994242826
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6397,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13799,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22295,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesMergedSource": true
+    }
+  ],
+  "operationalReadOnlyChecks": {
+    "intakeAvailable": true,
+    "newModuleVersionObserved": "quote-form.mjs?v=20261117-retryid1",
+    "existingServicesVisible": 12,
+    "nextEnabled": true,
+    "livePreviewCustomQuestionsVerified": true,
+    "previewSubmitDisabled": true,
+    "noLiveQuoteSubmissionOrContactClickPerformed": true,
+    "ordinaryLivePageViewMayBeMeasuredByExistingAnalytics": true,
+    "internalReviewVisitIsNotACustomerQuoteOrContract": true,
+    "analyticsDocumentsDeletedOrRewritten": false
+  }
+}

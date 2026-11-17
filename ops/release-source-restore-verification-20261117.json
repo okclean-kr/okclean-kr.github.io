@@ -14,8 +14,8 @@
   "productionRestorePerformed": false,
   "firebaseDataOrAuthExported": false,
   "dateKST": "2026-11-17",
-  "status": "source_restore_drill_and_readonly_live_audit_passed",
-  "checkedAtUTC": "2026-11-17T05:47:50.023864+00:00",
+  "status": "source_restore_drill_live_audit_and_first_main_artifact_verified",
+  "checkedAtUTC": "2026-11-17T06:10:42.054192+00:00",
   "gitHistoryCommits": 142,
   "fileModesMatched": true,
   "functionalSourceUnchangedSinceTestedPR56": true,
@@ -58,7 +58,7 @@
     "The persistent backup is the GitHub branch and immutable commit; the local bundle is temporary and is not claimed as independent durable storage.",
     "Private Apps Script properties, pending mail state, credentials, triggers and Firebase customer records are not contained in the public source backup.",
     "Physical phone testing, verified before/after originals and consented customer reviews remain outstanding.",
-    "The schedule is configured in the proposed workflow; initial main backup and the first future scheduled run must be verified separately."
+    "The first immediate main push backup and independently downloaded artifact were verified. The first future scheduled execution has not occurred and is not claimed as verified."
   ],
   "manifest": [
     {
@@ -1159,10 +1159,48 @@
     "cronUTC": "0 23 * * *",
     "requestedTimeKST": "08:00 daily",
     "retentionDays": 14,
-    "configuredInProposedChange": true,
     "firstScheduledExecutionVerified": false,
-    "firstImmediateMainBackupVerified": false,
+    "firstImmediateMainBackupVerified": true,
     "readOnlyContentsPermission": true,
-    "privateStateAndCustomerDataExcluded": true
+    "privateStateAndCustomerDataExcluded": true,
+    "configuredOnMain": true,
+    "nextRequestedScheduledTimeKST": "2026-11-18T08:00:00+09:00"
+  },
+  "latestSourceArtifact": {
+    "sourceCommit": "8b5246d137cc97fb27e50ecae94097dc98c07669",
+    "persistentBackupBranch": "backup/verified-source-20261117-8b5246d",
+    "pullRequest": 57,
+    "prChecksRunId": 44027968924,
+    "prChecksPassed": true,
+    "mainBackupRunId": 44028168716,
+    "mainBackupJobId": 133853419970,
+    "event": "push",
+    "runConclusion": "success",
+    "pagesRunId": 44028168309,
+    "pagesConclusion": "success",
+    "newBackupUnitChecksPassed": 6,
+    "newBackupUnitChecksFailed": 0,
+    "artifactId": 14304226758,
+    "artifactName": "okclean-source-44028168716-8b5246d137cc97fb27e50ecae94097dc98c07669",
+    "artifactCreatedAtUTC": "2026-11-17T06:01:38Z",
+    "artifactExpiresAtUTC": "2026-12-01T06:01:38Z",
+    "retentionDaysVerified": 14,
+    "zipBytes": 4655144,
+    "zipSha256": "57b494927d3a77b78bb95f46757bee84cdc1a1608dd86b84c5418d459d5d5042",
+    "zipDigestMatchesGitHub": true,
+    "archiveBytes": 4607485,
+    "archiveSha256": "374ad31c063643e0a348a58fc00601b6eb9bcae1f12719ff775197826a975cd8",
+    "zipMembers": [
+      "source.tar.gz",
+      "manifest.json"
+    ],
+    "downloadedArtifactIndependentlyRestored": true,
+    "filesVerified": 188,
+    "bytesVerified": 5733112,
+    "allFilesRestored": true,
+    "allRestoredFilesMatchGitBlobs": true,
+    "productionRestorePerformed": false,
+    "privateCustomerDataOrAuthIncluded": false,
+    "documentationUpdatesAfterThisSnapshotAreNotInThisArtifact": true
   }
 }

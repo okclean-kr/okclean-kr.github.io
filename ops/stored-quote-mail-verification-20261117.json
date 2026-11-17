@@ -1,0 +1,127 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "live_stored_test_quote_read_and_test_mail_received",
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/55",
+  "testedCommit": "aa448e7c9ad2dbb62a8511c648a1e532756335fd",
+  "mergeCommit": "7f9cfd52d3e2164e0e8c150842bdf0a78661103f",
+  "backupBranch": "backup/stored-mail-test-before-20261117-d92142b",
+  "backupCommit": "d92142bd42f51e87c3984f01067e980efd2c45d3",
+  "beforePrivateEditorSha256": "ea3902bf9de1b694302cc9cc88132b8823d7e8c3e8827bec6bf391a6ed1a4971",
+  "afterPrivateEditorSha256": "70348aa3504f0ea4b952fb80b715afca12443875dbf985fc3a753d950f00c06e",
+  "privateEditorReadbackMatchesTestedSource": true,
+  "checks": {
+    "nodePassed": 168,
+    "quoteRulesPassed": 45,
+    "memberRulesPassed": 12,
+    "backupRulesPassed": 6,
+    "mailRESTPassed": 7,
+    "caseSyncPythonPassed": 23,
+    "totalPassed": 261,
+    "failed": 0,
+    "skipped": 0,
+    "prRun": 44013543692,
+    "prJob": 133805938104,
+    "mainRun": 44013756845,
+    "pagesRun": 44013754719,
+    "conclusion": "success"
+  },
+  "liveManualCheck": {
+    "function": "sendStoredQuoteTestEmail",
+    "startedAtKST": "2026-11-17T12:58:03+09:00",
+    "durationSeconds": 1.899,
+    "resultLoggedAtKST": "2026-11-17T12:58:04+09:00",
+    "result": "stored-test-quote-mail-api-accepted",
+    "testQuoteRead": true,
+    "projectedFields": [
+      "schema",
+      "test",
+      "createdAt"
+    ],
+    "onlyExistingTestTrueDocumentRead": true,
+    "excludedFromCustomerNotification": true,
+    "productionStateUnchanged": true,
+    "executionCompleted": true,
+    "invokedOnce": true,
+    "testMailSubject": "[시험] 오케이청소 저장 견적·메일 연결 확인",
+    "testMailReceived": true,
+    "mailboxMessageTimeKST": "2026-11-17 12:58",
+    "mailboxVerificationScope": "Exact test subject row in the existing execution account inbox. Connected Gmail tool was a different account. No unrelated message was opened.",
+    "mailboxMatchingRows": 1,
+    "customerFieldsRead": false,
+    "newQuoteCreated": false,
+    "testFlagChangedToReal": false,
+    "customerDataChanged": false,
+    "realNotificationCursorOrOutboxChanged": false
+  },
+  "scheduledRunAfterPrivateCodeChange": {
+    "function": "pollQuoteNotifications",
+    "type": "time-driven",
+    "startedAtKST": "2026-11-17T12:58:06+09:00",
+    "durationSeconds": 2.654,
+    "completed": true,
+    "resultLoggedAtKST": "2026-11-17T12:58:09+09:00",
+    "result": "no-new-quotes",
+    "manuallyInvoked": false,
+    "triggerCount": 1,
+    "triggerErrorRateDisplayed": "0%"
+  },
+  "preserved": {
+    "existingFiveOAuthScopes": true,
+    "scriptExecutionAccountAndRecipient": true,
+    "baselineAndPendingMailState": true,
+    "existingSingleFiveMinuteTrigger": true,
+    "firebaseRulesAndSparkPlan": true,
+    "customerFormCalculatorMemberAndCoupon": true,
+    "blogThreadsAndYouTubeAutomation": true
+  },
+  "limitations": [
+    "This is receipt of a clearly labelled manual test message after reading an existing stored test quote; an actual new customer notification email has not yet been observed.",
+    "API acceptance and actual inbox receipt were checked separately.",
+    "A five-minute trigger interval is requested; exact execution or immediate delivery is not guaranteed.",
+    "No new customer record was submitted and no physical mobile-device test was performed in this follow-up."
+  ],
+  "recovery": "Restore only Code.gs from the backup branch into the existing private editor. Preserve ScriptProperties, triggers, pending notifications and all Firebase customer records.",
+  "liveHTTPVerification": {
+    "checkedAtUTC": "2026-11-17T04:04:25.353277+00:00",
+    "sourceCommit": "7f9cfd52d3e2164e0e8c150842bdf0a78661103f",
+    "files": [
+      {
+        "path": "notifications/apps-script/Code.gs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "70348aa3504f0ea4b952fb80b715afca12443875dbf985fc3a753d950f00c06e"
+      },
+      {
+        "path": "index.html",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "3c9ead5f3572173891a9864c3d6eeeaa418dfed5aed0ddacb88fe51a5bf0b1f0"
+      },
+      {
+        "path": "quote/index.html",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "cb9bf618e1c61eef8270c31c13cd6532c908022d306bb683bef9671624b0465d"
+      },
+      {
+        "path": "quote/catalog.json",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "3108940722e0f8d017a6f1a07cf9c3cbbe984247a12d9a574531394bf176e42a"
+      },
+      {
+        "path": "admin/quotes.mjs",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "9d81c4a518cb9dac36f1b9b7ffb9c0c3e5a2f09b86fbe24f94f50b76dde41590"
+      },
+      {
+        "path": "member-sync.js",
+        "status": 200,
+        "matchesSource": true,
+        "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+      }
+    ],
+    "allMatched": true
+  }
+}

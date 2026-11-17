@@ -1,0 +1,111 @@
+{
+  "dateKST": "2026-11-17",
+  "status": "pc_mobile_preview_verified_pending_ci_and_deployment",
+  "baseCommit": "1cfe2de4dff8f948e11df081cf38afbfbcb98755",
+  "backupBranch": "backup/quote-enter-before-20261117-1cfe2de",
+  "problem": "In a real browser, Enter on a numeric service answer did not advance when the final submit button was disabled in preview mode. The Next button worked.",
+  "fix": "Handle Enter only on text/number answers in step two, reuse existing validation/advance, and leave IME composition, selects and final contact-step keyboard behavior alone.",
+  "changedFiles": [
+    "quote/quote-form.mjs",
+    "quote/index.html",
+    "tests/quote-ui.test.cjs",
+    "ops/quote-enter-validation-20261117.json"
+  ],
+  "checks": {
+    "beforeFixTests": 17,
+    "beforeFixPassed": 16,
+    "beforeFixFailed": 1,
+    "afterFixTests": 17,
+    "afterFixPassed": 17,
+    "afterFixFailed": 0,
+    "afterFixSkipped": 0,
+    "newRegressionTests": 2,
+    "expectedStandardSuiteTotal": 252,
+    "ciVerified": false
+  },
+  "browserPreview": {
+    "pcActualKeypressVerified": true,
+    "invalidZeroCountBlocked": true,
+    "invalidInputFocused": true,
+    "twoUnitsEnterAdvancesToContact": true,
+    "focusMovesToStepHeading": true,
+    "finalSubmitStillDisabled": true,
+    "previewSavesAndAnalyticsDisabled": true,
+    "mobileIframeWidth": 390,
+    "mobileContentWidth": 375,
+    "mobileViewportWidth": 375,
+    "horizontalOverflow": false,
+    "mobileActualKeypressVerified": true,
+    "physicalPhoneTest": false
+  },
+  "baselinePublicHTTP": {
+    "checkedAtUTC": "2026-11-17T01:38:04.664134+00:00",
+    "files": [
+      {
+        "path": "/",
+        "status": 200,
+        "bytes": 56006,
+        "sha256": "ec79770aaf2209f4a8f4c96a5c60aa38692dbff19bfe4f690523584eda6c92bb"
+      },
+      {
+        "path": "quote/",
+        "status": 200,
+        "bytes": 6134,
+        "sha256": "3da6da5cd80699d24e7649ab872931cca18685d0560363f69fae815388c7189b"
+      },
+      {
+        "path": "quote/config.js",
+        "status": 200,
+        "bytes": 240,
+        "sha256": "f91ecc2e2d702a887b729e3600d86ce1cec7cfc2df6504639a0f92480a250edd"
+      },
+      {
+        "path": "quote/quote-form.mjs",
+        "status": 200,
+        "bytes": 11927,
+        "sha256": "88439627fbb967a3c2edcf2eba2e6053d06e6199edbb25dfdbd08604f2c0ea19"
+      },
+      {
+        "path": "admin/quotes.html",
+        "status": 200,
+        "bytes": 5224,
+        "sha256": "45381f57aba5e87766ce096fe6e8468fc59ac5efb3d9844484dae0ac32152b52"
+      },
+      {
+        "path": "admin/quotes.mjs",
+        "status": 200,
+        "bytes": 20844,
+        "sha256": "9d81c4a518cb9dac36f1b9b7ffb9c0c3e5a2f09b86fbe24f94f50b76dde41590"
+      },
+      {
+        "path": "member-sync.js",
+        "status": 200,
+        "bytes": 2255,
+        "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+      },
+      {
+        "path": "notifications/apps-script/Code.gs",
+        "status": 200,
+        "bytes": 11934,
+        "sha256": "ea3902bf9de1b694302cc9cc88132b8823d7e8c3e8827bec6bf391a6ed1a4971"
+      }
+    ]
+  },
+  "preserved": {
+    "pricingAndCatalog": true,
+    "memberAndCouponLogic": true,
+    "firebaseRulesAndPlan": true,
+    "photoAndQuoteStorage": true,
+    "mailScriptAndTriggerConfiguration": true,
+    "existingBlogAndThreadsAutomation": true
+  },
+  "productionDataMutation": false,
+  "newQuoteSubmitted": false,
+  "mailOperationalFollowup": {
+    "status": "viewer_authentication_required",
+    "existingAuthorizationAndTriggerNotChanged": true,
+    "lastObservedScheduledSuccessKST": "2026-11-17T02:08:06+09:00",
+    "laterScheduledExecutionsChecked": false
+  },
+  "recovery": "Revert this scoped change or restore the two quote UI source files from the backup branch; keep existing quote/customer data and other later automation commits."
+}

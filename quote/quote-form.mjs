@@ -1,6 +1,6 @@
 import{compressPhoto}from'./photos.mjs';
 const $=id=>document.getElementById(id),core=window.OKCleanQuote;
-let catalog,step=1,photos=[],busy=false,photoBusy=false,requestId,frozen=null,started=false,estimateTimer,lastEstimate='';
+let catalog,step=1,photos=[],busy=false,completed=false,photoBusy=false,requestId,frozen=null,started=false,estimateTimer,lastEstimate='';
 const answersByService=new Map(),params=new URLSearchParams(location.search);
 const preview=params.get('quote_preview')==='1',testMode=params.get('quote_test')==='1';
 let adminTestAllowed=false,composing=false,imeEnter=false,imeTimer;
@@ -61,20 +61,20 @@ $('questions').addEventListener('keydown',e=>{
 $('region').onchange=()=>{$('regionNotice').textContent=$('region').value==='춘천'?'춘천을 중심으로 작업합니다. 현장 조건과 일정에 따라 최종 가능 여부를 안내합니다.':'강원 지역 및 수도권은 거리·일정·작업 규모에 따라 출장 여부와 추가 비용을 먼저 확인합니다. 지역 선택만으로 방문이 확정되지는 않습니다.';};
 $('photos').onchange=async()=>{if(photoBusy||busy)return;photoBusy=true;$('next').disabled=true;$('submit').disabled=true;try{const files=[...$('photos').files];if(files.length+photos.length>5)throw new Error('사진은 최대 5장까지 첨부할 수 있습니다.');const added=[];for(const file of files)added.push(await compressPhoto(file));photos.push(...added);photoPreview();$('formError').textContent='';}catch(e){$('formError').textContent=e.message;}finally{$('photos').value='';photoBusy=false;$('next').disabled=false;$('submit').disabled=!enabled();}};
 $('quoteForm').onsubmit=async e=>{
- e.preventDefault();if(composing||imeEnter||busy||photoBusy)return;if(step<3){advance();return;}if(!enabled())return;
+ e.preventDefault();if(completed||composing||imeEnter||busy||photoBusy)return;if(step<3){advance();return;}if(!enabled())return;
  const input=frozen||read(),errors=core.validate(input,catalog);if(errors.length){showValidationErrors(errors);return;}
  if(!navigator.onLine){$('formError').textContent='인터넷 연결을 확인한 뒤 다시 접수해 주세요. 입력 내용은 이 화면에 유지됩니다.';return;}
  lock(true);$('formError').textContent='서버에 안전하게 저장하고 있습니다. 창을 닫지 말아 주세요.';frozen=input;
  try{
   const mod=await import('./quote-store.mjs');requestId||=mod.newRequestId();await mod.submitQuote(catalog,requestId,input,photos,{test:testMode});
   $('quoteForm').hidden=true;$('complete').hidden=false;if(testMode)$('complete').querySelector('h2').textContent='시험 견적 접수가 완료됐습니다.';$('receipt').textContent=core.receipt(requestId);$('result').replaceChildren();resultRow('서비스',catalog.services.find(s=>s.id===input.service).name);for(const[k,v]of Object.entries(input.answers))resultRow(core.LABELS[k],v);resultRow('지역',input.region);resultRow('희망 날짜',input.date||'상담 후 협의');resultRow('상담 시간',input.contactTime);resultRow('현장 사진',photos.length+'장');
-  document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(el.dataset.stepLabel==='4')el.setAttribute('aria-current','step');});track('quote_submit_success');photos=[];$('name').value='';$('phone').value='';$('photoPreview').replaceChildren();$('complete').scrollIntoView({block:'start'});
+  document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(el.dataset.stepLabel==='4')el.setAttribute('aria-current','step');});photos=[];$('name').value='';$('phone').value='';$('photoPreview').replaceChildren();completed=true;busy=false;frozen=null;$('completeTitle').focus({preventScroll:true});$('complete').scrollIntoView({block:'start'});track('quote_submit_success');
  }catch(error){
   $('formError').textContent='접수 완료를 확인하지 못했습니다. 입력과 사진은 이 화면에 유지됩니다. 같은 접수번호로 다시 확인·시도해 주세요.'+(error.code==='permission-denied'?' 서버 권한을 확인 중입니다. 카카오톡 또는 전화로 상담하실 수 있습니다.':'');
   lock(false);
   // Keep the submitted snapshot until the same request ID has been checked on the server.
   for(const el of $('quoteForm').querySelectorAll('input,select,#photoPreview button'))el.disabled=true;
-  $('previous').disabled=true;$('submit').textContent='같은 신청으로 다시 확인·접수';
+  $('previous').disabled=true;$('submit').textContent='같은 신청으로 다시 확인·접수';if(!$('submit').disabled)$('submit').focus();
  }
 };
 try{const response=await fetch('catalog.json',{cache:'no-cache'});if(!response.ok)throw new Error('서비스 정보 연결 실패');catalog=await response.json();

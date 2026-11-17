@@ -1,6 +1,6 @@
 {
   "dateKST": "2026-11-17",
-  "status": "local_checks_passed_deployment_pending",
+  "status": "deployed_live_price_display_and_isolated_event_context_verified",
   "baseCommit": "8946b4fe651c4a5b695863cb27613a01ab4c2b3d",
   "backupBranch": "backup/calculate-event-before-20261117-8946b4f",
   "moduleVersion": "20261117-calculate1",
@@ -69,12 +69,127 @@
   "pricingOrEventSchemaChanged": false,
   "historicAnalyticsDocumentsRewrittenOrDeleted": false,
   "productionQuoteOrCustomerDataWritesPerformed": false,
-  "deploymentVerified": false,
+  "deploymentVerified": true,
   "rollback": "Restore quote/index.html and quote/quote-form.mjs together from the pre-change backup. Preserve customer data, analytics documents and later automation changes.",
   "limits": [
     "Chrome PC and 390px iframe testing is not physical-phone/Safari testing.",
     "Local analytics callbacks are observed without producing real conversion events.",
-    "Existing historical events were not rewritten; this fix applies to future events only."
+    "Existing historical events were not rewritten; this fix applies to future events only.",
+    "The ordinary live page opened for deployment review may be included in existing page_view analytics. No quote/contract or calculation conversion event was created, and no historical metrics were rewritten."
   ],
-  "checkedAtUTC": "2026-11-17T08:46:39.436384+00:00"
+  "checkedAtUTC": "2026-11-17T08:52:37.121277+00:00",
+  "pullRequest": 63,
+  "headCommit": "2b0aaa7219fc90fcc7a23e4f9694121526e59945",
+  "mergeCommit": "19f9bc584ae1730ea2291e04ef40c2df58a88bea",
+  "githubChecks": {
+    "prRunId": 44049694349,
+    "prJobId": 133924091681,
+    "prConclusion": "success",
+    "mainRunId": 44049927956,
+    "pagesRunId": 44049927356,
+    "mainConclusion": "success",
+    "pagesConclusion": "success"
+  },
+  "protectedExistingFilesUnchanged": true,
+  "screenshotEvidence": {
+    "path": "ops/evidence/quote-calculate-service-isolated-20261117.jpg",
+    "bytes": 59608,
+    "sha256": "36abae2323760877c2b624ec00241889bf6d901717f690b72f339a5082e78378",
+    "scope": "Actual form source and native timer with local analytics/storage stubs in a 390px iframe; this is not a real conversion or customer quote."
+  },
+  "latestSourceRestore": {
+    "sourceCommit": "19f9bc584ae1730ea2291e04ef40c2df58a88bea",
+    "persistentBranch": "backup/verified-calculate-20261117-19f9bc5",
+    "archiveBytes": 4815736,
+    "archiveSha256": "81f96bbe177f574b9f327108605cbd3b0ff4c81ac2a4db93b79e90cfca5403e7",
+    "filesVerified": 215,
+    "bytesVerified": 6139426,
+    "allFilesRestored": true,
+    "archiveIsTemporaryLocalQaOutput": true,
+    "productionRestorePerformed": false,
+    "documentationUpdatesAfterThisSnapshotExcluded": true
+  },
+  "operationalHttpChecks": [
+    {
+      "path": "index.html",
+      "httpStatus": 200,
+      "bytes": 57628,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/index.html",
+      "httpStatus": 200,
+      "bytes": 6399,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/photos.mjs",
+      "httpStatus": 200,
+      "bytes": 2599,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-form.mjs",
+      "httpStatus": 200,
+      "bytes": 13546,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "quote/quote-core.js",
+      "httpStatus": 200,
+      "bytes": 6211,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.html",
+      "httpStatus": 200,
+      "bytes": 5220,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "admin/quotes.mjs",
+      "httpStatus": 200,
+      "bytes": 22295,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "app.js",
+      "httpStatus": 200,
+      "bytes": 23676,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "member-sync.js",
+      "httpStatus": 200,
+      "bytes": 2255,
+      "matchesMergedSource": true
+    },
+    {
+      "path": "analytics.js",
+      "httpStatus": 200,
+      "bytes": 23367,
+      "matchesMergedSource": true
+    }
+  ],
+  "operationalReadOnlyChecks": {
+    "intakeAvailable": true,
+    "newModuleVersionObserved": "quote-form.mjs?v=20261117-calculate1",
+    "existingServicesVisible": 12,
+    "nextEnabled": true,
+    "livePreview": {
+      "service": "aircon",
+      "type": "벽걸이",
+      "count": 2,
+      "estimate": "참고 예상 비용: 200,000원부터 (추가 작업·출장비 별도 확인)",
+      "changedService": "special-home",
+      "changedServiceQuestionsAndOnSiteGuidanceDisplayed": true,
+      "contactFieldsLeftEmpty": true,
+      "quoteOrPhotoOrEmailCreated": false,
+      "conversionEventsSent": false
+    },
+    "noLiveQuoteSubmissionOrContactClickPerformed": true,
+    "ordinaryLivePageViewMayBeMeasuredByExistingAnalytics": true,
+    "internalReviewVisitIsNotACustomerQuoteOrContract": true,
+    "analyticsDocumentsDeletedOrRewritten": false
+  }
 }

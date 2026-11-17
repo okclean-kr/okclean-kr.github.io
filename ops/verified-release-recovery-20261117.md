@@ -14,6 +14,12 @@
 
 전체 파일별 SHA-256과 Git blob은 `release-source-restore-verification-20261117.json`에 기록했다. 개인정보와 고객 집계가 없는 관리자 연결 화면은 `evidence/quote-admin-connection-audit-20261117.jpg`에 보존했다.
 
+## 예상 비용 계산 통계 개선 후 최신 정상 소스
+
+PR #63까지 포함한 정상 소스는 `backup/verified-calculate-20261117-19f9bc5` / `19f9bc584ae1730ea2291e04ef40c2df58a88bea`에 보존했다. 임시 tar에서 **215파일·6,139,426바이트** 전부 격리 복원했다. tar 4,815,736바이트, SHA-256 `81f96bbe177f574b9f327108605cbd3b0ff4c81ac2a4db93b79e90cfca5403e7`다. 변경 전 `backup/calculate-event-before-20261117-8946b4f` / `8946b4fe651c4a5b695863cb27613a01ab4c2b3d`도 **214파일·6,133,648바이트** 격리 복원했다. 변경 전 tar 4,814,488바이트, SHA-256 `f45a913ca5550b32797f1ab6fa611401f3b3ae829ae50befdac5953c8515b32b`다. Git 브랜치·커밋이 지속 보존 위치이며 임시 tar·고객 DB/Auth·이후 문서 갱신까지 포함하는 것으로 보고하지 않는다.
+
+이 변경만 복구할 때는 변경 전 브랜치에서 `quote/index.html`, `quote/quote-form.mjs`를 함께 가져온다. 기존 사진 압축·가격·회원·쿠폰·접수번호·서버 저장·Firebase 규칙·알림·관리자·기존 자동화는 이 PR에서 변경하지 않았다. 과거 통계를 삭제·재작성하거나 고객 문서·이후 자동화 변경을 과거 소스로 덮어쓰지 않는다. CI 288개·main·Pages 성공, Chrome PC/390px 격리 form·실제 타이머에서 서비스 전환 후 계산 당시 서비스로 기록됨을 확인했다. 운영 미리보기의 기존 참고 금액·맞춤 질문, 일반 접수 가능·새 모듈 및 주요 파일 10개 원본 일치도 확인했다. 새 견적·사진·계산 전환·메일은 생성하지 않았다. 근거: `quote-calculate-verification-20261117.json`.
+
 ## 사진 압축 개선 후 최신 정상 소스
 
 PR #62까지 포함한 정상 소스는 `backup/verified-photo-20261117-f04abc2` / `f04abc238aeda60d7adceb072e2fcc9b64ae2cc2`에 추가 보존했다. 임시 tar에서 **213파일·6,068,308바이트**를 전부 격리 복원했다. tar 4,770,832바이트, SHA-256 `fe1533f4836d1cfb413edc7f5fd794dddb54d0c846864f55200ddfba940e5ac1`다. 변경 전 `backup/photo-compression-before-20261117-c799d04` / `c799d043e38357363d632b4be9bab782e6507960`도 **211파일·6,056,634바이트** 격리 복원했다. 변경 전 tar 4,767,289바이트, SHA-256 `b86ef2b5725bc39a6fb8018a14c1c1ae8249d93de4ed41012b3915b414de8420`다. 영구 보존은 Git 브랜치·커밋이며 임시 tar나 이번 스냅샷 이후 문서까지 포함한다고 주장하지 않는다.

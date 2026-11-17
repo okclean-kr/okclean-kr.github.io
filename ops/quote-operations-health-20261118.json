@@ -1,0 +1,86 @@
+{
+  "dateKST": "2026-11-18",
+  "checkedAtKST": "2026-11-18T08:08:09.748444+09:00",
+  "status": "read_only_recent_scheduled_mail_health_verified_source_backup_schedule_pending",
+  "sourceCommit": "66407d38e467b070316aad63771cfeef8a07e4bd",
+  "applicationCodeChanged": false,
+  "productionQuotePhotoMemberContractOrAnalyticsWritten": false,
+  "customerOrNotificationStateMutated": false,
+  "manualPollOrTestMailSent": false,
+  "authorizationOrTriggerConfigurationChanged": false,
+  "mailScheduledExecutions": {
+    "function": "pollQuoteNotifications",
+    "type": "time-driven",
+    "reviewed": 50,
+    "completed": 50,
+    "failed": 0,
+    "rangeFromKST": "2026-11-18T03:58:06+09:00",
+    "rangeThroughKST": "2026-11-18T08:03:06+09:00",
+    "latestDurationSeconds": 1.779,
+    "latestLogAtKST": "2026-11-18T08:03:08+09:00",
+    "latestLogResult": "no-new-quotes",
+    "scope": "The current native executions table only; not all overnight/history executions or proof of actual customer email delivery."
+  },
+  "mailTrigger": {
+    "count": 1,
+    "function": "pollQuoteNotifications",
+    "type": "time-driven",
+    "displayedErrorRate": "0%",
+    "latestRunDisplayedKST": "2026-11-18T08:03:06+09:00",
+    "configurationChanged": false
+  },
+  "existingAutomatedChecks": {
+    "latestTotal": 297,
+    "failed": 0,
+    "skipped": 0,
+    "rerunThisReadOnlyAudit": false,
+    "reason": "Runtime and test sources are unchanged from PR 69 passing checks."
+  },
+  "existingChecks": {
+    "pullRequest": 69,
+    "pullRequestRunId": 44190248604,
+    "mainRunId": 44191099728,
+    "conclusion": "success"
+  },
+  "internalRouteAudit": {
+    "evidence": "internal-routes-verification-20261118.json",
+    "publicHtmlFiles": 27,
+    "internalReferences": 662,
+    "uniqueTargetFiles": 68,
+    "missingFiles": 0,
+    "missingStaticAnchors": 0,
+    "http200AndSourceByteMatch": 68,
+    "checkedAtKST": "2026-11-18T07:57:39+09:00",
+    "customerStorageOrAuthNotRetestedByThisAudit": true
+  },
+  "screenshotEvidence": {
+    "path": "ops/evidence/mail-trigger-health-20261118.jpg",
+    "bytes": 19424,
+    "sha256": "c070aa8f2cdfb5caf5b648df90be30956e6b99e87a251a243ee3a0c5ce721950",
+    "scope": "Cropped during capture to omit account identity and private project URL. Trigger count/function/time/error-rate display only; full date is verified from DOM."
+  },
+  "sourceBackupScheduleObservation": {
+    "status": "pending_no_matching_schedule_event_observed",
+    "scheduledForKST": "2026-11-18T08:00:00+09:00",
+    "checkedThroughKST": "2026-11-18T08:07:04+09:00",
+    "workflowPath": ".github/workflows/source-backup.yml",
+    "requiredEvent": "schedule",
+    "manualOrPushRunNotTreatedAsScheduled": true,
+    "workflowOrScheduleChanged": false
+  },
+  "firstScheduledBackupCheck": {
+    "taskId": "Automation_34b50cf4c52881918473ace3013c43ca",
+    "enabled": true,
+    "nextRunKST": "2026-11-18T08:30:00+09:00",
+    "lastRun": null,
+    "lookupVerified": true,
+    "changed": false,
+    "futureSuccessNotYetVerified": true
+  },
+  "remaining": [
+    "Actual first daily source-backup schedule run and its downloaded artifact restore remain unverified pending that run.",
+    "Actual first new customer notification email delivery is not established by a no-new-quotes poll.",
+    "Physical phone/Safari/physical IME tests remain unperformed.",
+    "Consented review originals and verified same-site completed-after photos remain unavailable."
+  ]
+}

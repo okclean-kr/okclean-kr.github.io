@@ -33,6 +33,7 @@
   let page = 'other';
   let quoteStarted = false;
   let quoteTimer;
+  let quoteCalculationTimer;
   let lastDelivery = 'not_attempted';
   let lastError = '';
   let sessionStorageAvailable = true;
@@ -76,6 +77,7 @@
 
   function clearLocalMeasurement() {
     env.clearTimeout(quoteTimer);
+    env.clearTimeout(quoteCalculationTimer);
     quoteStarted = false;
     for (const key of [SOURCE_KEY, DEBUG_KEY, LOG_KEY]) {
       try { if (env.sessionStorage) env.sessionStorage.removeItem(key); }
@@ -284,7 +286,15 @@
     const details = { service: selectedService(), placement: 'quote', target: 'quote' };
     if (!quoteStarted) { quoteStarted = true; void track('quote_start', details); }
     env.clearTimeout(quoteTimer);
-    quoteTimer = env.setTimeout(() => { void track('quote_result', { service: selectedService(), placement: 'quote', target: 'quote' }); if (env.OKCLEAN_QUOTES?.verified === true) void track('quote_calculate', { service: selectedService(), placement: 'quote', target: 'quote' }); }, 800);
+    quoteTimer = env.setTimeout(() => { void track('quote_result', details); }, 800);
+  }
+
+  function recordQuoteCalculation(service, hasEstimate) {
+    if (page !== 'home' || optedOut()) return;
+    env.clearTimeout(quoteCalculationTimer);
+    if (!hasEstimate || env.OKCLEAN_QUOTES?.verified !== true) return;
+    const details = { service, placement: 'quote', target: 'quote' };
+    quoteCalculationTimer = env.setTimeout(() => { void track('quote_calculate', details); }, 800);
   }
 
   function onClick(event) {
@@ -429,7 +439,7 @@
     return { rows, capped: snapshot.size === 2000, days: range, checkedAt: new Date().toISOString() };
   }
 
-  const api = { init, track, status, setCollectionAllowed, setDebug, debugEvents, sendTest, readEvents, aggregateByDay, backend, buildEvent, resolveSource, resolvePage, normalizeSource, channelUrl, serviceFromPath, safeError, constants: Object.freeze({ EVENTS, SOURCES, CHANNEL_SOURCES, PAGES, SERVICES, PLACEMENTS, TARGETS, FIREBASE }) };
+  const api = { init, track, recordQuoteCalculation, status, setCollectionAllowed, setDebug, debugEvents, sendTest, readEvents, aggregateByDay, backend, buildEvent, resolveSource, resolvePage, normalizeSource, channelUrl, serviceFromPath, safeError, constants: Object.freeze({ EVENTS, SOURCES, CHANNEL_SOURCES, PAGES, SERVICES, PLACEMENTS, TARGETS, FIREBASE }) };
   if (typeof module === 'object' && module.exports) {
     api._guardCollectionWrite = guardCollectionWrite;
     api._testPayload = testPayload;

@@ -327,3 +327,76 @@ test('선택 저장소를 읽을 수 없으면 수집을 시작하지 않는다'
   const result=t.api.setCollectionAllowed(true);
   assert.equal(result.preferenceSaved,false);assert.equal(result.optedOut,true);
 });
+
+test('실제 홈페이지 계산기에서 금액이 표시되는 가격 조작만 계산으로 집계', () => {
+  const { JSDOM } = require('jsdom');
+  const html = fs.readFileSync('index.html', 'utf8');
+  const dom = new JSDOM(html, {
+    url: 'https://okclean-kr.github.io/?svc=aircon',
+    runScripts: 'outside-only'
+  });
+  const w = dom.window;
+  try {
+    const timers = new Map();
+    let id = 0;
+    w.setTimeout = callback => { timers.set(++id, callback); return id; };
+    w.clearTimeout = key => timers.delete(key);
+    const flush = () => {
+      for (const callback of timers.values()) callback();
+      timers.clear();
+    };
+    w.fetch = async () => ({ ok: false });
+    w.OKCLEAN_QUOTES = { verified: true };
+    w.sessionStorage.setItem('okclean_analytics_debug_v1', 'true');
+    w.eval(fs.readFileSync('quote/quote-core.js', 'utf8'));
+    w.eval(fs.readFileSync('app.js', 'utf8'));
+    w.eval(source);
+    const $ = id => w.document.getElementById(id);
+    const change = (id, value) => {
+      $(id).value = value;
+      $(id).dispatchEvent(new w.Event('change', { bubbles: true }));
+    };
+    const calculations = () => w.OKCleanAnalytics.debugEvents()
+      .filter(row => row.event === 'quote_calculate')
+      .map(row => row.service);
+    assert.deepEqual([...calculations()], []);
+    change('qArea', '춘천');
+    change('qDate', '2026-11-20');
+    flush();
+    assert.deepEqual([...calculations()], []);
+    assert.ok(w.OKCleanAnalytics.debugEvents().some(row => row.event === 'quote_result'));
+
+    // The price input draws a new button set. Capture the calculated service before the delay.
+    w.document.querySelector('#qVar button[data-v="1"]').click();
+    assert.match($('qV').textContent, /[0-9]/);
+    $('qSvc').value = 'washer';
+    flush();
+    assert.deepEqual([...calculations()], ['aircon']);
+
+    change('qSvc', 'window');
+    assert.match($('qV').textContent, /사진 보고/);
+    assert.equal($('qDetailed').getAttribute('href'), 'quote/?svc=window');
+    flush();
+    assert.deepEqual([...calculations()], ['aircon']);
+
+    change('qSvc', 'aircon');
+    $('qPlus').click();
+    $('qPlus').click();
+    change('qArea', '원주');
+    flush();
+    assert.deepEqual([...calculations()], ['aircon', 'aircon']);
+
+    $('qPlus').click();
+    change('qSvc', 'window');
+    flush();
+    assert.deepEqual([...calculations()], ['aircon', 'aircon']);
+
+    change('qSvc', 'office');
+    w.document.querySelector('#qVar button[data-v="1"]').click();
+    assert.match($('qV').textContent, /사진 보고/);
+    flush();
+    assert.deepEqual([...calculations()], ['aircon', 'aircon']);
+  } finally {
+    w.close();
+  }
+});

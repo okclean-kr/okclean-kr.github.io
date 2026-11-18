@@ -1,0 +1,117 @@
+{
+  "status": "first_scheduled_source_backup_download_and_full_restore_verified",
+  "repository": "okclean-kr/okclean-kr.github.io",
+  "scheduledForKST": "2026-11-18T08:00:00+09:00",
+  "workflowPath": ".github/workflows/source-backup.yml",
+  "run": {
+    "id": 44201605700,
+    "url": "https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700",
+    "event": "schedule",
+    "attempt": 1,
+    "headBranch": "main",
+    "headSha": "6806ed480e6b25cdcb845abc6b1ea78f28adc250",
+    "createdAtKST": "2026-11-18T08:41:46.000+09:00",
+    "startedAtKST": "2026-11-18T08:41:46.000+09:00",
+    "lastUpdatedAtKST": "2026-11-18T08:41:58.000+09:00",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "job": {
+    "id": 134456840661,
+    "url": "https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700/job/134456840661",
+    "status": "completed",
+    "conclusion": "success",
+    "backupTestsPassed": 6,
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1
+      },
+      {
+        "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2
+      },
+      {
+        "name": "Check backup and safe restore behavior",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3
+      },
+      {
+        "name": "Create and restore-check committed public source",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4
+      },
+      {
+        "name": "Store verified source for 14 days",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      },
+      {
+        "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 10
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 11
+      }
+    ],
+    "runnerRestore": {
+      "sourceCommit": "6806ed480e6b25cdcb845abc6b1ea78f28adc250",
+      "archiveBytes": 5223980,
+      "archiveSha256": "19a2bdf8a6a33d5ab7dab4a29bffbdd8ed49bc66c7d6c150464e3f73e2ef6baf",
+      "filesVerified": 233,
+      "bytesVerified": 6755670,
+      "allFilesRestored": true
+    }
+  },
+  "artifact": {
+    "id": 14382050626,
+    "url": "https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700/artifacts/14382050626",
+    "name": "okclean-source-44201605700-6806ed480e6b25cdcb845abc6b1ea78f28adc250",
+    "createdAtKST": "2026-11-18T08:41:56.000+09:00",
+    "expiresAtKST": "2026-12-02T08:41:55.000+09:00",
+    "retentionDaysConfigured": 14,
+    "expiredAtVerification": false,
+    "reportedZipBytes": 5283402,
+    "reportedZipDigest": "sha256:06566358385ab333a512cc896013798dfa38231714857f51fa8b314bcb4ed075"
+  },
+  "independentRestore": {
+    "verifiedAtUTC": "2026-11-18T00:00:16.380079+00:00",
+    "sourceCommit": "6806ed480e6b25cdcb845abc6b1ea78f28adc250",
+    "zipBytes": 5283402,
+    "zipSha256": "06566358385ab333a512cc896013798dfa38231714857f51fa8b314bcb4ed075",
+    "zipEntries": [
+      "manifest.json",
+      "source.tar.gz"
+    ],
+    "manifestCreatedAtUTC": "2026-11-17T23:41:55.137198+00:00",
+    "archiveBytes": 5223980,
+    "archiveSha256": "19a2bdf8a6a33d5ab7dab4a29bffbdd8ed49bc66c7d6c150464e3f73e2ef6baf",
+    "filesVerified": 233,
+    "bytesVerified": 6755670,
+    "allFilesRestored": true,
+    "gitFileListMatches": true,
+    "gitBlobsMatch": true,
+    "gitModesMatch": true,
+    "executableFiles": 0,
+    "verifiedAtKST": "2026-11-18T09:00:16.380+09:00",
+    "zipDigestMatchesGitHub": true,
+    "zipCrcValid": true,
+    "verifier": "scripts/source_backup.py from the exact scheduled run commit",
+    "scope": "Committed public Git source"
+  },
+  "backupConfigurationChanged": false,
+  "productionRestorePerformed": false,
+  "privateDatabaseAuthOrCredentialsAccessed": false
+}

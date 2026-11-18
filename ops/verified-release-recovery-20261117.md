@@ -1,5 +1,19 @@
 # 현재 정상 소스의 백업·복구 검증
 
+## 2026-11-18 첫 예약 소스 백업 검증
+
+- 2026-11-18 08:41:46 KST에 생성된 첫 예약 실행 `44201605700`(`schedule`, 최초 시도)이 성공했다. 08:00 예약 시각과 실제 실행 시각은 약 42분 차이가 났다. 백업 검사 6개, 압축, 격리 복원, 산출물 업로드 단계가 모두 성공했다. [GitHub 실행 기록](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700) · [작업 상세](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700/job/134456840661)
+- 산출물 `14382050626`는 2026-11-18 08:41:56 KST에 생성됐고 2026-12-02 08:41:55 KST에 만료된다. 내려받은 ZIP은 **5,283,402바이트**이며 SHA-256 `06566358385ab333a512cc896013798dfa38231714857f51fa8b314bcb4ed075`가 GitHub 기록과 일치했다. 내부는 `manifest.json`과 `source.tar.gz` 두 파일이다. [백업 ZIP](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700/artifacts/14382050626)
+- 별도 빈 폴더에 **233개 파일·6,755,670바이트**를 복원했다. 커밋 `6806ed480e6b25cdcb845abc6b1ea78f28adc250`의 파일 목록·내용·Git 파일 모드와 모두 일치했다. 내부 압축 파일 SHA-256은 `19a2bdf8a6a33d5ab7dab4a29bffbdd8ed49bc66c7d6c150464e3f73e2ef6baf`다. 검증 범위는 공개 Git 소스다. [검증 기록](first-scheduled-source-backup-verification-20261118.json)
+
+복구할 때는 해당 [Git 커밋](https://github.com/okclean-kr/okclean-kr.github.io/tree/6806ed480e6b25cdcb845abc6b1ea78f28adc250)이나 위 백업 ZIP을 사용한다. ZIP을 풀어 두 파일을 준비한 뒤 이 커밋의 검증 도구로 빈 폴더에 복원한다.
+
+```sh
+python3 scripts/source_backup.py --verify source.tar.gz --manifest manifest.json --restore ./restored-source
+```
+
+운영 소스는 복원한 파일과 현재 main의 차이를 검토한 뒤 필요한 변경만 되돌린다. 이 절차의 범위는 공개 Git 소스다.
+
 2026년 11월 17일 운영 소스 커밋 `755805d2c91adcf1f4023474627cc5eab72db622`를 `backup/verified-release-20261117-755805d` 브랜치에 보존했다. 견적 입력 오류 개선 PR #56까지 포함하는 버전이다. 이후 PR #57에서는 공개 소스 백업 job과 검증 도구·문서를 추가했다. 홈페이지·견적·회원·관리자 실행 코드는 바꾸지 않았다. 아래 기존 정상 버전의 Git 이력 복원과 PR #57의 실제 artifact 복원은 별도로 검증했다.
 
 ## 실제 수행한 검증

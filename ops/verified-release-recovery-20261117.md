@@ -1,5 +1,10 @@
 # 현재 정상 소스의 백업·복구 검증
 
+## 2026-11-18 견적 상담 화면 복구
+
+- 변경 전 `backup/quote-contact-before-20261118-d83ac46`와 배포 소스 `backup/verified-quote-contact-20261118-5e135c9`를 같은 저장소의 복구 기준점으로 보존했다. 각각 234개 파일 전체의 격리 복원을 확인했다. 검증 범위는 공개 Git 소스다. [검증 기록](quote-contact-verification-20261118.json)
+- 이번 화면만 복구하려면 PR #70에서 바뀐 `quote/index.html`과 `quote/quote-form.mjs`를 함께 되돌린다. 이후 변경이 있으면 먼저 차이를 확인하고 해당 상담 화면 변경만 취소한다. 배포 뒤 운영 미리보기에서 기존 상담 버튼과 접수 비활성 상태를 확인한다.
+
 ## 2026-11-18 첫 예약 소스 백업 검증
 
 - 2026-11-18 08:41:46 KST에 생성된 첫 예약 실행 `44201605700`(`schedule`, 최초 시도)이 성공했다. 08:00 예약 시각과 실제 실행 시각은 약 42분 차이가 났다. 백업 검사 6개, 압축, 격리 복원, 산출물 업로드 단계가 모두 성공했다. [GitHub 실행 기록](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700) · [작업 상세](https://github.com/okclean-kr/okclean-kr.github.io/actions/runs/44201605700/job/134456840661)

@@ -141,7 +141,13 @@ test('저장 중 이탈 경고는 유지하고 서버 접수 확인 뒤에는 �
 test('서버 접수 확인 후 완료 제목으로 초점 이동하고 상담 링크·접수번호 표시',async()=>{
  const ui=await setup();fillForm(ui);ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();
  assert.equal(ui.w.document.activeElement.textContent,'견적 접수가 완료됐습니다.');assert.equal(ui.w.document.activeElement.tabIndex,-1);assert.equal(ui.w.document.activeElement.closest('section'),ui.$('complete'));
- assert.equal(ui.$('quoteForm').hidden,true);assert.match(ui.$('receipt').textContent,/^OKQ-/);assert.equal(ui.$('completeKakao').getAttribute('href'),'https://open.kakao.com/o/s3TIhwSi');assert.ok(ui.$('complete').querySelector('a[href="tel:0339114457"]'));ui.dom.window.close();
+
+ assert.equal(ui.$('quoteForm').hidden,true);
+ const active = [...ui.w.document.querySelectorAll('a[href="tel:0339114457"], a[href="https://open.kakao.com/o/s3TIhwSi"]')].filter(link => !link.closest('[hidden]'));
+ assert.equal(active.length,2);
+ assert.ok(active.every(link => ui.$('complete').contains(link)));
+ assert.match(ui.$('complete').textContent,/접수번호를 채팅창에 직접 보내/);
+ assert.match(ui.$('receipt').textContent,/^OKQ-/);assert.equal(ui.$('completeKakao').getAttribute('href'),'https://open.kakao.com/o/s3TIhwSi');assert.ok(ui.$('complete').querySelector('a[href="tel:0339114457"]'));ui.dom.window.close();
 });
 
 test('완료 후 추가 submit은 저장·완료 통계를 반복하지 않고 입력 삭제 상태 유지',async()=>{
@@ -153,7 +159,11 @@ test('완료 후 추가 submit은 저장·완료 통계를 반복하지 않고 �
 
 test('저장 실패 뒤 재시도 버튼으로 초점 이동하고 같은 번호 재시도까지 입력 유지',async()=>{
  let calls=0;const ids=[];const ui=await setup(true,{newRequestId:()=> 'F'.repeat(20),submitQuote:async(c,id)=>{ids.push(id);if(++calls===1)throw{code:'unavailable'};}});fillForm(ui);
- ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.$('complete').hidden,true);assert.equal(ui.w.document.activeElement,ui.$('submit'));assert.equal(ui.$('submit').disabled,false);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');
+ ui.$('quoteForm').dispatchEvent(new ui.w.Event('submit',{cancelable:true}));await tick();assert.equal(ui.$('complete').hidden,true);
+ const active = [...ui.w.document.querySelectorAll('a[href="tel:0339114457"], a[href="https://open.kakao.com/o/s3TIhwSi"]')].filter(link => !link.closest('[hidden]'));
+ assert.equal(active.length,2);
+ assert.ok(active.some(link => link.textContent.includes('현장 사진')));
+ assert.equal(ui.w.document.activeElement,ui.$('submit'));assert.equal(ui.$('submit').disabled,false);assert.equal(ui.$('name').value,'시험');assert.equal(ui.$('phone').value,'010-0000-0000');
  ui.$('submit').click();await tick();assert.equal(ui.$('complete').hidden,false);assert.deepEqual(ids,['F'.repeat(20),'F'.repeat(20)]);assert.equal(ui.w.document.activeElement.textContent,'견적 접수가 완료됐습니다.');ui.dom.window.close();
 });
 

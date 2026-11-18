@@ -68,7 +68,9 @@ $('quoteForm').onsubmit=async e=>{
  lock(true);$('formError').textContent='서버에 안전하게 저장하고 있습니다. 창을 닫지 말아 주세요.';frozen=input;
  try{
   const mod=await import('./quote-store.mjs');requestId||=mod.newRequestId();await mod.submitQuote(catalog,requestId,input,photos,{test:testMode});
-  $('quoteForm').hidden=true;$('complete').hidden=false;if(testMode)$('complete').querySelector('h2').textContent='시험 견적 접수가 완료됐습니다.';$('receipt').textContent=core.receipt(requestId);$('result').replaceChildren();resultRow('서비스',catalog.services.find(s=>s.id===input.service).name);for(const[k,v]of Object.entries(input.answers))resultRow(core.LABELS[k],v);resultRow('지역',input.region);resultRow('희망 날짜',input.date||'상담 후 협의');resultRow('상담 시간',input.contactTime);resultRow('현장 사진',photos.length+'장');
+  $('quoteForm').hidden=true;
+  $('quoteHelp').hidden=true;
+  $('complete').hidden=false;if(testMode)$('complete').querySelector('h2').textContent='시험 견적 접수가 완료됐습니다.';$('receipt').textContent=core.receipt(requestId);$('result').replaceChildren();resultRow('서비스',catalog.services.find(s=>s.id===input.service).name);for(const[k,v]of Object.entries(input.answers))resultRow(core.LABELS[k],v);resultRow('지역',input.region);resultRow('희망 날짜',input.date||'상담 후 협의');resultRow('상담 시간',input.contactTime);resultRow('현장 사진',photos.length+'장');
   document.querySelectorAll('[data-step-label]').forEach(el=>{el.removeAttribute('aria-current');if(el.dataset.stepLabel==='4')el.setAttribute('aria-current','step');});photos=[];$('name').value='';$('phone').value='';$('photoPreview').replaceChildren();completed=true;busy=false;frozen=null;$('completeTitle').focus({preventScroll:true});$('complete').scrollIntoView({block:'start'});track('quote_submit_success');
  }catch(error){
   $('formError').textContent='접수 완료를 확인하지 못했습니다.'+(retryReference()||' 확인용 번호를 아직 만들지 못했습니다.')+' 입력과 사진은 이 화면에 유지됩니다. 아래 버튼으로 같은 신청을 다시 확인·시도해 주세요.'+(error.code==='permission-denied'?' 서버 권한을 확인 중입니다. 카카오톡 또는 전화로 상담하실 수 있습니다.':'');

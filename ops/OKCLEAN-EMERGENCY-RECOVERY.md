@@ -13,6 +13,7 @@
 1. **GitHub 저장소 확인**
    - 저장소: `okclean-kr/okclean-kr.github.io`
    - `main` 최신 정상 커밋과 `backup/*`, `restore/*` 브랜치를 확인한다.
+   - 정기 소스 백업의 [첫 실제 복원 검증과 복구 절차](verified-release-recovery-20261117.md#2026-11-18-첫-예약-소스-백업-검증)를 확인한다. GitHub Actions의 ZIP 보관 기간은 14일이다.
    - 운영 파일을 삭제하지 말고 정상 백업 기준점을 먼저 확보한다.
 
 2. **GitHub Pages 재배포**
@@ -34,7 +35,8 @@
    - 회원 개인정보를 공개 저장소로 내보내지 않는다.
 
 6. **상품 데이터 확인/복원**
-   - 공개 복구 참고본: `backup/products-snapshot-20261110.json`
+   - 2026년 11월 18일 기준 [공개 추천제품 21건 스냅샷](https://github.com/okclean-kr/okclean-kr.github.io/blob/fcf37add5f10d4e82daf549ca82e9a786eb8ef85/backup/products-snapshot-20261118.json)과 [상품 복구 메모](https://github.com/okclean-kr/okclean-kr.github.io/blob/fcf37add5f10d4e82daf549ca82e9a786eb8ef85/backup/RECOVERY-20261118.md)를 확인한다.
+   - 11월 10일의 3건 스냅샷 `backup/products-snapshot-20261110.json`은 이전 버전 확인용이다.
    - 실제 Firestore `products`가 우선이며, 스냅샷은 누락 여부 확인 및 수동 복구 참고용이다.
    - 상품 ID는 클릭통계 연결에 사용되므로 가능한 한 유지한다.
 
@@ -67,7 +69,7 @@
    - 운영 저장 시험은 관리자 시험 모드(`test:true`)로만 수행해 실제 고객·계약 통계와 분리한다.
    - 알림 패널의 불러온 실제 접수 중 미확인·실패 건수를 확인한다. 브라우저 알림 재표시는 접수 확인 완료를 의미하지 않는다.
    - 알림 결과 기록 미저장은 연결 회복 후 다시 확인한다. 알림 오류 때문에 고객 접수·사진을 삭제하거나 재접수시키지 않는다.
-   - 화면을 닫은 동안의 외부 문자·메일·푸시는 지원하지 않는다. 다시 열면 서버 목록에서 미확인 접수를 확인한다.
+   - 관리자 화면을 닫아도 별도 Apps Script가 시간 기반으로 새 접수를 확인해 관리자 메일을 보낸다. 시험 메일 수신과 예약 실행을 확인했으며, 실제 신규 고객 접수 메일의 첫 수신은 별도 확인이 필요하다. [메일 검증 기록](private-email-alert-verification-20261117.json)
 
 ## 2026-11-16 알림 보완 직전 소스 복원 검증
 

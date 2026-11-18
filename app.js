@@ -49,7 +49,7 @@ const today = new Date(); $("qDate").min = new Date(today.getTime() + 9*3600e3).
 const priceText = (lo, hi) => hi == null ? `${won(lo)}원~` : lo === hi ? `${won(lo)}원` : `${won(lo)}~${won(hi)}원`;
 const optText = (o, s) => o.quote ? "현장 견적" : "+" + (o.hi == null ? won(o.lo) + "~" : `${won(o.lo)}~${won(o.hi)}`) + (o.perUnit ? "/" + s.unit : "");
 const isQuote = s => s.quote || (!(s.tiers || []).length && !(s.variants || []).length);
-function drawForm(){
+function drawForm(priceInput = false){
   const s = svc();
   $("qSvc").value = s.id;
   const quote = isQuote(s), tiered = !!(s.tiers || []).length;
@@ -78,7 +78,7 @@ function drawForm(){
       + (excludes.length ? `<h3>별도 확인 항목</h3><ul>${excludes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "")
       + `<p>공간 구조와 오염 상태를 사진으로 확인한 뒤 최종 범위와 비용을 안내합니다.</p><a href="services/${encodeURIComponent(s.id)}.html">${esc(s.name)} 자세히 보기 →</a>`;
   }
-  calc();
+  calc(priceInput);
 }
 function estimate(){
   if(window.OKCleanQuote) return window.OKCleanQuote.estimate(svc(),cur);
@@ -131,7 +131,7 @@ function weekendNote(){
   const d = new Date(v + "T00:00:00").getDay();
   return (d === 0 || d === 6) ? " 주말은 할증이 붙을 수 있어요. 평일이면 더 저렴해요." : "";
 }
-function calc(){
+function calc(priceInput = false){
   const s = svc(), r = estimate();
   if($("qDetailed")) $("qDetailed").href = "quote/?svc="+encodeURIComponent(s.id);
   if(r){
@@ -152,16 +152,17 @@ function calc(){
     else box.innerHTML = `<button type="button" class="mem-join" data-join>🎟 회원가입하면 여기서 <b>${won(M.coupon)}원 더 할인</b> + 무료 서비스 →</button>`;
   }
   store.set("quote", {svc: cur.svc, v: cur.v, t: cur.t, qty: cur.qty, opts: cur.opts, area: $("qArea").value, date: $("qDate").value});
+  if(priceInput) window.OKCleanAnalytics?.recordQuoteCalculation?.(s.id, Boolean(r));
 }
-$("qSvc").addEventListener("change", e => { cur = {svc: e.target.value, v: 0, t: null, qty: null, opts: []}; drawForm(); });
-$("qTier").addEventListener("click", e => { const b = e.target.closest("[data-t]"); if(!b) return; cur.t = +b.dataset.t; drawForm(); });
-$("qVar").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if(!b) return; cur.v = +b.dataset.v; drawForm(); });
-$("qQty").addEventListener("input", e => { cur.qty = Math.min(999, Math.max(1, parseInt(e.target.value, 10) || 1)); calc(); });
-$("qMinus").onclick = () => { cur.qty = Math.max(1, (+cur.qty || 1) - 1); $("qQty").value = cur.qty; calc(); };
-$("qPlus").onclick = () => { cur.qty = Math.min(999, (+cur.qty || 0) + 1); $("qQty").value = cur.qty; calc(); };
-$("qOpt").addEventListener("change", e => { const i = +e.target.dataset.o; cur.opts = e.target.checked ? [...new Set([...cur.opts, i])] : cur.opts.filter(x => x !== i); calc(); });
-$("qArea").addEventListener("change", calc);
-$("qDate").addEventListener("change", calc);
+$("qSvc").addEventListener("change", e => { cur = {svc: e.target.value, v: 0, t: null, qty: null, opts: []}; drawForm(true); });
+$("qTier").addEventListener("click", e => { const b = e.target.closest("[data-t]"); if(!b) return; cur.t = +b.dataset.t; drawForm(true); });
+$("qVar").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if(!b) return; cur.v = +b.dataset.v; drawForm(true); });
+$("qQty").addEventListener("input", e => { cur.qty = Math.min(999, Math.max(1, parseInt(e.target.value, 10) || 1)); calc(true); });
+$("qMinus").onclick = () => { cur.qty = Math.max(1, (+cur.qty || 1) - 1); $("qQty").value = cur.qty; calc(true); };
+$("qPlus").onclick = () => { cur.qty = Math.min(999, (+cur.qty || 0) + 1); $("qQty").value = cur.qty; calc(true); };
+$("qOpt").addEventListener("change", e => { const i = +e.target.dataset.o; cur.opts = e.target.checked ? [...new Set([...cur.opts, i])] : cur.opts.filter(x => x !== i); calc(true); });
+$("qArea").addEventListener("change", () => calc());
+$("qDate").addEventListener("change", () => calc());
 window.goSms = u => { location.href = u; };
 // 문자로 견적 보내기: 견적 내용이 미리 적힌 문자 창을 엶 (아이폰은 &body=, 안드로이드는 ?body=)
 if($("qSms")) $("qSms").onclick = async () => {

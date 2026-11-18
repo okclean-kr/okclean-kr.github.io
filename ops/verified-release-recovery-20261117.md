@@ -1,5 +1,10 @@
 # 현재 정상 소스의 백업·복구 검증
 
+## 2026-11-18 홈페이지 예상 비용 집계 복구
+
+- 변경 전 `backup/home-calculation-before-20261118-2ccc6de`와 배포 소스 `backup/verified-home-calculation-20261118-b7ebc36`를 복구 기준점으로 보존했다. 각 공개 Git 소스 236개 파일의 격리 복원을 확인했다.
+- 집계 연동을 복구해야 하면 PR #71의 `index.html`, `app.js`, `analytics.js` 변경을 함께 되돌린다. 뒤에 적용한 변경이 있으면 세 파일의 차이를 비교하고 관련 부분만 되돌린다. 복구 후 통계를 끈 미리보기에서 표시 금액과 상세 견적 링크를 확인한다. [검증 기록](home-calculation-verification-20261118.json)
+
 ## 2026-11-18 견적 상담 화면 복구
 
 - 변경 전 `backup/quote-contact-before-20261118-d83ac46`와 배포 소스 `backup/verified-quote-contact-20261118-5e135c9`를 같은 저장소의 복구 기준점으로 보존했다. 각각 234개 파일 전체의 격리 복원을 확인했다. 검증 범위는 공개 Git 소스다. [검증 기록](quote-contact-verification-20261118.json)

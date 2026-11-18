@@ -1,0 +1,168 @@
+{
+  "dateKST": "2026-11-18",
+  "status": "production_deployed_isolated_calculation_measurement_verified",
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/71",
+  "headSha": "114a9061a196456d4f41cda066eeb9bbb8c2b863",
+  "mergeCommit": "b7ebc36da971b0f40ddd89c5548ca9beaa2e2dd7",
+  "changedFiles": [
+    "analytics.js",
+    "app.js",
+    "index.html",
+    "tests/analytics.test.cjs"
+  ],
+  "checks": {
+    "prRun": 44225730998,
+    "prJob": 134538315509,
+    "mainRun": 44225965666,
+    "pagesRun": 44225964552,
+    "nodePassed": 205,
+    "firestoreAndRestPassed": 70,
+    "pythonPassed": 23,
+    "allPassed": 298,
+    "failed": 0,
+    "skipped": 0,
+    "preFixReproduction": "A region/date edit emitted a quote_calculate event."
+  },
+  "behavior": {
+    "numericEstimateRequired": true,
+    "regionAndDateAloneExcluded": true,
+    "initialDisplayExcluded": true,
+    "onSiteQuoteExcluded": true,
+    "serviceCapturedAtCalculation": true,
+    "debounceMs": 800,
+    "oldEventsRewritten": false
+  },
+  "browserChecks": {
+    "scope": "Chrome display and local debug events with the backend disabled",
+    "desktop": {
+      "initialOrRegionAndDateCount": 0,
+      "wallAirconUnits": 3,
+      "price": "30만원~",
+      "countAfterPrice": 1,
+      "countAfterOnSite": 1,
+      "onSiteQuoteHref": "quote/?svc=window"
+    },
+    "mobile": {
+      "viewport": 390,
+      "documentWidth": 375,
+      "scrollWidth": 375,
+      "countBefore": 1,
+      "countAfterPrice": 2,
+      "countAfterOnSite": 2,
+      "wallAirconUnits": 2,
+      "price": "20만원~"
+    },
+    "productionPreview": {
+      "url": "https://okclean-kr.github.io/?quote_preview=1&svc=aircon#quote",
+      "services": 12,
+      "prices": [
+        "20만원~",
+        "30만원~"
+      ],
+      "detailHref": "quote/?svc=aircon",
+      "moduleVersion": "20261118-calculation1",
+      "backendMeasurementDisabled": true
+    },
+    "physicalPhoneOrSafariTested": false,
+    "productionTestEventsWritten": false
+  },
+  "operationalHttp": {
+    "verifiedAtUTC": "2026-11-18T02:50:23.451938+00:00",
+    "files": [
+      {
+        "path": "index.html",
+        "status": 200,
+        "bytes": 57886,
+        "matchesSource": true,
+        "sha256": "14ed434f866341921dbcd6d0fca568b2c84aedeead1157593e75d5adcc7a4d9f"
+      },
+      {
+        "path": "app.js",
+        "status": 200,
+        "bytes": 23852,
+        "matchesSource": true,
+        "sha256": "61b4c9e34175523a3e990429ed8ad5eb26f26a32f490d9e060770294411fb6e1"
+      },
+      {
+        "path": "analytics.js",
+        "status": 200,
+        "bytes": 23658,
+        "matchesSource": true,
+        "sha256": "214415f548c0a8d10d7363197ea2df031a5dbc71feb3807dd60dcc6ad8af4d21"
+      },
+      {
+        "path": "analytics-config.js",
+        "status": 200,
+        "bytes": 248,
+        "matchesSource": true,
+        "sha256": "116948fd8e399efaf126adbd847ab71af597123e86917bcabb405bdf4e2559ca"
+      },
+      {
+        "path": "quote/quote-core.js",
+        "status": 200,
+        "bytes": 6211,
+        "matchesSource": true,
+        "sha256": "ad338cf5a93b2868ee11c37373beea2e89c835c5dbdab19e4987e07ab1bd5baa"
+      },
+      {
+        "path": "quote/index.html",
+        "status": 200,
+        "bytes": 6571,
+        "matchesSource": true,
+        "sha256": "3d0aee4974862fa0c05182025fdec0aea5aa75171418a4e59fdecdc151cf8a1f"
+      },
+      {
+        "path": "quote/quote-form.mjs",
+        "status": 200,
+        "bytes": 13832,
+        "matchesSource": true,
+        "sha256": "50218dddd5901b0c7d3f27259c4118b7ef9228500a62eb02df4161a9d6623270"
+      },
+      {
+        "path": "admin/quotes.html",
+        "status": 200,
+        "bytes": 5297,
+        "matchesSource": true,
+        "sha256": "7add8f93681c7c0a49d437dacdeb2357ddbcdc83d84a128bf0c711df000ac590"
+      },
+      {
+        "path": "member-sync.js",
+        "status": 200,
+        "bytes": 2255,
+        "matchesSource": true,
+        "sha256": "c740d485a1b5f120355070b88538cfb591fae7080d014145d8b1a54e8a985ecf"
+      },
+      {
+        "path": "style.css",
+        "status": 200,
+        "bytes": 33424,
+        "matchesSource": true,
+        "sha256": "eeac5e981069d3ec3e2e17fa24ffcbacc84038327940acc8049f9d537ee6d835"
+      }
+    ]
+  },
+  "backupBefore": {
+    "branch": "backup/home-calculation-before-20261118-2ccc6de",
+    "sourceCommit": "2ccc6deddf2774e2a62ac8448187b884e8fe1f07",
+    "archiveBytes": 5265600,
+    "archiveSha256": "22001c7d18a25244acd3bec9f7f5dcaad415f10719c955922e5470462eed4f81",
+    "filesVerified": 236,
+    "bytesVerified": 6823014,
+    "allFilesRestored": true
+  },
+  "backupAfter": {
+    "branch": "backup/verified-home-calculation-20261118-b7ebc36",
+    "sourceCommit": "b7ebc36da971b0f40ddd89c5548ca9beaa2e2dd7",
+    "archiveBytes": 5266547,
+    "archiveSha256": "3ef3dbe873a897188a9a3211e074c11139a0b929e03c3614eddcec9b977b2942",
+    "filesVerified": 236,
+    "bytesVerified": 6826169,
+    "allFilesRestored": true
+  },
+  "screenshot": {
+    "path": "ops/evidence/home-calculation-mobile-20261118.jpg",
+    "bytes": 48301,
+    "sha256": "4f052689bd623bb16f229e91587af3f438c080d7853419727179edc09b76e844",
+    "scope": "390px isolated fixture. The two displayed events are preceding air-conditioner calculations in the same local session."
+  }
+}

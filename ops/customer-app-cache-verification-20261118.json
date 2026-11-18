@@ -1,0 +1,128 @@
+{
+  "dateKST": "2026-11-18",
+  "status": "production_worker_deployed_and_isolated_cache_failures_verified",
+  "pullRequest": "https://github.com/okclean-kr/okclean-kr.github.io/pull/72",
+  "headSha": "82c2a0cfb8daa3a14ff60c2ae7adbbbccd17be75",
+  "mergeCommit": "f002d750534d795bf4b2bbf27c02e18c5992be56",
+  "changedFiles": [
+    ".github/workflows/quote-checks.yml",
+    "package.json",
+    "sw.js",
+    "tests/quote-service-worker.test.cjs"
+  ],
+  "checks": {
+    "prRun": 44245347835,
+    "prJob": 134602827370,
+    "mainRun": 44245545338,
+    "pagesRun": 44245544916,
+    "nodePassed": 210,
+    "firestoreAndRestPassed": 70,
+    "pythonPassed": 23,
+    "allPassed": 303,
+    "failed": 0,
+    "skipped": 0,
+    "workerRegressionTests": 5,
+    "workerFailuresBeforeFix": 4
+  },
+  "browserChecks": {
+    "isolatedChrome": {
+      "scope": "Temporary localhost worker imports modified sw.js and injects controlled Cache Storage failures.",
+      "claimedClientDespiteCacheListFailure": true,
+      "customerAppRedirectPreserved": true,
+      "onlineDisplayDespiteCacheOpenFailure": true,
+      "wallAirconUnits": 2,
+      "price": "20만원~",
+      "quoteHref": "quote/?svc=aircon",
+      "fallbackVisibleWithNetworkAndCacheFailure": true,
+      "temporaryWorkerUnregistered": true
+    },
+    "productionPreview": {
+      "url": "https://okclean-kr.github.io/index.html?quote_preview=1&svc=aircon&src=app#quote",
+      "serviceCount": 12,
+      "service": "aircon",
+      "quoteHref": "quote/?svc=aircon",
+      "sourceParameterPreserved": true
+    },
+    "installedPhysicalDeviceTested": false,
+    "productionFaultInjected": false,
+    "productionQuoteOrAnalyticsWritten": false
+  },
+  "operationalHttp": {
+    "checkedAtUTC": "2026-11-18T05:38:57.439178+00:00",
+    "files": [
+      {
+        "path": "/",
+        "status": 200,
+        "matches": true,
+        "sha256": "14ed434f866341921dbcd6d0fca568b2c84aedeead1157593e75d5adcc7a4d9f",
+        "bytes": 57886
+      },
+      {
+        "path": "/sw.js",
+        "status": 200,
+        "matches": true,
+        "sha256": "ba321669cef22d8a5115f97c9f960a1ce71a57470ee79fc5d5436c9b76f14094",
+        "bytes": 2952
+      },
+      {
+        "path": "/app/",
+        "status": 200,
+        "matches": true,
+        "sha256": "a471b826e8e68443757e120047f264c85e2da8dc9df06d28bce5613f143a1e00",
+        "bytes": 831
+      },
+      {
+        "path": "/quote/",
+        "status": 200,
+        "matches": true,
+        "sha256": "3d0aee4974862fa0c05182025fdec0aea5aa75171418a4e59fdecdc151cf8a1f",
+        "bytes": 6571
+      },
+      {
+        "path": "/admin/quotes.html",
+        "status": 200,
+        "matches": true,
+        "sha256": "7add8f93681c7c0a49d437dacdeb2357ddbcdc83d84a128bf0c711df000ac590",
+        "bytes": 5297
+      },
+      {
+        "path": "/install-app.js",
+        "status": 200,
+        "matches": true,
+        "sha256": "53af1d65a1af5bd399a0b2bd384c386f79a483e5a76e450eb1dadcd1db9c4c9e",
+        "bytes": 7666
+      },
+      {
+        "path": "/manifest.webmanifest",
+        "status": 200,
+        "matches": true,
+        "sha256": "c7dd84be4d2479ca7f52da3c6c8a3e0a2e1d24e0bafe4f638757b4293bdb1da8",
+        "bytes": 469
+      }
+    ]
+  },
+  "backupBefore": {
+    "branch": "backup/customer-app-cache-before-20261118-316ee34",
+    "sourceCommit": "316ee344199d0b87cf6a19735f575f2f5082ca4e",
+    "archiveBytes": 5309059,
+    "archiveSha256": "eea1afeeecf195c85b59504270484449abe021ea3f56a99f11d41c0b33621ce4",
+    "filesVerified": 238,
+    "bytesVerified": 6882070,
+    "allFilesRestored": true
+  },
+  "backupAfter": {
+    "branch": "backup/verified-customer-app-cache-20261118-f002d75",
+    "sourceCommit": "f002d750534d795bf4b2bbf27c02e18c5992be56",
+    "archiveBytes": 5310392,
+    "archiveSha256": "2e0c9abec1bceb93e64f848f96c928cbda3a26db4d68e2a40303753cf498ddad",
+    "filesVerified": 239,
+    "bytesVerified": 6886354,
+    "allFilesRestored": true
+  },
+  "screenshot": {
+    "path": "ops/evidence/customer-app-cache-20261118.jpg",
+    "bytes": 90639,
+    "sha256": "7b07a180e0086e10dfcc9e5b48b4dc53bb7fd433f200ccb802f9221f05d5904a",
+    "scope": "Local Chrome fixture with simulated Cache Storage open/list failure."
+  }
+}

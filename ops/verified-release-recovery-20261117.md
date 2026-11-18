@@ -1,5 +1,10 @@
 # 현재 정상 소스의 백업·복구 검증
 
+## 2026-11-18 고객 앱 캐시 오류 처리 복구
+
+- 변경 전 `backup/customer-app-cache-before-20261118-316ee34`와 배포 소스 `backup/verified-customer-app-cache-20261118-f002d75`를 보존했다. 각각 238개와 239개의 공개 Git 소스 파일을 격리 복원했다.
+- 동작을 되돌려야 하면 PR #72의 `sw.js` 변경만 되돌리고 배포 뒤 고객 앱 진입과 온라인 계산을 확인한다. PR 전체를 되돌리면 회귀 검사 파일과 검사 경로 변경도 함께 원상 복구된다. [검증 기록](customer-app-cache-verification-20261118.json)
+
 ## 2026-11-18 홈페이지 예상 비용 집계 복구
 
 - 변경 전 `backup/home-calculation-before-20261118-2ccc6de`와 배포 소스 `backup/verified-home-calculation-20261118-b7ebc36`를 복구 기준점으로 보존했다. 각 공개 Git 소스 236개 파일의 격리 복원을 확인했다.
